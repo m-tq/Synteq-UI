@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Synteq UI V2 — Component Explorer</title>
+  <link rel="stylesheet" href="../css/synteq-ui-v2.css" />
+  <style>
+    /* ── Explorer-specific chrome ─────────────────────────────────── */
+
+    /* User pill (reused from dashboard) */
+    .v2-user { display:flex; align-items:center; gap:var(--v2-space-2); min-width:0; text-decoration:none; }
+    .v2-user__info { display:flex; flex-direction:column; min-width:0; }
+    .v2-user__name  { font-size:var(--v2-text-sm); color:var(--v2-text-strong); font-weight:var(--v2-fw-medium); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .v2-user__email { font-size:var(--v2-text-xs); color:var(--v2-text-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Component preview block */
+    .cx-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--v2-space-3);
+      min-width: 0;
+      width: 100%;
+    }
+
+    /* Live preview area */
+    .cx-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--v2-space-3);
+      padding: var(--v2-space-5);
+      background: var(--v2-inset);
+      border-radius: var(--v2-radius-control);
+      min-width: 0;
+    }
+    .cx-preview > * { min-width: 0; max-width: 100%; }
+    .cx-preview--col { flex-direction: column; align-items: stretch; justify-content: flex-start; }
+
+    /* Code snippet */
+    .cx-code {
+      position: relative;
+      background: var(--v2-sidebar);
+      border-radius: var(--v2-radius-control);
+      overflow: hidden;
+      min-width: 0;
+    }
+    .cx-code pre {
+      margin: 0;
+      /* right padding reserves room for the copy button — they used to overlap */
+      padding: var(--v2-space-4) calc(var(--v2-space-5) + 48px) var(--v2-space-4) var(--v2-space-5);
+      overflow-x: auto;
+      font-family: var(--v2-font-mono);
+      font-size: var(--v2-text-xs);
+      line-height: 1.65;
+      color: var(--v2-text);
+      tab-size: 2;
+      scrollbar-width: thin;
+      scrollbar-color: var(--v2-line-strong) transparent;
+    }
+    .cx-code pre::-webkit-scrollbar { height: 4px; }
+    .cx-code pre::-webkit-scrollbar-thumb { background: var(--v2-line-strong); border-radius: 2px; }
+    .cx-copy-btn {
+      position: absolute;
+      top: var(--v2-space-2);
+      right: var(--v2-space-2);
+      z-index: 2;
+      font-size: var(--v2-text-xs);
+      color: var(--v2-text-subtle);
+      padding: 2px var(--v2-space-2);
+      border-radius: var(--v2-radius-micro);
+      background: var(--v2-hover);
+      transition: color var(--v2-dur-instant) var(--v2-ease), background var(--v2-dur-instant) var(--v2-ease);
+    }
+    .cx-copy-btn:hover { color: var(--v2-text-strong); background: var(--v2-line-strong); }
+    .cx-copy-btn.copied { color: var(--v2-status-running); }
+
+    /* Token chip */
+    .cx-token { font-family:var(--v2-font-mono); font-size:var(--v2-text-xs); color:var(--v2-brand); background:color-mix(in srgb, var(--v2-brand) 10%, transparent); padding:1px 5px; border-radius:var(--v2-radius-micro); }
+
+    /* Color swatch — auto-fill grid keeps every swatch on a real column */
+    .cx-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+      gap: var(--v2-space-3) var(--v2-space-2);
+      min-width: 0;
+    }
+    .cx-swatch {
+      display: flex;
+      flex-direction: column;
+      gap: var(--v2-space-1);
+      min-width: 0;
+    }
+    .cx-swatch__dot {
+      width: 32px; height: 32px;
+      border-radius: var(--v2-radius-control);
+      border: 1px solid var(--v2-line);
+    }
+    .cx-swatch__name { font-size:var(--v2-text-xs); color:var(--v2-text-subtle); overflow:hidden; text-overflow:ellipsis; }
+
+    /* Type specimen */
+    .cx-type-row {
+      display: grid;
+      grid-template-columns: 88px 78px minmax(0, 1fr);
+      align-items: baseline;
+      gap: var(--v2-space-4);
+      padding: var(--v2-space-2) 0;
+      border-top: 1px solid var(--v2-line);
+      min-width: 0;
+    }
+    .cx-type-row:first-child { border-top:none; }
+    .cx-type-label { min-width: 0; font-size:var(--v2-text-xs); color:var(--v2-text-subtle); font-family:var(--v2-font-mono); }
+    .cx-type-val { min-width: 0; font-size:var(--v2-text-xs); color:var(--v2-text-subtle); font-family:var(--v2-font-mono); }
+    .cx-type-row > :last-child { min-width: 0; overflow-wrap: anywhere; }
+
+    /* Reduced width container for narrow previews — centred like the rest */
+    .cx-narrow { width: 100%; max-width: 360px; margin-inline: auto; }
+
+    /* ── Explorer breakpoints ─────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .cx-preview { padding: var(--v2-space-4); justify-content: flex-start; }
+      .cx-type-row { grid-template-columns: 76px minmax(0, 1fr); gap: var(--v2-space-1) var(--v2-space-3); }
+      .cx-type-row > :last-child { grid-column: 1 / -1; }
+      .cx-type-val { text-align: right; }
+    }
+    @media (max-width: 420px) {
+      .cx-preview { padding: var(--v2-space-3); }
+      .cx-swatch-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="v2-app" id="app">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────────────── -->
+  <aside class="v2-aside" aria-label="Component categories" id="sidebar">
+    <a href="#" class="v2-aside__brand" aria-label="Component Explorer home">
+      <span class="v2-aside__brand-mark" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M9 3.5C9 2.12 7.66 1 6 1 4.34 1 3 2.12 3 3.5c0 1.18.9 2.17 2.14 2.41L7.5 6.3C8.43 6.57 9 7.3 9 8.2 9 9.32 7.87 10.2 6.5 10.2S4 9.32 4 8.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      V2 Components
+    </a>
+
+    <nav class="v2-nav" aria-label="Component categories">
+      <a href="#tokens" class="v2-nav__item v2-nav__item--active">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        Tokens
+      </a>
+      <a href="#typography" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        Typography
+      </a>
+      <a href="#icons" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Icons
+      </a>
+
+      <a href="#shell" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="9" y2="9"/></svg>
+        Shell
+      </a>
+      <a href="#sections" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        Sections
+      </a>
+
+      <a href="#stats" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Stats & KV
+      </a>
+      <a href="#gauges" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.364 5.636a9 9 0 1 1-12.728 0M12 12V3"/></svg>
+        Gauges
+      </a>
+      <a href="#charts" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Charts
+      </a>
+
+      <a href="#buttons" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="7" cy="12" r="3"/></svg>
+        Buttons
+      </a>
+      <a href="#badges" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Badges
+      </a>
+      <a href="#inputs" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
+        Inputs
+      </a>
+
+      <a href="#motion" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
+        Motion
+      </a>
+    </nav>
+
+    <div class="v2-aside__footer">
+      <span class="v2-dot" aria-label="Online"></span>
+      <a href="dashboard.html" class="v2-user" aria-label="Back to dashboard demo">
+        <span class="v2-avatar" aria-hidden="true">→</span>
+        <span class="v2-user__info">
+          <span class="v2-user__name">Dashboard Demo</span>
+          <span class="v2-user__email">examples/dashboard.html</span>
+        </span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ──────────────────────────────────────────────────── -->
+  <header class="v2-topbar" role="banner">
+    <button class="v2-sidebar-toggle" data-v2-sidebar-toggle
+            aria-label="Toggle navigation" aria-expanded="true" aria-controls="sidebar">
+      <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg class="v2-icon v2-icon--18 icon-close" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="v2-topbar__left">
+      <span class="v2-topbar__title">Component Explorer</span>
+      <span class="v2-badge v2-badge--brand">V2</span>
+    </div>
+
+    <div class="v2-topbar__right">
+      <button class="v2-search" data-v2-search-trigger aria-label="Search components"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="v2-search__text">Search...</span><kbd class="v2-kbd">⌘K</kbd></button>
+      <button class="v2-iconbtn v2-theme-toggle" data-v2-toggle-theme aria-label="Toggle theme">
+        <svg class="v2-icon v2-icon--16 v2-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="v2-icon v2-icon--16 v2-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN ───────────────────────────────────────────────────── -->
+  <main class="v2-main" aria-label="Component explorer content">
+    <div class="v2-content v2-scroll" id="main-content">
+
+      <!-- ══ TOKENS ══════════════════════════════════════════════ -->
+      <div class="v2-section" id="tokens">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            Design Tokens
+          </span>
+        </div>
+
+        <!-- Colors -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute" style="text-transform:uppercase;letter-spacing:.06em;">Surface & Text</span>
+          <div class="cx-swatch-grid">
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-canvas)"></div><span class="cx-swatch__name">canvas</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-sidebar)"></div><span class="cx-swatch__name">sidebar</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-hover)"></div><span class="cx-swatch__name">hover</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-inset)"></div><span class="cx-swatch__name">inset</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-text)"></div><span class="cx-swatch__name">text</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-text-strong)"></div><span class="cx-swatch__name">text-strong</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-text-subtle)"></div><span class="cx-swatch__name">text-subtle</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-brand)"></div><span class="cx-swatch__name">brand</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-status-running)"></div><span class="cx-swatch__name">running</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-status-warning)"></div><span class="cx-swatch__name">warning</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-status-error)"></div><span class="cx-swatch__name">error</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-tel-in)"></div><span class="cx-swatch__name">tel-in</span></div>
+            <div class="cx-swatch"><div class="cx-swatch__dot" style="background:var(--v2-tel-out)"></div><span class="cx-swatch__name">tel-out</span></div>
+          </div>
+        </div>
+
+        <!-- Separators -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute" style="text-transform:uppercase;letter-spacing:.06em;">Line Separators</span>
+          <div style="display:flex;flex-direction:column;gap:var(--v2-space-3);">
+            <div style="display:flex;align-items:center;gap:var(--v2-space-3);"><span class="cx-token">--v2-line</span><div style="flex:1;height:1px;background:var(--v2-line)"></div></div>
+            <div style="display:flex;align-items:center;gap:var(--v2-space-3);"><span class="cx-token">--v2-line-strong</span><div style="flex:1;height:1px;background:var(--v2-line-strong)"></div></div>
+            <div style="display:flex;align-items:center;gap:var(--v2-space-3);"><span class="cx-token">--v2-line-accent</span><div style="flex:1;height:1px;background:var(--v2-line-accent)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TYPOGRAPHY ════════════════════════════════════════════ -->
+      <div class="v2-section" id="typography">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            Typography
+          </span>
+          <span class="v2-section__meta">Google Sans Code · self-hosted</span>
+        </div>
+        <div>
+          <div class="cx-type-row"><span class="cx-type-label">text-3xl</span><span class="cx-type-val">clamp(26,3.2vw,34)</span><span style="font-size:var(--v2-text-3xl);font-weight:var(--v2-fw-semibold);color:var(--v2-text-strong);line-height:1.2;">Dashboard</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-2xl</span><span class="cx-type-val">clamp(22,2.4vw,28)</span><span style="font-size:var(--v2-text-2xl);font-weight:var(--v2-fw-medium);color:var(--v2-text-strong);line-height:1.2;">99.97%</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-xl</span><span class="cx-type-val">18px</span><span style="font-size:var(--v2-text-xl);color:var(--v2-text-strong);">Section value</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-lg</span><span class="cx-type-val">15px</span><span style="font-size:var(--v2-text-lg);color:var(--v2-text-strong);">Sidebar brand name</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-md</span><span class="cx-type-val">13px</span><span style="font-size:var(--v2-text-md);color:var(--v2-text);">Body · nav · KV rows</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-sm</span><span class="cx-type-val">12px</span><span style="font-size:var(--v2-text-sm);color:var(--v2-text-subtle);">Button labels · breadcrumb</span></div>
+          <div class="cx-type-row"><span class="cx-type-label">text-xs</span><span class="cx-type-val">11px</span><span style="font-size:var(--v2-text-xs);color:var(--v2-text-subtle);text-transform:uppercase;letter-spacing:.06em;">SECTION TITLE · BADGE</span></div>
+        </div>
+      </div>
+
+      <!-- ══ ICONS ═══════════════════════════════════════════════ -->
+      <div class="v2-section" id="icons">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Icons
+          </span>
+          <span class="v2-section__meta">inline SVG · Lucide-compatible</span>
+        </div>
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Sizes</span>
+          <div class="cx-preview">
+            <span class="v2-ico-label v2-mute"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> 14px</span>
+            <span class="v2-ico-label v2-mute"><svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> 16px</span>
+            <span class="v2-ico-label v2-mute"><svg class="v2-icon v2-icon--18" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> 18px</span>
+            <span class="v2-ico-label v2-mute"><svg class="v2-icon v2-icon--20" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> 20px</span>
+          </div>
+          <span class="v2-t-xs v2-mute">Tints</span>
+          <div class="cx-preview">
+            <svg class="v2-icon v2-icon--18 v2-icon--mute" viewBox="0 0 24 24" title="mute" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <svg class="v2-icon v2-icon--18 v2-icon--brand" viewBox="0 0 24 24" title="brand" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <svg class="v2-icon v2-icon--18 v2-icon--ok" viewBox="0 0 24 24" title="ok" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg class="v2-icon v2-icon--18 v2-icon--warn" viewBox="0 0 24 24" title="warn" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <svg class="v2-icon v2-icon--18 v2-icon--err" viewBox="0 0 24 24" title="err" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SHELL ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="shell">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="9" y2="9"/></svg>
+            App Shell
+          </span>
+          <span class="v2-section__meta">viewport-locked · no body scroll</span>
+        </div>
+        <div class="cx-block">
+          <p class="v2-t-sm v2-mute">The shell is a CSS Grid locked to <span class="cx-token">100dvh</span>. Only <span class="cx-token">.v2-content.v2-scroll</span> produces a scrollbar. A single topbar control hides and shows the sticky bottom dock.</p>
+          <div class="cx-code">
+            <button class="cx-copy-btn" aria-label="Copy shell HTML">copy</button>
+            <pre>&lt;div class="v2-app" id="app"&gt;
+  &lt;aside class="v2-aside" id="sidebar"&gt;...&lt;/aside&gt;
+
+  &lt;header class="v2-topbar"&gt;
+    &lt;button class="v2-sidebar-toggle"
+            data-v2-sidebar-toggle
+            aria-label="Toggle navigation"&gt;
+      &lt;svg class="v2-icon v2-icon--18 icon-menu"&gt;...&lt;/svg&gt;
+    &lt;/button&gt;
+    ...
+  &lt;/header&gt;
+
+  &lt;main class="v2-main"&gt;
+    &lt;div class="v2-content v2-scroll"&gt;
+      &lt;!-- sections here --&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTIONS ═════════════════════════════════════════════ -->
+      <div class="v2-section" id="sections">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            Sections & Separators
+          </span>
+        </div>
+        <div class="cx-block">
+          <p class="v2-t-sm v2-mute">One <span class="cx-token">border-top</span> hairline separates each section. First section has no separator. Section heads have <strong>no</strong> <span class="cx-token">border-bottom</span>.</p>
+          <div class="cx-preview cx-preview--col cx-narrow">
+            <div class="v2-section" style="border-top:none;padding-top:0;">
+              <div class="v2-section__head"><span class="v2-section__title">First Section</span><span class="v2-section__meta">no top border</span></div>
+              <p class="v2-t-sm v2-mute">Content here.</p>
+            </div>
+            <div class="v2-section">
+              <div class="v2-section__head"><span class="v2-section__title">Second Section</span></div>
+              <p class="v2-t-sm v2-mute">Separated by one hairline above.</p>
+            </div>
+            <div class="v2-section">
+              <div class="v2-section__head"><span class="v2-section__title">Third Section</span></div>
+              <p class="v2-t-sm v2-mute">Only ever one rule between blocks.</p>
+            </div>
+          </div>
+          <div class="cx-code">
+            <button class="cx-copy-btn" aria-label="Copy section HTML">copy</button>
+            <pre>&lt;div class="v2-section"&gt;
+  &lt;div class="v2-section__head"&gt;
+    &lt;span class="v2-section__title"&gt;
+      &lt;svg class="v2-icon v2-icon--14" ...&gt;...&lt;/svg&gt;
+      Section Title
+    &lt;/span&gt;
+    &lt;span class="v2-section__meta"&gt;updated 5s ago&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;!-- content --&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STATS & KV ════════════════════════════════════════════ -->
+      <div class="v2-section" id="stats">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Stats & Key-Value
+          </span>
+        </div>
+
+        <!-- Stat strip -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Stat strip — gap only, no dividers</span>
+          <div class="cx-preview">
+            <div class="v2-stat-strip">
+              <div class="v2-stat">
+                <span class="v2-stat__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg> vCPU</span>
+                <div class="v2-stat__value">4 <span class="v2-unit">cores</span></div>
+              </div>
+              <div class="v2-stat">
+                <span class="v2-stat__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v4c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 9v4c0 1.66 4.03 3 9 3s9-1.34 9-3V9"/></svg> Disk</span>
+                <div class="v2-stat__value">160 <span class="v2-unit">GB</span></div>
+              </div>
+              <div class="v2-stat">
+                <span class="v2-stat__label"><svg class="v2-icon v2-icon--14 v2-icon--ok" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg> Inbound</span>
+                <div class="v2-stat__value">2.4 <span class="v2-unit">MB/s</span></div>
+                <span class="v2-stat__delta v2-stat__delta--up">↑ 18% vs avg</span>
+              </div>
+              <div class="v2-stat">
+                <span class="v2-stat__label"><svg class="v2-icon v2-icon--14 v2-icon--err" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg> Outbound</span>
+                <div class="v2-stat__value">0.8 <span class="v2-unit">MB/s</span></div>
+                <span class="v2-stat__delta v2-stat__delta--down">↓ 4% vs avg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KV list -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Key-Value rows — border-top between rows only</span>
+          <div class="cx-preview cx-preview--col cx-narrow">
+            <div class="v2-kv">
+              <div class="v2-kv__row"><span class="v2-kv__label">Hostname</span><span class="v2-kv__value v2-mono">octra</span></div>
+              <div class="v2-kv__row"><span class="v2-kv__label">OS</span><span class="v2-kv__value">Ubuntu 24.04 LTS</span></div>
+              <div class="v2-kv__row"><span class="v2-kv__label">Region</span><span class="v2-kv__value">AMS1 — Amsterdam</span></div>
+              <div class="v2-kv__row"><span class="v2-kv__label">Status</span><span class="v2-kv__value"><span class="v2-badge v2-badge--ok">Running</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ GAUGES ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="gauges">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.364 5.636a9 9 0 1 1-12.728 0M12 12V3"/></svg>
+            Gauges
+          </span>
+          <span class="v2-section__meta">auto-colored by JS · reduced-motion safe</span>
+        </div>
+        <div class="cx-block">
+          <div class="cx-preview cx-preview--col cx-narrow" style="gap:var(--v2-space-4);">
+            <div class="v2-gauge" data-v2-gauge="34" role="progressbar" aria-label="CPU" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-gauge__head"><span class="v2-gauge__label">CPU — 34% (green &lt;75)</span><span class="v2-gauge__value">34<span class="v2-gauge__max"> / 100%</span></span></div>
+              <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
+            </div>
+            <div class="v2-gauge" data-v2-gauge="78" role="progressbar" aria-label="Memory" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-gauge__head"><span class="v2-gauge__label">Memory — 78% (amber 75-89)</span><span class="v2-gauge__value">78<span class="v2-gauge__max"> / 100%</span></span></div>
+              <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
+            </div>
+            <div class="v2-gauge" data-v2-gauge="93" role="progressbar" aria-label="Disk" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-gauge__head"><span class="v2-gauge__label">Disk — 93% (red ≥90)</span><span class="v2-gauge__value">93<span class="v2-gauge__max"> / 100%</span></span></div>
+              <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
+            </div>
+            <div class="v2-gauge" data-v2-gauge="22" role="progressbar" aria-label="Bandwidth" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-gauge__head"><span class="v2-gauge__label">Bandwidth — brand override</span><span class="v2-gauge__value">22<span class="v2-gauge__max"> / 4 TB</span></span></div>
+              <div class="v2-gauge__track"><div class="v2-gauge__fill v2-gauge__fill--brand"></div></div>
+            </div>
+          </div>
+          <div class="cx-code">
+            <button class="cx-copy-btn" aria-label="Copy gauge HTML">copy</button>
+            <pre>&lt;div class="v2-gauge" data-v2-gauge="72"
+     role="progressbar" aria-label="CPU"
+     aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"&gt;
+  &lt;div class="v2-gauge__head"&gt;
+    &lt;span class="v2-gauge__label"&gt;CPU&lt;/span&gt;
+    &lt;span class="v2-gauge__value"&gt;72
+      &lt;span class="v2-gauge__max"&gt; / 100%&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="v2-gauge__track"&gt;
+    &lt;div class="v2-gauge__fill"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CHARTS ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="charts">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Charts
+          </span>
+          <span class="v2-section__meta">SVG sparklines · CSS bar chart</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="cx-block">
+            <span class="v2-t-xs v2-mute">Sparkline — inbound (green)</span>
+            <div class="cx-preview cx-preview--col">
+              <svg class="v2-spark" id="spark-in" viewBox="0 0 200 40" preserveAspectRatio="none" role="img" aria-label="CPU trend"></svg>
+              <div class="v2-legend"><span class="v2-legend__item"><span class="v2-legend__sw v2-legend__sw--in"></span>Inbound</span></div>
+            </div>
+            <span class="v2-t-xs v2-mute">Sparkline — outbound (red)</span>
+            <div class="cx-preview cx-preview--col">
+              <svg class="v2-spark v2-spark--out" id="spark-out" viewBox="0 0 200 40" preserveAspectRatio="none" role="img" aria-label="Outbound trend"></svg>
+              <div class="v2-legend"><span class="v2-legend__item"><span class="v2-legend__sw v2-legend__sw--out"></span>Outbound</span></div>
+            </div>
+          </div>
+          <div class="cx-block">
+            <span class="v2-t-xs v2-mute">Bar chart — dual series (in/out)</span>
+            <div class="cx-preview cx-preview--col">
+              <div class="v2-bars" id="bars-demo" role="img" aria-label="Network I/O" style="--v2-bars-cols:16;"></div>
+              <div style="display:flex;justify-content:space-between;"><span class="v2-t-xs v2-mute">16 min ago</span><span class="v2-t-xs v2-mute">now</span></div>
+              <div class="v2-legend">
+                <span class="v2-legend__item"><span class="v2-legend__sw v2-legend__sw--in"></span>In</span>
+                <span class="v2-legend__item"><span class="v2-legend__sw v2-legend__sw--out"></span>Out</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BUTTONS ═══════════════════════════════════════════════ -->
+      <div class="v2-section" id="buttons">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="7" cy="12" r="3"/></svg>
+            Buttons
+          </span>
+        </div>
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Variants</span>
+          <div class="cx-preview">
+            <button class="v2-btn">Default</button>
+            <button class="v2-btn v2-btn--primary">Primary</button>
+            <button class="v2-btn v2-btn--brand">Brand</button>
+            <button class="v2-btn v2-btn--ghost">Ghost</button>
+            <button class="v2-btn v2-btn--danger">Danger</button>
+            <button class="v2-iconbtn" aria-label="Options"><svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+          </div>
+          <span class="v2-t-xs v2-mute">States</span>
+          <div class="cx-preview">
+            <button class="v2-btn">Idle</button>
+            <button class="v2-btn" disabled>Disabled</button>
+          </div>
+          <span class="v2-t-xs v2-mute">Segmented bar</span>
+          <div class="cx-preview">
+            <div class="v2-seg" role="group" aria-label="Instance actions">
+              <button class="v2-seg__btn v2-seg__btn--active" aria-label="Console">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Console
+              </button>
+              <button class="v2-seg__btn" aria-label="Power">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                Power
+              </button>
+              <button class="v2-seg__btn" aria-label="Reboot">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Reboot
+              </button>
+            </div>
+          </div>
+          <span class="v2-t-xs v2-mute">Block stack</span>
+          <div class="cx-preview cx-preview--col cx-narrow">
+            <div class="v2-btn__stack">
+              <button class="v2-btn v2-btn--block">Resize VPS</button>
+              <button class="v2-btn v2-btn--block v2-btn--ghost">Switch plan</button>
+              <button class="v2-btn v2-btn--block v2-btn--danger">Destroy instance</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BADGES ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="badges">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            Badges & Status
+          </span>
+        </div>
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Badge variants</span>
+          <div class="cx-preview">
+            <span class="v2-badge">Default</span>
+            <span class="v2-badge v2-badge--ok">Running</span>
+            <span class="v2-badge v2-badge--warn">Degraded</span>
+            <span class="v2-badge v2-badge--err">Error</span>
+            <span class="v2-badge v2-badge--brand">New</span>
+          </div>
+          <span class="v2-t-xs v2-mute">Status dots</span>
+          <div class="cx-preview">
+            <span class="v2-status" aria-label="Running"><span class="v2-dot" aria-hidden="true"></span> Running</span>
+            <span class="v2-status" aria-label="Warning"><span class="v2-dot v2-dot--reboot" aria-hidden="true"></span> Rebooting</span>
+            <span class="v2-status" aria-label="Stopped"><span class="v2-dot v2-dot--stopped" aria-hidden="true"></span> Stopped</span>
+          </div>
+          <span class="v2-t-xs v2-mute">Kbd pill · Avatar</span>
+          <div class="cx-preview">
+            <kbd class="v2-kbd">⌘K</kbd>
+            <kbd class="v2-kbd">Esc</kbd>
+            <span class="v2-avatar" aria-hidden="true">AC</span>
+            <span class="v2-avatar" aria-hidden="true">JD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ INPUTS ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="inputs">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+            Inputs
+          </span>
+        </div>
+        <div class="cx-block">
+          <div class="cx-preview cx-preview--col cx-narrow">
+            <input class="v2-input" type="text" placeholder="Search resources…" aria-label="Search" />
+            <input class="v2-input" type="text" value="octra" aria-label="Hostname" />
+            <input class="v2-input" type="text" placeholder="Disabled input" aria-label="Disabled" disabled />
+          </div>
+          <span class="v2-t-xs v2-mute">Search trigger (topbar variant)</span>
+          <div class="cx-preview">
+            <button class="v2-search" aria-label="Search or run a command">
+              <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span class="v2-search__text">Search…</span>
+              <kbd class="v2-kbd">⌘K</kbd>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MOTION ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="motion">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
+            Motion
+          </span>
+          <span class="v2-section__meta">auto-disabled with prefers-reduced-motion</span>
+        </div>
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Fade-up mount — click to replay</span>
+          <div class="cx-preview">
+            <button class="v2-btn" id="replay-btn">Replay animation</button>
+            <div id="anim-target" class="v2-fade-up" style="padding:var(--v2-space-3) var(--v2-space-4);background:var(--v2-inset);border-radius:var(--v2-radius-control);">
+              <span class="v2-t-sm">Faded up ↑</span>
+            </div>
+          </div>
+          <span class="v2-t-xs v2-mute">Skeleton shimmer</span>
+          <div class="cx-preview cx-preview--col cx-narrow" style="gap:var(--v2-space-2);">
+            <span class="v2-skeleton" style="height:14px;border-radius:var(--v2-radius-micro);">&nbsp;</span>
+            <span class="v2-skeleton" style="height:14px;width:72%;border-radius:var(--v2-radius-micro);">&nbsp;</span>
+            <span class="v2-skeleton" style="height:14px;width:54%;border-radius:var(--v2-radius-micro);">&nbsp;</span>
+          </div>
+          <span class="v2-t-xs v2-mute">Live pulse indicator</span>
+          <div class="cx-preview">
+            <span class="v2-status"><span class="v2-dot v2-live" aria-hidden="true"></span> Live data</span>
+          </div>
+          <span class="v2-t-xs v2-mute">Stagger on scroll — add <span class="cx-token">data-v2-stagger</span> to parent</span>
+          <div class="cx-preview cx-preview--col cx-narrow" data-v2-stagger>
+            <div style="padding:var(--v2-space-2) var(--v2-space-3);background:var(--v2-inset);border-radius:var(--v2-radius-micro);" class="v2-t-sm">Child 1</div>
+            <div style="padding:var(--v2-space-2) var(--v2-space-3);background:var(--v2-inset);border-radius:var(--v2-radius-micro);" class="v2-t-sm">Child 2</div>
+            <div style="padding:var(--v2-space-2) var(--v2-space-3);background:var(--v2-inset);border-radius:var(--v2-radius-micro);" class="v2-t-sm">Child 3</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:var(--v2-space-7);" aria-hidden="true"></div>
+    </div>
+  </main>
+</div>
+
+  <dialog class="v2-dialog" id="component-search" aria-label="Search components">
+    <form method="dialog" class="v2-command">
+      <div class="v2-section__head"><strong>Find a component</strong><button class="v2-btn v2-btn--icon" value="cancel" aria-label="Close">×</button></div>
+      <input class="v2-input" data-v2-search-input placeholder="Search sections..." aria-label="Search sections" />
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#tokens">Design tokens</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#buttons">Buttons and controls</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#motion">Motion primitives</button>
+    </form>
+  </dialog>
+  <script src="../js/synteq-ui-v2.js"></script>
+<script>
+(function () {
+  /* Sparklines */
+  var inData  = [12,18,22,28,35,40,38,34,30,36,44,50,48,42,38];
+  var outData = [4,5,7,9,12,14,11,9,8,10,13,16,14,12,10];
+  SynteqV2.renderSparkline(document.getElementById('spark-in'),  inData);
+  SynteqV2.renderSparkline(document.getElementById('spark-out'), outData);
+
+  /* Bar chart */
+  var barData = inData.map(function(v, i) { return [v, outData[i]]; });
+  SynteqV2.renderBars(document.getElementById('bars-demo'), barData);
+
+  /* Replay button for fade-up demo */
+  document.getElementById('replay-btn').addEventListener('click', function () {
+    var el = document.getElementById('anim-target');
+    el.classList.remove('v2-fade-up');
+    void el.offsetWidth; // force reflow
+    el.classList.add('v2-fade-up');
+  });
+
+  /* Copy button wiring for code blocks */
+  document.querySelectorAll('.cx-copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.nextElementSibling;
+      if (!pre) return;
+      navigator.clipboard && navigator.clipboard.writeText(pre.textContent.trim()).then(function () {
+        btn.textContent = 'copied!';
+        btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+      });
+    });
+  });
+
+  /* Nav active tracking + smooth scroll are owned by the runtime
+     (SynteqV2.initNavScroll). A second scroll-spy here used to fight the
+     runtime and highlight the wrong item. */
+})();
+</script>
+</body>
+</html>
