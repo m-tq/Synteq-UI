@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Overlays & Disclosure — Synteq UI V2</title>
+  <link rel="stylesheet" href="../css/synteq-ui-v2.css" />
+</head>
+<body>
+
+<div class="v2-app" id="app">
+
+  <!-- STICKY BOTTOM NAVIGATION DOCK -->
+  <aside class="v2-aside" aria-label="Primary navigation" id="sidebar">
+    <a href="#" class="v2-aside__brand" aria-label="Synteq UI home">
+      <span class="v2-aside__brand-mark" aria-hidden="true">S</span>
+      Synteq UI
+    </a>
+
+    <nav class="v2-nav" aria-label="Primary navigation links">
+      <a href="dashboard.html" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="components.html" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/>
+          <rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/>
+        </svg>
+        Components
+      </a>
+      <a href="forms.html" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        Forms
+      </a>
+      <a href="#overlays" class="v2-nav__item v2-nav__item--active" aria-current="page">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
+        </svg>
+        Overlays
+      </a>
+    </nav>
+
+    <div class="v2-aside__footer">
+      <span class="v2-dot" aria-label="Online"></span>
+      <a href="#" class="v2-user" aria-label="Account: Demo User">
+        <span class="v2-avatar" aria-hidden="true">DU</span>
+        <span class="v2-user__info">
+          <span class="v2-user__name">Demo User</span>
+          <span class="v2-user__email">demo@synteq.dev</span>
+        </span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="v2-topbar" role="banner">
+    <button class="v2-sidebar-toggle"
+            data-v2-sidebar-toggle
+            aria-label="Toggle navigation"
+            aria-expanded="true"
+            aria-controls="sidebar">
+      <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <svg class="v2-icon v2-icon--18 icon-close" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="v2-topbar__left">
+      <span class="v2-topbar__title">Overlays & Disclosure</span>
+    </div>
+
+    <div class="v2-topbar__right">
+      <button class="v2-iconbtn v2-theme-toggle" data-v2-toggle-theme aria-label="Toggle theme">
+        <svg class="v2-icon v2-icon--16 v2-icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="v2-icon v2-icon--16 v2-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="v2-main" aria-label="Main content">
+    <div class="v2-content v2-scroll" id="main-content">
+
+      <!-- Tabs Section -->
+      <div class="v2-section v2-section--compact" id="tabs">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            </svg>
+            Tabs
+          </span>
+        </div>
+
+        <div class="v2-tabs" data-v2-tabs role="tablist" aria-label="Settings tabs">
+          <div class="v2-tabs__list">
+            <button class="v2-tabs__tab" role="tab" aria-selected="true" aria-controls="panel-general" id="tab-general">
+              General
+            </button>
+            <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="panel-security" id="tab-security">
+              Security
+            </button>
+            <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="panel-billing" id="tab-billing">
+              Billing
+            </button>
+            <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="panel-advanced" id="tab-advanced">
+              Advanced
+            </button>
+          </div>
+
+          <div class="v2-tabs__panel" role="tabpanel" id="panel-general" aria-labelledby="tab-general" aria-hidden="false">
+            <p>General settings panel. Configure your account name, email, and profile picture.</p>
+          </div>
+
+          <div class="v2-tabs__panel" role="tabpanel" id="panel-security" aria-labelledby="tab-security" aria-hidden="true">
+            <p>Security settings panel. Manage passwords, two-factor authentication, and session history.</p>
+          </div>
+
+          <div class="v2-tabs__panel" role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" aria-hidden="true">
+            <p>Billing settings panel. View invoices, update payment methods, and manage subscriptions.</p>
+          </div>
+
+          <div class="v2-tabs__panel" role="tabpanel" id="panel-advanced" aria-labelledby="tab-advanced" aria-hidden="true">
+            <p>Advanced settings panel. Developer API keys, webhooks, and custom integrations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion Section -->
+      <div class="v2-section v2-section--compact" id="accordion">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Accordion</span>
+        </div>
+
+        <div class="v2-accordion">
+          <details class="v2-accordion__item" open>
+            <summary class="v2-accordion__trigger">What is Synteq UI?</summary>
+            <div class="v2-accordion__content">
+              <p>Synteq UI V2 is a viewport-locked, offline-first dashboard framework built on six hard rules. It provides a complete component library for operator dashboards and admin panels.</p>
+            </div>
+          </details>
+
+          <details class="v2-accordion__item">
+            <summary class="v2-accordion__trigger">How do I get started?</summary>
+            <div class="v2-accordion__content">
+              <p>Link to <code>synteq-ui-v2.css</code> and <code>synteq-ui-v2.js</code> in your HTML. Use the shell template from the documentation to create your first page.</p>
+            </div>
+          </details>
+
+          <details class="v2-accordion__item">
+            <summary class="v2-accordion__trigger">Is it accessible?</summary>
+            <div class="v2-accordion__content">
+              <p>Yes. All components target WCAG 2.2 Level AA with keyboard navigation, ARIA attributes, and reduced-motion support. Full validation requires manual testing with assistive technologies.</p>
+            </div>
+          </details>
+
+          <details class="v2-accordion__item">
+            <summary class="v2-accordion__trigger">Can I customize the theme?</summary>
+            <div class="v2-accordion__content">
+              <p>Absolutely. Override CSS custom properties (<code>--v2-*</code> tokens) in your own stylesheet. See the theme extension guide in DESIGN.md for details.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Menu Section -->
+      <div class="v2-section v2-section--compact" id="menu">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Menu Dropdown</span>
+        </div>
+
+        <div style="display: flex; gap: var(--v2-space-4); flex-wrap: wrap;">
+          <div class="v2-menu-trigger" style="position: relative;">
+            <button class="v2-btn" data-v2-menu-trigger="demo-menu" aria-haspopup="menu" aria-expanded="false">
+              <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+              </svg>
+              Actions
+            </button>
+            <div class="v2-menu v2-menu--bottom" id="demo-menu" role="menu" hidden>
+              <button class="v2-menu__item" role="menuitem">
+                <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+              <button class="v2-menu__item" role="menuitem">
+                <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+                  <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+                </svg>
+                Refresh
+              </button>
+              <hr class="v2-menu__separator" />
+              <button class="v2-menu__item" role="menuitem">
+                <svg class="v2-icon v2-icon--16 v2-icon--err" viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="v2-menu-trigger" style="position: relative;">
+            <button class="v2-btn v2-btn--primary" data-v2-menu-trigger="share-menu" aria-haspopup="menu" aria-expanded="false">
+              <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Share
+            </button>
+            <div class="v2-menu v2-menu--bottom" id="share-menu" role="menu" hidden>
+              <button class="v2-menu__item" role="menuitem">Copy link</button>
+              <button class="v2-menu__item" role="menuitem">Email</button>
+              <button class="v2-menu__item" role="menuitem">Twitter</button>
+              <button class="v2-menu__item" role="menuitem">LinkedIn</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popover Section -->
+      <div class="v2-section v2-section--compact" id="popover">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Popover</span>
+        </div>
+
+        <div style="display: flex; gap: var(--v2-space-4); flex-wrap: wrap;">
+          <div style="position: relative;">
+            <button class="v2-btn v2-btn--ghost" data-v2-popover-trigger="info-popover" aria-haspopup="dialog">
+              <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              Help
+            </button>
+            <div class="v2-popover" id="info-popover" role="dialog" hidden>
+              Click tabs to navigate. Use arrow keys for keyboard navigation.
+            </div>
+          </div>
+
+          <div style="position: relative;">
+            <button class="v2-btn" data-v2-popover-trigger="rich-popover" aria-haspopup="dialog">
+              Instance Info
+            </button>
+            <div class="v2-popover v2-popover--rich" id="rich-popover" role="dialog" hidden>
+              <div class="v2-popover__title">VPS Instance</div>
+              <p>4 vCPU, 8 GB RAM, 160 GB SSD<br>Region: US East<br>Status: Running</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog Section -->
+      <div class="v2-section v2-section--compact" id="dialog">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Dialog (Modal)</span>
+        </div>
+
+        <div style="display: flex; gap: var(--v2-space-3); flex-wrap: wrap;">
+          <button class="v2-btn" onclick="document.getElementById('demo-dialog').showModal()">
+            Open Dialog
+          </button>
+          <button class="v2-btn" onclick="document.getElementById('sm-dialog').showModal()">
+            Small Dialog
+          </button>
+          <button class="v2-btn" onclick="document.getElementById('lg-dialog').showModal()">
+            Large Dialog
+          </button>
+          <button class="v2-btn v2-btn--danger" onclick="document.getElementById('confirm-dialog').showModal()">
+            Confirm Action
+          </button>
+        </div>
+      </div>
+
+      <!-- Toast Section -->
+      <div class="v2-section v2-section--compact" id="toast">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Toast Notifications</span>
+        </div>
+
+        <div style="display: flex; gap: var(--v2-space-3); flex-wrap: wrap;">
+          <button class="v2-btn" onclick="SynteqV2.toast('Default notification', { dismissible: true })">
+            Default Toast
+          </button>
+          <button class="v2-btn" onclick="SynteqV2.toast('Info message', { kind: 'info', dismissible: true })">
+            Info Toast
+          </button>
+          <button class="v2-btn v2-btn--primary" onclick="SynteqV2.toast('Operation completed successfully', { kind: 'ok', dismissible: true })">
+            Success Toast
+          </button>
+          <button class="v2-btn" onclick="SynteqV2.toast('Please review your settings', { kind: 'warn', dismissible: true })">
+            Warning Toast
+          </button>
+          <button class="v2-btn v2-btn--danger" onclick="SynteqV2.toast('Connection failed', { kind: 'err', dismissible: true, duration: 6000 })">
+            Error Toast
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Dialogs (outside app grid) -->
+<dialog class="v2-dialog" id="demo-dialog">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title">Dialog Title</h2>
+    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body">
+    <p>This is a standard dialog. It has a title, body content, and action buttons in the footer.</p>
+    <p>Press Escape or click the backdrop to close.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" onclick="this.closest('dialog').close()">Cancel</button>
+    <button class="v2-btn v2-btn--primary" onclick="this.closest('dialog').close()">Save Changes</button>
+  </div>
+</dialog>
+
+<dialog class="v2-dialog v2-dialog--sm" id="sm-dialog">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title">Small Dialog</h2>
+    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body">
+    <p>Compact dialog for simple confirmations.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--primary" onclick="this.closest('dialog').close()">Got it</button>
+  </div>
+</dialog>
+
+<dialog class="v2-dialog v2-dialog--lg" id="lg-dialog">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title">Large Dialog</h2>
+    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body">
+    <p>Large dialog for complex forms or content-heavy modals.</p>
+    <p>This dialog scrolls internally if content exceeds the viewport height.</p>
+    <div style="height: 600px; border: 1px dashed var(--v2-line); display: flex; align-items: center; justify-content: center; margin-top: var(--v2-space-4);">
+      <span style="color: var(--v2-text-subtle);">Tall content area (scroll to see footer)</span>
+    </div>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" onclick="this.closest('dialog').close()">Cancel</button>
+    <button class="v2-btn v2-btn--primary" onclick="this.closest('dialog').close()">Continue</button>
+  </div>
+</dialog>
+
+<dialog class="v2-dialog" id="confirm-dialog" role="alertdialog" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title" id="confirm-title">Confirm Deletion</h2>
+    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body" id="confirm-desc">
+    <p>Are you sure you want to delete this instance? This action cannot be undone.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" onclick="this.closest('dialog').close()">Cancel</button>
+    <button class="v2-btn v2-btn--danger" onclick="this.closest('dialog').close(); SynteqV2.toast('Instance deleted', { kind: 'ok' })">Delete</button>
+  </div>
+</dialog>
+
+<script src="../js/synteq-ui-v2.js"></script>
+</body>
+</html>

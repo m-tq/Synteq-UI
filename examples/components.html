@@ -194,6 +194,10 @@
         Inputs
       </a>
 
+      <a href="#feedback" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Feedback
+      </a>
       <a href="#motion" class="v2-nav__item">
         <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
         Motion
@@ -640,6 +644,193 @@
               <span class="v2-search__text">Search…</span>
               <kbd class="v2-kbd">⌘K</kbd>
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ FEEDBACK ══════════════════════════════════════════════ -->
+      <div class="v2-section" id="feedback">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Feedback &amp; Status
+          </span>
+          <span class="v2-section__meta">alerts, progress, breadcrumbs, empty states</span>
+        </div>
+
+        <!-- Alert -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Alert / Banner — 4 kinds</span>
+          <div class="cx-preview cx-preview--col" style="gap:var(--v2-space-3);">
+            <div class="v2-alert v2-alert--info" role="alert">
+              <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <div class="v2-alert__content">
+                <div class="v2-alert__title">System Update Available</div>
+                <div class="v2-alert__message">Version 2.1.0 is ready to install. Update now to get the latest features.</div>
+              </div>
+              <button class="v2-alert__dismiss" aria-label="Dismiss alert">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="v2-alert v2-alert--ok" role="alert">
+              <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <div class="v2-alert__content">
+                <div class="v2-alert__title">Deployment Successful</div>
+                <div class="v2-alert__message">Your application has been deployed to production.</div>
+              </div>
+            </div>
+
+            <div class="v2-alert v2-alert--warn" role="alert">
+              <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <div class="v2-alert__content">
+                <div class="v2-alert__title">High Memory Usage</div>
+                <div class="v2-alert__message">Instance is using 85% of available memory. Consider upgrading.</div>
+              </div>
+            </div>
+
+            <div class="v2-alert v2-alert--err" role="alert">
+              <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+              </svg>
+              <div class="v2-alert__content">
+                <div class="v2-alert__title">Connection Failed</div>
+                <div class="v2-alert__message">Unable to connect to database. Check your network settings and try again.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Progress Bar — determinate &amp; indeterminate</span>
+          <div class="cx-preview cx-preview--col cx-narrow" style="gap:var(--v2-space-4);">
+            <div class="v2-progress" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-progress__head">
+                <span class="v2-progress__label">Upload progress</span>
+                <span class="v2-progress__value">35%</span>
+              </div>
+              <div class="v2-progress__track">
+                <div class="v2-progress__fill" style="width: 35%;"></div>
+              </div>
+            </div>
+
+            <div class="v2-progress" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-progress__head">
+                <span class="v2-progress__label">Migration (warning threshold)</span>
+                <span class="v2-progress__value">78%</span>
+              </div>
+              <div class="v2-progress__track">
+                <div class="v2-progress__fill v2-progress__fill--warn" style="width: 78%;"></div>
+              </div>
+            </div>
+
+            <div class="v2-progress" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-progress__head">
+                <span class="v2-progress__label">Disk usage (error threshold)</span>
+                <span class="v2-progress__value">92%</span>
+              </div>
+              <div class="v2-progress__track">
+                <div class="v2-progress__fill v2-progress__fill--err" style="width: 92%;"></div>
+              </div>
+            </div>
+
+            <div class="v2-progress">
+              <div class="v2-progress__head">
+                <span class="v2-progress__label">Processing...</span>
+              </div>
+              <div class="v2-progress__track">
+                <div class="v2-progress__fill v2-progress__fill--indeterminate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Breadcrumb Navigation</span>
+          <div class="cx-preview">
+            <nav class="v2-breadcrumb" aria-label="Breadcrumb">
+              <a href="#" class="v2-breadcrumb__item">Home</a>
+              <span class="v2-breadcrumb__separator">/</span>
+              <a href="#" class="v2-breadcrumb__item">Instances</a>
+              <span class="v2-breadcrumb__separator">/</span>
+              <a href="#" class="v2-breadcrumb__item">us-east-1</a>
+              <span class="v2-breadcrumb__separator">/</span>
+              <span class="v2-breadcrumb__item" aria-current="page">i-0a1b2c3d</span>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Spinner -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Spinner — 3 sizes</span>
+          <div class="cx-preview" style="gap:var(--v2-space-4);">
+            <span class="v2-spinner v2-spinner--sm" role="status" aria-label="Loading"></span>
+            <span class="v2-spinner" role="status" aria-label="Loading"></span>
+            <span class="v2-spinner v2-spinner--lg" role="status" aria-label="Loading"></span>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Empty State</span>
+          <div class="cx-preview">
+            <div class="v2-empty">
+              <svg class="v2-empty__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+              <div class="v2-empty__title">No instances found</div>
+              <div class="v2-empty__message">
+                Get started by creating your first instance. It only takes a minute to launch a new server.
+              </div>
+              <div class="v2-empty__action">
+                <button class="v2-btn v2-btn--primary">Create Instance</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tag / Chip -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Tag / Chip — dismissible badges</span>
+          <div class="cx-preview" style="gap:var(--v2-space-2);flex-wrap:wrap;">
+            <span class="v2-tag">Default</span>
+            <span class="v2-tag v2-tag--brand">Featured</span>
+            <span class="v2-tag v2-tag--ok">
+              Active
+              <button class="v2-tag__dismiss" aria-label="Remove tag">
+                <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </span>
+            <span class="v2-tag v2-tag--warn">
+              Beta
+              <button class="v2-tag__dismiss" aria-label="Remove tag">
+                <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </span>
+            <span class="v2-tag v2-tag--err">
+              Deprecated
+              <button class="v2-tag__dismiss" aria-label="Remove tag">
+                <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </span>
           </div>
         </div>
       </div>

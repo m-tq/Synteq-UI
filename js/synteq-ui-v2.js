@@ -428,21 +428,279 @@
     });
   }
 
-  function toast(message) {
-    var region = $('[data-v2-toast-region]');
+  /* ======================================================
+     TOAST (upgraded with kinds, dismiss, queue)
+     toast('Message')                      // default (no border accent)
+     toast('Saved', { kind: 'ok' })        // green left border
+     toast('Warning', { kind: 'warn' })    // amber left border
+     toast('Error', { kind: 'err' })       // red left border
+     toast('Info', { kind: 'info' })       // brand left border
+     toast(msg, { duration: 5000 })        // custom duration
+     toast(msg, { dismissible: true })     // show X button
+     ====================================================== */
+  var _toastQueue = [];
+  var _toastPaused = false;
+
+  function toast(message, opts) {
+    if (!message) return;
+    opts = opts || {};
+    var kind = opts.kind || '';
+    var duration = opts.duration || 4000;
+    var dismissible = opts.dismissible !== false;
+
+    var region = $('[data-v2-toast-region]') || $('.v2-toast-region');
     if (!region) {
       region = document.createElement('div');
       region.className = 'v2-toast-region';
-      region.setAttribute('data-v2-toast-region', '');
       region.setAttribute('role', 'status');
-      region.setAttribute('aria-live', 'polite');
+      region.setAttribute('aria-live', kind === 'err' ? 'assertive' : 'polite');
       document.body.appendChild(region);
     }
+
     var item = document.createElement('div');
-    item.className = 'v2-toast';
-    item.textContent = message;
+    item.className = 'v2-toast' + (kind ? ' v2-toast--' + kind : '');
+
+    // Icon (optional, based on kind)
+    var iconMap = {
+      info: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      ok: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+      warn: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      err: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+    };
+
+    if (iconMap[kind]) {
+      var iconSpan = document.createElement('span');
+      iconSpan.className = 'v2-toast__icon';
+      iconSpan.innerHTML = iconMap[kind];
+      item.appendChild(iconSpan);
+    }
+
+    // Content
+    var content = document.createElement('div');
+    content.className = 'v2-toast__content';
+    content.textContent = message;
+    item.appendChild(content);
+
+    // Dismiss button
+    if (dismissible) {
+      var dismiss = document.createElement('button');
+      dismiss.className = 'v2-toast__dismiss';
+      dismiss.setAttribute('aria-label', 'Dismiss');
+      dismiss.innerHTML = '<svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+      dismiss.addEventListener('click', function () { removeToast(item); });
+      item.appendChild(dismiss);
+    }
+
+    // Pause on hover
+    var timer;
+    function startTimer() {
+      timer = setTimeout(function () { removeToast(item); }, duration);
+    }
+    item.addEventListener('mouseenter', function () { clearTimeout(timer); });
+    item.addEventListener('mouseleave', startTimer);
+
     region.appendChild(item);
-    window.setTimeout(function () { item.remove(); }, 3200);
+    startTimer();
+
+    return item;
+  }
+
+  function removeToast(item) {
+    if (!item || !item.parentNode) return;
+    item.classList.add('is-leaving');
+    setTimeout(function () { if (item.parentNode) item.remove(); }, 200);
+  }
+
+  /* ======================================================
+     TABS — roving tabindex + arrow keys
+     Wire with data-v2-tabs on .v2-tabs container
+     ====================================================== */
+  function initTabs() {
+    $$('[data-v2-tabs]').forEach(function (container) {
+      if (container.dataset.v2TabsReady === 'true') return;
+      container.dataset.v2TabsReady = 'true';
+
+      var tabs = $$('[role="tab"]', container);
+      var panels = $$('[role="tabpanel"]', container);
+      if (tabs.length === 0 || panels.length === 0) return;
+
+      function selectTab(index) {
+        tabs.forEach(function (tab, i) {
+          var selected = i === index;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.setAttribute('tabindex', selected ? '0' : '-1');
+          if (panels[i]) panels[i].setAttribute('aria-hidden', String(!selected));
+        });
+        tabs[index].focus();
+      }
+
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener('click', function (e) {
+          e.preventDefault();
+          selectTab(index);
+        });
+
+        tab.addEventListener('keydown', function (e) {
+          var current = tabs.indexOf(document.activeElement);
+          if (current === -1) return;
+
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectTab((current + 1) % tabs.length);
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectTab((current - 1 + tabs.length) % tabs.length);
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            selectTab(0);
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            selectTab(tabs.length - 1);
+          }
+        });
+      });
+
+      // Initialize first tab as selected if none is
+      var hasSelected = tabs.some(function (tab) { return tab.getAttribute('aria-selected') === 'true'; });
+      if (!hasSelected) selectTab(0);
+    });
+  }
+
+  /* ======================================================
+     MENU — open/close, keyboard nav, escape
+     Trigger: data-v2-menu-trigger="menu-id"
+     Menu: .v2-menu#menu-id
+     ====================================================== */
+  function initMenus() {
+    $$('[data-v2-menu-trigger]').forEach(function (trigger) {
+      if (trigger.dataset.v2MenuReady === 'true') return;
+      trigger.dataset.v2MenuReady = 'true';
+
+      var menuId = trigger.getAttribute('data-v2-menu-trigger');
+      var menu = document.getElementById(menuId);
+      if (!menu) return;
+
+      var items = $$('.v2-menu__item', menu);
+      var currentFocus = -1;
+
+      function openMenu() {
+        menu.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        currentFocus = -1;
+        items[0]?.focus();
+      }
+
+      function closeMenu() {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+
+      function focusItem(index) {
+        if (index < 0 || index >= items.length) return;
+        currentFocus = index;
+        items[index].focus();
+      }
+
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        menu.hidden ? openMenu() : closeMenu();
+      });
+
+      menu.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeMenu();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          focusItem((currentFocus + 1) % items.length);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          focusItem((currentFocus - 1 + items.length) % items.length);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          focusItem(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          focusItem(items.length - 1);
+        }
+      });
+
+      items.forEach(function (item, index) {
+        item.addEventListener('click', function () { closeMenu(); });
+        item.addEventListener('focus', function () { currentFocus = index; });
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!menu.hidden && !menu.contains(e.target) && !trigger.contains(e.target)) {
+          closeMenu();
+        }
+      });
+    });
+  }
+
+  /* ======================================================
+     POPOVER — show/hide, positioning, escape
+     Trigger: data-v2-popover-trigger="popover-id"
+     Popover: .v2-popover#popover-id
+     ====================================================== */
+  function initPopovers() {
+    $$('[data-v2-popover-trigger]').forEach(function (trigger) {
+      if (trigger.dataset.v2PopoverReady === 'true') return;
+      trigger.dataset.v2PopoverReady = 'true';
+
+      var popoverId = trigger.getAttribute('data-v2-popover-trigger');
+      var popover = document.getElementById(popoverId);
+      if (!popover) return;
+
+      function showPopover() {
+        popover.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        positionPopover();
+      }
+
+      function hidePopover() {
+        popover.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+
+      function positionPopover() {
+        var rect = trigger.getBoundingClientRect();
+        var gap = 8;
+        var top = rect.bottom + gap;
+        var left = rect.left + rect.width / 2 - popover.offsetWidth / 2;
+
+        // Keep in viewport
+        if (top + popover.offsetHeight > window.innerHeight) {
+          top = rect.top - popover.offsetHeight - gap;
+        }
+        if (left < gap) left = gap;
+        if (left + popover.offsetWidth > window.innerWidth - gap) {
+          left = window.innerWidth - popover.offsetWidth - gap;
+        }
+
+        popover.style.top = top + 'px';
+        popover.style.left = left + 'px';
+      }
+
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        popover.hidden ? showPopover() : hidePopover();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !popover.hidden) {
+          hidePopover();
+          trigger.focus();
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!popover.hidden && !popover.contains(e.target) && !trigger.contains(e.target)) {
+          hidePopover();
+        }
+      });
+    });
   }
 
   function initProductionControls() {
@@ -831,6 +1089,9 @@
     initNavDock();
     initNavScroll();
     initHashSection();
+    initTabs();
+    initMenus();
+    initPopovers();
   }
 
   if (document.readyState === 'loading') {
@@ -843,6 +1104,7 @@
      PUBLIC API
      ====================================================== */
   global.SynteqV2 = {
+    version: '2.0.0',
     // Theme
     setTheme:        setTheme,
     getTheme:        getTheme,
@@ -855,15 +1117,20 @@
     renderGauge:     renderGauge,
     renderBars:      renderBars,
     renderSparkline: renderSparkline,
+    // Overlays & feedback
     toast:           toast,
     tip:             tip,
     // Navigation
     scrollToSection: scrollToSection,
     // Init helpers (call after dynamic content changes)
+    init:            init,
     initGauges:      initGauges,
     initSparklines:  initSparklines,
     initNavDock:     initNavDock,
     initNavScroll:   initNavScroll,
+    initTabs:        initTabs,
+    initMenus:       initMenus,
+    initPopovers:    initPopovers,
   };
 
 })(window);

@@ -420,7 +420,74 @@ Responsive: component tag hidden at `≤720px`, timestamp hidden at `≤420px`.
 
 ---
 
-### 5.6 Controls
+### 5.6 Form Controls
+
+V2 restyls native HTML form elements to match the flat-surface model. All controls use `--v2-inset` background, `--v2-radius-control` (or `--v2-radius-micro` for checkboxes), and transparent borders that turn brand-colored on focus.
+
+#### Field Wrapper
+
+| Class | Purpose |
+|-------|---------|
+| `.v2-field` | Flex column container. `gap: var(--v2-field-gap)`. Groups label + input + hint/error. |
+| `.v2-field__label` | Label text. `--v2-text-sm`, `--v2-fw-medium`, `--v2-text-strong`. |
+| `.v2-field__label--required` | Adds red asterisk via `::after`. |
+| `.v2-field__hint` | Helper text below input. `--v2-text-xs`, `--v2-text-subtle`. Always visible unless field is invalid. |
+| `.v2-field__error` | Error message. `--v2-text-xs`, `--v2-status-error`. Hidden by default, shown when `.v2-field--invalid` applied. |
+| `.v2-field--invalid` | State class. Shows error, adds red border to input. Wire with `[aria-invalid="true"]` on the input. |
+
+#### Text Inputs
+
+| Class | Element | Notes |
+|-------|---------|-------|
+| `.v2-input` | `<input type="text|email|password|number|tel|url">` | Height `--v2-input-h` (32px). Transparent border → brand on focus. Red border when `[aria-invalid="true"]`. |
+| `.v2-textarea` | `<textarea>` | Min-height 2.5× input height. Vertical resize allowed. Same focus/invalid states as input. |
+| `.v2-select` | `<select>` | Native dropdown with custom SVG arrow (data-uri). Arrow color switches per theme. Same states as input. |
+
+#### Checkbox & Radio
+
+| Class | Element | Notes |
+|-------|---------|-------|
+| `.v2-checkbox` | `<input type="checkbox">` | 16×16 px (20×20 on touch). `appearance: none`, custom checkmark via `::after` when `:checked`. Background → brand when checked. |
+| `.v2-checkbox-label` | `<label>` wrapper | Flex row, gap, cursor pointer. Dims when checkbox disabled. |
+| `.v2-radio` | `<input type="radio">` | Circular variant. 6×6 px inner dot via `::after` when `:checked`. |
+| `.v2-radio-label` | `<label>` wrapper | Same pattern as checkbox-label. |
+| `.v2-radio-group` | Container for radio set | Flex column, gap. Add `role="radiogroup"` + `aria-label`. |
+
+#### Switch
+
+| Class | Element | Notes |
+|-------|---------|-------|
+| `.v2-switch` | `<input type="checkbox">` styled as toggle | 36×20 px track (44×24 on touch). Sliding dot via `::after`, translateX(16px) when checked. Brand bg when checked. Add `role="switch"` + `aria-checked`. |
+| `.v2-switch-label` | `<label>` wrapper | Flex row, gap, pointer. |
+
+#### Input Group
+
+| Class | Purpose |
+|-------|---------|
+| `.v2-input-group` | Flex row wrapper. Single outer border + `--v2-inset` background. Focus-within → brand border. |
+| `.v2-input-group .v2-input` | Input inside group. No border, transparent bg, flex:1. |
+| `.v2-input-group__affix` | Prefix or suffix text/icon. Hairline separator between segments. First-child gets right border, others get left border. |
+
+#### Range Slider
+
+| Class | Purpose |
+|-------|---------|
+| `.v2-range` | `<input type="range">`. Track height 6px, `--v2-track` bg, pill radius. Custom thumb: 16×16 circle, `--v2-brand`, hover scale 1.15×. Vendor prefixes for `::-webkit-slider-thumb` and `::-moz-range-thumb`. |
+| `.v2-range-label` | Wrapper with label + value display above slider. |
+| `.v2-range-label__head` | Flex row, space-between. Label left, value right. |
+| `.v2-range-label__value` | Tabular nums, `--v2-text-strong`, medium weight. |
+
+**States (all controls):**
+- `:disabled` → 40-50% opacity, `cursor: not-allowed`
+- `:focus-visible` → brand border (inputs) or brand ring (checkbox/radio/switch)
+- `[aria-invalid="true"]` → `--v2-status-error` border
+- `[readonly]` → dimmed, no interaction
+
+**Touch targets:** `@media (pointer: coarse)` increases checkbox/radio to 20×20, switch to 44×24 to meet WCAG 2.2 AA minimum (44×44 effective tap area with label).
+
+---
+
+### 5.7 Buttons
 
 #### Buttons
 
@@ -551,7 +618,129 @@ CSS rules swap their `display` based on `.nav-collapsed`. The open state shows t
 
 ---
 
-## 8. Dos and Don'ts
+## 8. Theme Extension Guide
+
+Synteq UI V2 ships with two themes: dark (default) and light. Both are defined entirely through CSS custom properties (`--v2-*` tokens). You can extend or override these themes without modifying framework files.
+
+### Overriding Theme Tokens
+
+Create a custom stylesheet **after** `synteq-ui-v2.css`:
+
+```html
+<link rel="stylesheet" href="V2/css/synteq-ui-v2.css" />
+<link rel="stylesheet" href="custom-theme.css" />
+```
+
+In `custom-theme.css`, override tokens at the `:root` level or scope them to `[data-theme]`:
+
+```css
+/* Override for all themes */
+:root {
+  --v2-brand: #3b82f6;       /* Change brand color globally */
+  --v2-radius-control: 8px;  /* Increase border radius */
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --v2-canvas: #0a0a0a;
+  --v2-text-strong: #f5f5f5;
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --v2-brand: #2563eb;
+  --v2-canvas: #fafafa;
+}
+```
+
+### Creating a Third Theme
+
+Add a new `[data-theme="mytheme"]` block:
+
+```css
+[data-theme="mytheme"] {
+  /* Color tokens */
+  --v2-canvas: #1a1a2e;
+  --v2-sidebar: #16213e;
+  --v2-text-strong: #eef1ff;
+  --v2-text: #c5cae9;
+  --v2-text-subtle: #9fa8da;
+  --v2-text-on-accent: #ffffff;
+  --v2-brand: #5c6bc0;
+  --v2-line: rgba(255, 255, 255, 0.08);
+  --v2-line-strong: rgba(255, 255, 255, 0.14);
+  --v2-hover: rgba(255, 255, 255, 0.06);
+  --v2-inset: rgba(255, 255, 255, 0.04);
+  --v2-track: rgba(255, 255, 255, 0.08);
+  
+  /* Status colors */
+  --v2-status-running: #66bb6a;
+  --v2-status-warning: #ffa726;
+  --v2-status-error: #ef5350;
+  --v2-status-stopped: #78909c;
+}
+```
+
+Activate via JS:
+
+```js
+SynteqV2.setTheme('mytheme');
+```
+
+Or set `data-theme="mytheme"` on `<html>` in your markup.
+
+### Extending with New Tokens
+
+Add domain-specific tokens in your custom stylesheet:
+
+```css
+:root {
+  --app-header-h: 64px;
+  --app-sidebar-collapsed: 48px;
+  --app-accent-blue: #3b82f6;
+}
+```
+
+Reference them in component styles:
+
+```css
+.app-custom-panel {
+  height: var(--app-header-h);
+  background: var(--v2-canvas);
+  border-left: 3px solid var(--app-accent-blue);
+}
+```
+
+### Token Groups Reference
+
+Core token groups you can override:
+
+| Group | Example Tokens | Notes |
+|-------|---------------|-------|
+| **Typography** | `--v2-font-sans`, `--v2-text-md`, `--v2-fw-medium` | Type scale, weights, line heights |
+| **Spacing** | `--v2-space-4`, `--v2-space-8` | 4px base grid, 9 steps |
+| **Radius** | `--v2-radius-micro`, `--v2-radius-control`, `--v2-radius-pill` | 3 border radius values |
+| **Color (Surface)** | `--v2-canvas`, `--v2-sidebar`, `--v2-hover`, `--v2-inset` | Background surfaces |
+| **Color (Text)** | `--v2-text-strong`, `--v2-text`, `--v2-text-subtle` | Text hierarchy |
+| **Color (Line)** | `--v2-line`, `--v2-line-strong` | Borders and separators |
+| **Color (Status)** | `--v2-status-running`, `--v2-status-warning`, `--v2-status-error` | Semantic colors |
+| **Motion** | `--v2-dur-instant`, `--v2-dur-fast`, `--v2-ease` | Timing and easing |
+
+### Forced Colors Mode (High Contrast)
+
+The framework includes automatic support for Windows High Contrast Mode via `@media (forced-colors: active)`. System colors are applied to interactive elements. No override needed unless you have specific forced-colors requirements.
+
+### Best Practices
+
+1. **Never modify framework files directly.** Use a separate custom stylesheet that loads after `synteq-ui-v2.css`.
+2. **Test both themes.** If you override a token, verify it works in dark and light mode.
+3. **Maintain contrast ratios.** Keep text-to-background contrast at ≥ 4.5:1 (WCAG AA). Use a contrast checker.
+4. **Scope overrides to themes.** Use `[data-theme="dark"]` / `[data-theme="light"]` instead of global `:root` overrides when colors differ between themes.
+5. **Document custom tokens.** If you add new tokens, document them in your project's style guide.
+
+---
+
+## 9. Dos and Don'ts
 
 | | Rule |
 |---|------|
@@ -572,7 +761,7 @@ CSS rules swap their `display` based on `.nav-collapsed`. The open state shows t
 
 ---
 
-## 9. Accessibility
+## 10. Accessibility
 
 Synteq UI V2 targets **WCAG 2.2 Level AA**. Full validation requires manual testing with assistive technologies.
 

@@ -37,6 +37,7 @@
   /* Radius — minimal two-tier (V2 favors near-flat surfaces) */
   --v2-radius-micro: 2px;   /* micro badges, status dots, chart caps */
   --v2-radius-control: 5px; /* buttons, inputs, segmented, nav items */
+  --v2-radius-pill: 999px;  /* switches, range thumbs, circular caps */
 
   /* Layout shell tokens (drive the viewport-locked grid) */
   --v2-aside-w: clamp(204px, 17vw, 240px);
@@ -58,4 +59,8 @@
   /* Hairline separator weights */
   --v2-line-h: 1px;
   --v2-line-h-strong: 1px;
+
+  /* Form controls */
+  --v2-input-h: 32px;       /* standard input/select/button height */
+  --v2-field-gap: var(--v2-space-1); /* gap between label and input */
 }

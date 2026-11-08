@@ -357,6 +357,425 @@ timestamp hidden `≤420px`.
 
 ---
 
+## Overlay Components
+
+### Tabs
+
+```html
+<div class="v2-tabs" data-v2-tabs role="tablist" aria-label="Settings tabs">
+  <div class="v2-tabs__list">
+    <button class="v2-tabs__tab" role="tab" aria-selected="true" 
+            aria-controls="panel-general" id="tab-general">
+      General
+    </button>
+    <button class="v2-tabs__tab" role="tab" aria-selected="false" 
+            aria-controls="panel-security" id="tab-security">
+      Security
+    </button>
+    <button class="v2-tabs__tab" role="tab" aria-selected="false" 
+            aria-controls="panel-billing" id="tab-billing">
+      Billing
+    </button>
+  </div>
+
+  <div class="v2-tabs__panel" role="tabpanel" id="panel-general" 
+       aria-labelledby="tab-general" aria-hidden="false">
+    <p>General settings panel content.</p>
+  </div>
+
+  <div class="v2-tabs__panel" role="tabpanel" id="panel-security" 
+       aria-labelledby="tab-security" aria-hidden="true">
+    <p>Security settings panel content.</p>
+  </div>
+
+  <div class="v2-tabs__panel" role="tabpanel" id="panel-billing" 
+       aria-labelledby="tab-billing" aria-hidden="true">
+    <p>Billing settings panel content.</p>
+  </div>
+</div>
+```
+
+Tabs auto-init with roving tabindex (arrow keys navigate). Use `data-v2-tabs` to enable JS behavior.
+
+### Accordion
+
+```html
+<div class="v2-accordion">
+  <details class="v2-accordion__item" open>
+    <summary class="v2-accordion__trigger">What is Synteq UI?</summary>
+    <div class="v2-accordion__content">
+      <p>Synteq UI V2 is a viewport-locked, offline-first dashboard framework.</p>
+    </div>
+  </details>
+
+  <details class="v2-accordion__item">
+    <summary class="v2-accordion__trigger">How do I get started?</summary>
+    <div class="v2-accordion__content">
+      <p>Link to synteq-ui-v2.css and synteq-ui-v2.js in your HTML.</p>
+    </div>
+  </details>
+</div>
+```
+
+Uses native `<details>` for progressive enhancement. Multiple items can be open simultaneously.
+
+### Menu dropdown
+
+```html
+<div style="position: relative;">
+  <button class="v2-btn" data-v2-menu-trigger="actions-menu" 
+          aria-haspopup="menu" aria-expanded="false">
+    Actions
+  </button>
+  <div class="v2-menu v2-menu--bottom" id="actions-menu" role="menu" hidden>
+    <button class="v2-menu__item" role="menuitem">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <!-- icon path -->
+      </svg>
+      Edit
+    </button>
+    <button class="v2-menu__item" role="menuitem">Refresh</button>
+    <hr class="v2-menu__separator" />
+    <button class="v2-menu__item" role="menuitem">Delete</button>
+  </div>
+</div>
+```
+
+JS runtime wires `data-v2-menu-trigger`. Position variants: `v2-menu--top`, `v2-menu--bottom`, `v2-menu--left`, `v2-menu--right`. Auto-dismiss on click outside or Escape.
+
+### Popover
+
+```html
+<div style="position: relative;">
+  <button class="v2-btn" data-v2-popover-trigger="help-popover" 
+          aria-haspopup="dialog">
+    Help
+  </button>
+  <div class="v2-popover" id="help-popover" role="dialog" hidden>
+    Click tabs to navigate. Use arrow keys for keyboard navigation.
+  </div>
+</div>
+```
+
+Rich variant with title:
+
+```html
+<div class="v2-popover v2-popover--rich" id="info-popover" role="dialog" hidden>
+  <div class="v2-popover__title">Instance Details</div>
+  <p>4 vCPU, 8 GB RAM, 160 GB SSD<br>Region: US East</p>
+</div>
+```
+
+JS runtime wires `data-v2-popover-trigger`. Auto-dismiss on click outside or Escape.
+
+### Dialog (Modal)
+
+```html
+<dialog class="v2-dialog" id="demo-dialog">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title">Dialog Title</h2>
+    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" 
+            aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body">
+    <p>Dialog content goes here.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" onclick="this.closest('dialog').close()">
+      Cancel
+    </button>
+    <button class="v2-btn v2-btn--primary" onclick="this.closest('dialog').close()">
+      Save Changes
+    </button>
+  </div>
+</dialog>
+
+<!-- Trigger -->
+<button class="v2-btn" onclick="document.getElementById('demo-dialog').showModal()">
+  Open Dialog
+</button>
+```
+
+Size variants: `v2-dialog--sm`, `v2-dialog--lg`. Uses native `<dialog>` element. Backdrop click closes modal.
+
+### Toast notification
+
+```js
+// Default toast
+SynteqV2.toast('Operation completed');
+
+// With options
+SynteqV2.toast('File saved successfully', {
+  kind: 'ok',        // 'info' | 'ok' | 'warn' | 'err'
+  duration: 4000,    // ms (default 3500)
+  dismissible: true  // show close button
+});
+```
+
+Toasts stack in bottom-right corner, auto-dismiss after duration. Kinds add icon + color.
+
+---
+
+## Feedback Components
+
+### Alert / Banner
+
+```html
+<div class="v2-alert v2-alert--info" role="alert">
+  <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="16" x2="12" y2="12"/>
+    <line x1="12" y1="8" x2="12.01" y2="8"/>
+  </svg>
+  <div class="v2-alert__content">
+    <div class="v2-alert__title">Update Available</div>
+    <div class="v2-alert__message">Version 2.1.0 is ready to install.</div>
+  </div>
+  <button class="v2-alert__dismiss" aria-label="Dismiss alert">
+    <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</div>
+```
+
+Variants: `v2-alert--info`, `v2-alert--ok`, `v2-alert--warn`, `v2-alert--err`. Left border rail matches kind color.
+
+### Progress bar
+
+```html
+<div class="v2-progress" role="progressbar" aria-valuenow="65" 
+     aria-valuemin="0" aria-valuemax="100">
+  <div class="v2-progress__head">
+    <span class="v2-progress__label">Upload progress</span>
+    <span class="v2-progress__value">65%</span>
+  </div>
+  <div class="v2-progress__track">
+    <div class="v2-progress__fill" style="width: 65%;"></div>
+  </div>
+</div>
+```
+
+Color variants: `v2-progress__fill--ok`, `v2-progress__fill--warn`, `v2-progress__fill--err`.
+
+Indeterminate (loading state):
+
+```html
+<div class="v2-progress__track">
+  <div class="v2-progress__fill v2-progress__fill--indeterminate"></div>
+</div>
+```
+
+### Breadcrumb
+
+```html
+<nav class="v2-breadcrumb" aria-label="Breadcrumb">
+  <a href="#" class="v2-breadcrumb__item">Home</a>
+  <span class="v2-breadcrumb__separator">/</span>
+  <a href="#" class="v2-breadcrumb__item">Settings</a>
+  <span class="v2-breadcrumb__separator">/</span>
+  <span class="v2-breadcrumb__item" aria-current="page">Security</span>
+</nav>
+```
+
+Current page item is not clickable. Use any separator character.
+
+### Empty state
+
+```html
+<div class="v2-empty">
+  <svg class="v2-empty__icon" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="16"/>
+    <line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+  <div class="v2-empty__title">No instances found</div>
+  <div class="v2-empty__message">
+    Get started by creating your first instance. It only takes a minute.
+  </div>
+  <div class="v2-empty__action">
+    <button class="v2-btn v2-btn--primary">Create Instance</button>
+  </div>
+</div>
+```
+
+### Skeleton (loading placeholder)
+
+```html
+<!-- Text line -->
+<span class="v2-skeleton v2-skeleton--text">&nbsp;</span>
+
+<!-- Title -->
+<span class="v2-skeleton v2-skeleton--title">&nbsp;</span>
+
+<!-- Circle (avatar) -->
+<span class="v2-skeleton v2-skeleton--circle">&nbsp;</span>
+
+<!-- Button -->
+<span class="v2-skeleton v2-skeleton--btn">&nbsp;</span>
+
+<!-- Custom size -->
+<span class="v2-skeleton" style="height: 14px; width: 72%;">&nbsp;</span>
+```
+
+Shimmer animation auto-plays. Use `&nbsp;` for non-empty content.
+
+### Spinner
+
+```html
+<span class="v2-spinner" role="status" aria-label="Loading"></span>
+<span class="v2-spinner v2-spinner--sm" role="status" aria-label="Loading"></span>
+<span class="v2-spinner v2-spinner--lg" role="status" aria-label="Loading"></span>
+```
+
+### Tag / Chip (dismissible badge)
+
+```html
+<span class="v2-tag">
+  Default
+</span>
+
+<span class="v2-tag v2-tag--brand">
+  Featured
+</span>
+
+<span class="v2-tag v2-tag--ok">
+  Active
+  <button class="v2-tag__dismiss" aria-label="Remove tag">
+    <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</span>
+```
+
+Variants: `v2-tag--brand`, `v2-tag--ok`, `v2-tag--warn`, `v2-tag--err`. Pill-shaped with optional dismiss button.
+
+---
+
+## Form Components
+
+### Text input with field wrapper
+
+```html
+<div class="v2-field">
+  <label for="username" class="v2-field__label v2-field__label--required">Username</label>
+  <input type="text" id="username" class="v2-input" placeholder="Enter username" 
+         aria-required="true" aria-describedby="username-hint">
+  <span id="username-hint" class="v2-field__hint">Must be 3-20 characters, alphanumeric only</span>
+</div>
+```
+
+Invalid state (shows error, hides hint):
+
+```html
+<div class="v2-field v2-field--invalid">
+  <label for="email" class="v2-field__label">Email</label>
+  <input type="email" id="email" class="v2-input" aria-invalid="true" 
+         aria-describedby="email-error">
+  <span id="email-error" class="v2-field__error">Please enter a valid email address</span>
+</div>
+```
+
+### Textarea
+
+```html
+<div class="v2-field">
+  <label for="notes" class="v2-field__label">Notes</label>
+  <textarea id="notes" class="v2-textarea" rows="4" placeholder="Enter notes..."></textarea>
+</div>
+```
+
+### Select dropdown
+
+```html
+<div class="v2-field">
+  <label for="region" class="v2-field__label">Region</label>
+  <select id="region" class="v2-select">
+    <option value="">Select a region</option>
+    <option value="us-east">US East</option>
+    <option value="us-west">US West</option>
+    <option value="eu-central">EU Central</option>
+  </select>
+</div>
+```
+
+### Checkbox
+
+```html
+<label class="v2-checkbox-label">
+  <input type="checkbox" class="v2-checkbox">
+  I agree to the terms and conditions
+</label>
+```
+
+### Radio group
+
+```html
+<div class="v2-field">
+  <span class="v2-field__label">Instance size</span>
+  <div class="v2-radio-group" role="radiogroup" aria-label="Instance size">
+    <label class="v2-radio-label">
+      <input type="radio" name="size" value="small" class="v2-radio">
+      Small (2 vCPU, 4 GB)
+    </label>
+    <label class="v2-radio-label">
+      <input type="radio" name="size" value="medium" class="v2-radio" checked>
+      Medium (4 vCPU, 8 GB)
+    </label>
+    <label class="v2-radio-label">
+      <input type="radio" name="size" value="large" class="v2-radio">
+      Large (8 vCPU, 16 GB)
+    </label>
+  </div>
+</div>
+```
+
+### Switch (toggle)
+
+```html
+<label class="v2-switch-label">
+  <input type="checkbox" class="v2-switch" role="switch" aria-checked="false">
+  Enable auto-renewal
+</label>
+```
+
+### Input group (prefix/suffix)
+
+```html
+<div class="v2-field">
+  <label for="amount" class="v2-field__label">Amount</label>
+  <div class="v2-input-group">
+    <span class="v2-input-group__affix">$</span>
+    <input type="number" id="amount" class="v2-input" placeholder="0.00">
+    <span class="v2-input-group__affix">USD</span>
+  </div>
+</div>
+```
+
+### Range slider
+
+```html
+<div class="v2-range-label">
+  <div class="v2-range-label__head">
+    <span class="v2-range-label__name">CPU Limit</span>
+    <span class="v2-range-label__value">75%</span>
+  </div>
+  <input type="range" class="v2-range" min="0" max="100" value="75" 
+         aria-label="CPU limit percentage">
+</div>
+```
+
+**States:** All form controls support `:disabled`, `:focus-visible`, and `[aria-invalid="true"]`. Disabled controls get 40-50% opacity and `cursor: not-allowed`. Invalid controls show a red border (error color).
+
+**Touch targets:** Under `@media (pointer: coarse)`, checkbox/radio/switch sizes increase to meet 44×44 px minimum.
+
+---
+
 ## JS API Reference
 
 All methods are on the `SynteqV2` global, available after `synteq-ui-v2.js` loads.

@@ -69,7 +69,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+  border: var(--v2-line-h) solid var(--v2-line-strong);
   pointer-events: none;
   animation: v2-fade-up var(--v2-dur-fast) var(--v2-ease) both;
 }

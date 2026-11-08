@@ -1,0 +1,86 @@
+/**
+ * Synteq UI V2 — Version 2.0.0
+ * Production-ready framework quality features:
+ * - Idempotent init() for dynamic content
+ * - Custom events for reactive integration
+ * - Density control
+ * - Forced-colors support
+ */
+
+/* ---- Density Control ---- */
+[data-v2-density="compact"] {
+  --v2-space-1: 3px;
+  --v2-space-2: 6px;
+  --v2-space-3: 9px;
+  --v2-space-4: 12px;
+  --v2-space-5: 16px;
+  --v2-space-6: 20px;
+}
+
+[data-v2-density="comfortable"] {
+  --v2-space-1: 6px;
+  --v2-space-2: 10px;
+  --v2-space-3: 14px;
+  --v2-space-4: 18px;
+  --v2-space-5: 24px;
+  --v2-space-6: 28px;
+}
+
+/* ---- Forced Colors (Windows High Contrast) ---- */
+@media (forced-colors: active) {
+  .v2-btn,
+  .v2-input,
+  .v2-select,
+  .v2-checkbox,
+  .v2-radio,
+  .v2-switch,
+  .v2-tabs__tab,
+  .v2-menu__item,
+  .v2-dialog,
+  .v2-alert,
+  .v2-tag {
+    border: 1px solid CanvasText;
+  }
+
+  .v2-btn--primary,
+  .v2-btn--brand {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 2px solid ButtonBorder;
+  }
+
+  .v2-nav__item--active,
+  .v2-tabs__tab[aria-selected="true"] {
+    border: 2px solid Highlight;
+    color: Highlight;
+  }
+
+  .v2-brand,
+  .v2-status-running,
+  .v2-status-warning,
+  .v2-status-error {
+    color: CanvasText;
+  }
+
+  .v2-alert__icon,
+  .v2-toast__icon {
+    color: CanvasText;
+  }
+}
+
+/* ---- Touch Targets (pointer: coarse) ---- */
+@media (pointer: coarse) {
+  .v2-btn,
+  .v2-iconbtn,
+  .v2-seg__btn,
+  .v2-tabs__tab,
+  .v2-menu__item {
+    min-height: 44px;
+  }
+
+  .v2-sidebar-toggle,
+  .v2-theme-toggle {
+    width: 44px;
+    height: 44px;
+  }
+}

@@ -1,0 +1,382 @@
+/* ==========================================================================
+   SYNTEQ UI V2 — FEEDBACK & STATUS (components/feedback.css)
+   Alert, progress, breadcrumb, empty state, spinner, skeleton polish.
+   Flat-surface model: hairline borders + colored accent rail, no fills.
+   ========================================================================== */
+
+/* ---- Alert / Banner ---- */
+.v2-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--v2-space-3);
+  padding: var(--v2-space-3) var(--v2-space-4);
+  border: var(--v2-line-h) solid var(--v2-line-strong);
+  border-left-width: 3px;
+  border-radius: var(--v2-radius-control);
+  background: var(--v2-canvas);
+  color: var(--v2-text);
+  font-size: var(--v2-text-sm);
+  line-height: var(--v2-leading-base);
+}
+
+.v2-alert--info {
+  border-left-color: var(--v2-brand);
+}
+
+.v2-alert--ok {
+  border-left-color: var(--v2-status-running);
+}
+
+.v2-alert--warn {
+  border-left-color: var(--v2-status-warning);
+}
+
+.v2-alert--err {
+  border-left-color: var(--v2-status-error);
+}
+
+.v2-alert__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.v2-alert--info .v2-alert__icon {
+  color: var(--v2-brand);
+}
+
+.v2-alert--ok .v2-alert__icon {
+  color: var(--v2-status-running);
+}
+
+.v2-alert--warn .v2-alert__icon {
+  color: var(--v2-status-warning);
+}
+
+.v2-alert--err .v2-alert__icon {
+  color: var(--v2-status-error);
+}
+
+.v2-alert__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.v2-alert__title {
+  font-weight: var(--v2-fw-medium);
+  color: var(--v2-text-strong);
+  margin-bottom: var(--v2-space-1);
+}
+
+.v2-alert__message {
+  color: var(--v2-text);
+}
+
+.v2-alert__dismiss {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--v2-radius-micro);
+  color: var(--v2-text-subtle);
+  cursor: pointer;
+  transition: background-color var(--v2-dur-instant) var(--v2-ease),
+              color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-alert__dismiss:hover {
+  background: var(--v2-hover);
+  color: var(--v2-text-strong);
+}
+
+/* ---- Progress Bar ---- */
+.v2-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-2);
+  width: 100%;
+}
+
+.v2-progress__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--v2-text-sm);
+}
+
+.v2-progress__label {
+  color: var(--v2-text);
+}
+
+.v2-progress__value {
+  color: var(--v2-text-strong);
+  font-weight: var(--v2-fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.v2-progress__track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--v2-track);
+  border-radius: var(--v2-radius-pill);
+  overflow: hidden;
+}
+
+.v2-progress__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  height: 100%;
+  background: var(--v2-brand);
+  border-radius: var(--v2-radius-pill);
+  transition: width var(--v2-dur-slow) var(--v2-ease);
+}
+
+.v2-progress__fill--ok {
+  background: var(--v2-status-running);
+}
+
+.v2-progress__fill--warn {
+  background: var(--v2-status-warning);
+}
+
+.v2-progress__fill--err {
+  background: var(--v2-status-error);
+}
+
+/* Indeterminate progress (loading state) */
+.v2-progress__fill--indeterminate {
+  width: 40%;
+  animation: v2-progress-indeterminate 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes v2-progress-indeterminate {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ---- Spinner ---- */
+.v2-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--v2-line-strong);
+  border-top-color: var(--v2-brand);
+  border-radius: 50%;
+  animation: v2-spinner-rotate 0.8s linear infinite;
+}
+
+.v2-spinner--sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.v2-spinner--lg {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+@keyframes v2-spinner-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Breadcrumb ---- */
+.v2-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  flex-wrap: wrap;
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text-subtle);
+}
+
+.v2-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  color: var(--v2-text-subtle);
+  text-decoration: none;
+  transition: color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-breadcrumb__item:hover {
+  color: var(--v2-text);
+}
+
+.v2-breadcrumb__item[aria-current="page"] {
+  color: var(--v2-text-strong);
+  font-weight: var(--v2-fw-medium);
+  pointer-events: none;
+}
+
+.v2-breadcrumb__separator {
+  color: var(--v2-text-subtle);
+  opacity: 0.4;
+  user-select: none;
+}
+
+/* ---- Empty State ---- */
+.v2-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--v2-space-3);
+  padding: var(--v2-space-8) var(--v2-space-4);
+  text-align: center;
+  color: var(--v2-text-subtle);
+}
+
+.v2-empty__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--v2-text-subtle);
+  opacity: 0.5;
+}
+
+.v2-empty__title {
+  font-size: var(--v2-text-lg);
+  font-weight: var(--v2-fw-medium);
+  color: var(--v2-text);
+}
+
+.v2-empty__message {
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text-subtle);
+  max-width: 420px;
+  line-height: var(--v2-leading-base);
+}
+
+.v2-empty__action {
+  margin-top: var(--v2-space-2);
+}
+
+/* ---- Skeleton (polish existing from motion.css) ---- */
+.v2-skeleton {
+  background: linear-gradient(90deg, var(--v2-inset) 0%, var(--v2-hover) 50%, var(--v2-inset) 100%);
+  background-size: 200% 100%;
+  animation: v2-shimmer 1.4s infinite linear;
+  border-radius: var(--v2-radius-micro);
+  color: transparent;
+  user-select: none;
+  pointer-events: none;
+}
+
+.v2-skeleton--text {
+  height: 1em;
+  width: 100%;
+  display: inline-block;
+}
+
+.v2-skeleton--title {
+  height: 1.2em;
+  width: 60%;
+  display: block;
+  margin-bottom: var(--v2-space-2);
+}
+
+.v2-skeleton--circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.v2-skeleton--btn {
+  height: 32px;
+  width: 80px;
+  display: inline-block;
+  border-radius: var(--v2-radius-control);
+}
+
+@keyframes v2-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ---- Tag / Chip (dismissible badge) ---- */
+.v2-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v2-space-1);
+  padding: 2px var(--v2-space-2);
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid var(--v2-line);
+  border-radius: var(--v2-radius-pill);
+  color: var(--v2-text);
+  font-size: var(--v2-text-xs);
+  line-height: 1.5;
+}
+
+.v2-tag--brand {
+  background: color-mix(in srgb, var(--v2-brand) 10%, transparent);
+  border-color: var(--v2-brand);
+  color: var(--v2-brand);
+}
+
+.v2-tag--ok {
+  background: color-mix(in srgb, var(--v2-status-running) 10%, transparent);
+  border-color: var(--v2-status-running);
+  color: var(--v2-status-running);
+}
+
+.v2-tag--warn {
+  background: color-mix(in srgb, var(--v2-status-warning) 10%, transparent);
+  border-color: var(--v2-status-warning);
+  color: var(--v2-status-warning);
+}
+
+.v2-tag--err {
+  background: color-mix(in srgb, var(--v2-status-error) 10%, transparent);
+  border-color: var(--v2-status-error);
+  color: var(--v2-status-error);
+}
+
+.v2-tag__dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: var(--v2-space-1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-tag__dismiss:hover {
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .v2-alert {
+    padding: var(--v2-space-3);
+  }
+
+  .v2-empty {
+    padding: var(--v2-space-6) var(--v2-space-3);
+  }
+
+  .v2-empty__icon {
+    width: 40px;
+    height: 40px;
+  }
+}

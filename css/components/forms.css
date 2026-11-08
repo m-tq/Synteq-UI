@@ -1,0 +1,558 @@
+/* ==========================================================================
+   SYNTEQ UI V2 — FORMS (components/forms.css)
+   Native HTML form controls restyled to match the flat-surface model.
+   All interactive states, full keyboard support, ARIA-ready.
+   ========================================================================== */
+
+/* ---- Field wrapper (label + input + hint + error) ---- */
+.v2-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-field-gap);
+  width: 100%;
+}
+
+.v2-field__label {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-sm);
+  font-weight: var(--v2-fw-medium);
+  color: var(--v2-text-strong);
+}
+
+.v2-field__label--required::after {
+  content: '*';
+  color: var(--v2-status-error);
+  margin-left: var(--v2-space-1);
+}
+
+.v2-field__hint {
+  font-size: var(--v2-text-xs);
+  color: var(--v2-text-subtle);
+  line-height: var(--v2-leading-base);
+}
+
+.v2-field__error {
+  display: none;
+  font-size: var(--v2-text-xs);
+  color: var(--v2-status-error);
+  line-height: var(--v2-leading-base);
+}
+
+.v2-field--invalid .v2-field__error {
+  display: block;
+}
+
+/* ---- Text input (existing .v2-input enhanced with states) ---- */
+.v2-input {
+  width: 100%;
+  height: var(--v2-input-h);
+  padding: 0 var(--v2-space-3);
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid transparent;
+  border-radius: var(--v2-radius-control);
+  color: var(--v2-text-strong);
+  font-size: var(--v2-text-sm);
+  font-family: var(--v2-font-sans);
+  transition: border-color var(--v2-dur-instant) var(--v2-ease),
+              background-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-input::placeholder {
+  color: var(--v2-text-subtle);
+}
+
+.v2-input:focus-visible {
+  background: var(--v2-hover);
+  border-color: var(--v2-brand);
+}
+
+.v2-input:disabled,
+.v2-input[readonly] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--v2-inset);
+}
+
+.v2-input:disabled::placeholder {
+  color: var(--v2-text-subtle);
+}
+
+.v2-input[aria-invalid="true"],
+.v2-field--invalid .v2-input {
+  border-color: var(--v2-status-error);
+}
+
+.v2-input[aria-invalid="true"]:focus-visible,
+.v2-field--invalid .v2-input:focus-visible {
+  border-color: var(--v2-status-error);
+}
+
+/* ---- Textarea ---- */
+.v2-textarea {
+  width: 100%;
+  min-height: calc(var(--v2-input-h) * 2.5);
+  padding: var(--v2-space-2) var(--v2-space-3);
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid transparent;
+  border-radius: var(--v2-radius-control);
+  color: var(--v2-text-strong);
+  font-size: var(--v2-text-sm);
+  font-family: var(--v2-font-sans);
+  line-height: var(--v2-leading-base);
+  resize: vertical;
+  transition: border-color var(--v2-dur-instant) var(--v2-ease),
+              background-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-textarea::placeholder {
+  color: var(--v2-text-subtle);
+}
+
+.v2-textarea:focus-visible {
+  background: var(--v2-hover);
+  border-color: var(--v2-brand);
+}
+
+.v2-textarea:disabled,
+.v2-textarea[readonly] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  resize: none;
+}
+
+.v2-textarea[aria-invalid="true"],
+.v2-field--invalid .v2-textarea {
+  border-color: var(--v2-status-error);
+}
+
+/* ---- Select (native, custom arrow) ---- */
+.v2-select {
+  width: 100%;
+  height: var(--v2-input-h);
+  padding: 0 var(--v2-space-6) 0 var(--v2-space-3);
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid transparent;
+  border-radius: var(--v2-radius-control);
+  color: var(--v2-text-strong);
+  font-size: var(--v2-text-sm);
+  font-family: var(--v2-font-sans);
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%237a8080' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--v2-space-3) center;
+  transition: border-color var(--v2-dur-instant) var(--v2-ease),
+              background-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-select:focus-visible {
+  background-color: var(--v2-hover);
+  border-color: var(--v2-brand);
+}
+
+.v2-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.v2-select[aria-invalid="true"],
+.v2-field--invalid .v2-select {
+  border-color: var(--v2-status-error);
+}
+
+/* Light theme arrow color adjustment */
+[data-theme="light"] .v2-select {
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236a7272' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---- Checkbox ---- */
+.v2-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid var(--v2-line-strong);
+  border-radius: var(--v2-radius-micro);
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--v2-dur-instant) var(--v2-ease),
+              border-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-checkbox:hover {
+  background: var(--v2-hover);
+  border-color: var(--v2-text);
+}
+
+.v2-checkbox:focus-visible {
+  border-color: var(--v2-brand);
+}
+
+.v2-checkbox:checked {
+  background: var(--v2-brand);
+  border-color: var(--v2-brand);
+}
+
+.v2-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--v2-text-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.v2-checkbox:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.v2-checkbox[aria-invalid="true"] {
+  border-color: var(--v2-status-error);
+}
+
+/* Checkbox label wrapper */
+.v2-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.v2-checkbox-label:has(.v2-checkbox:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---- Radio ---- */
+.v2-radio {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid var(--v2-line-strong);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--v2-dur-instant) var(--v2-ease),
+              border-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-radio:hover {
+  background: var(--v2-hover);
+  border-color: var(--v2-text);
+}
+
+.v2-radio:focus-visible {
+  border-color: var(--v2-brand);
+}
+
+.v2-radio:checked {
+  background: var(--v2-brand);
+  border-color: var(--v2-brand);
+}
+
+.v2-radio:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 6px;
+  height: 6px;
+  background: var(--v2-text-on-accent);
+  border-radius: 50%;
+}
+
+.v2-radio:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.v2-radio[aria-invalid="true"] {
+  border-color: var(--v2-status-error);
+}
+
+/* Radio label wrapper */
+.v2-radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.v2-radio-label:has(.v2-radio:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Radio group */
+.v2-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-2);
+}
+
+/* ---- Switch (checkbox styled as track + dot) ---- */
+.v2-switch {
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid var(--v2-line-strong);
+  border-radius: var(--v2-radius-pill);
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--v2-dur-fast) var(--v2-ease),
+              border-color var(--v2-dur-fast) var(--v2-ease);
+}
+
+.v2-switch::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--v2-text-strong);
+  border-radius: 50%;
+  transition: transform var(--v2-dur-fast) var(--v2-ease),
+              background-color var(--v2-dur-fast) var(--v2-ease);
+}
+
+.v2-switch:hover {
+  background: var(--v2-hover);
+  border-color: var(--v2-text);
+}
+
+.v2-switch:focus-visible {
+  border-color: var(--v2-brand);
+}
+
+.v2-switch:checked {
+  background: var(--v2-brand);
+  border-color: var(--v2-brand);
+}
+
+.v2-switch:checked::after {
+  background: var(--v2-text-on-accent);
+  transform: translateX(16px);
+}
+
+.v2-switch:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Switch label wrapper */
+.v2-switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.v2-switch-label:has(.v2-switch:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---- Input group (prefix/suffix) ---- */
+.v2-input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  background: var(--v2-inset);
+  border: var(--v2-line-h) solid transparent;
+  border-radius: var(--v2-radius-control);
+  overflow: hidden;
+  transition: border-color var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-input-group:focus-within {
+  border-color: var(--v2-brand);
+}
+
+.v2-input-group--invalid {
+  border-color: var(--v2-status-error);
+}
+
+.v2-input-group .v2-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.v2-input-group .v2-input:focus-visible {
+  border: none;
+  background: transparent;
+}
+
+.v2-input-group__affix {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--v2-space-3);
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text-subtle);
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-left: var(--v2-line-h) solid var(--v2-line);
+}
+
+.v2-input-group__affix:first-child {
+  border-left: none;
+  border-right: var(--v2-line-h) solid var(--v2-line);
+}
+
+/* ---- Range slider ---- */
+.v2-range {
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--v2-track);
+  border-radius: var(--v2-radius-pill);
+  outline: none;
+  cursor: pointer;
+  transition: opacity var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-range:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.v2-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--v2-brand);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-range::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.v2-range::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+}
+
+.v2-range:disabled::-webkit-slider-thumb {
+  background: var(--v2-text-subtle);
+  cursor: not-allowed;
+}
+
+/* Firefox */
+.v2-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--v2-brand);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform var(--v2-dur-instant) var(--v2-ease);
+}
+
+.v2-range::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+.v2-range::-moz-range-thumb:active {
+  transform: scale(1.05);
+}
+
+.v2-range:disabled::-moz-range-thumb {
+  background: var(--v2-text-subtle);
+  cursor: not-allowed;
+}
+
+.v2-range::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+/* Range with value label */
+.v2-range-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-2);
+  width: 100%;
+}
+
+.v2-range-label__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--v2-text-sm);
+}
+
+.v2-range-label__name {
+  color: var(--v2-text);
+}
+
+.v2-range-label__value {
+  color: var(--v2-text-strong);
+  font-weight: var(--v2-fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (pointer: coarse) {
+  /* Touch-friendly targets */
+  .v2-checkbox,
+  .v2-radio {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .v2-checkbox:checked::after {
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+  }
+  
+  .v2-radio:checked::after {
+    left: 5px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+  }
+  
+  .v2-switch {
+    width: 44px;
+    height: 24px;
+  }
+  
+  .v2-switch::after {
+    width: 18px;
+    height: 18px;
+    left: 2px;
+    top: 2px;
+  }
+  
+  .v2-switch:checked::after {
+    transform: translateX(20px);
+  }
+}

@@ -12,10 +12,8 @@
   min-height: 0;
   min-width: 0;
   overflow: hidden;
-  transition: box-shadow var(--v2-dur-fast) var(--v2-ease);
 }
-.v2-topbar.is-scrolled { box-shadow: 0 1px 20px rgba(0,0,0,.28); }
-[data-theme="light"] .v2-topbar.is-scrolled { box-shadow: 0 1px 12px rgba(0,0,0,.10); }
+.v2-topbar.is-scrolled { border-bottom-color: var(--v2-line-strong); }
 
 /* Sidebar toggle button — always in the topbar */
 .v2-sidebar-toggle {

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Form Components — Synteq UI V2</title>
+  <link rel="stylesheet" href="../css/synteq-ui-v2.css" />
+</head>
+<body>
+
+<div class="v2-app" id="app">
+
+  <!-- STICKY BOTTOM NAVIGATION DOCK -->
+  <aside class="v2-aside" aria-label="Primary navigation" id="sidebar">
+    <a href="#" class="v2-aside__brand" aria-label="Synteq UI home">
+      <span class="v2-aside__brand-mark" aria-hidden="true">S</span>
+      Synteq UI
+    </a>
+
+    <nav class="v2-nav" aria-label="Primary navigation links">
+      <a href="dashboard.html" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="components.html" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/>
+          <rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/>
+        </svg>
+        Components
+      </a>
+      <a href="#forms" class="v2-nav__item v2-nav__item--active" aria-current="page">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        Forms
+      </a>
+    </nav>
+
+    <div class="v2-aside__footer">
+      <span class="v2-dot" aria-label="Online"></span>
+      <a href="#" class="v2-user" aria-label="Account: Demo User">
+        <span class="v2-avatar" aria-hidden="true">DU</span>
+        <span class="v2-user__info">
+          <span class="v2-user__name">Demo User</span>
+          <span class="v2-user__email">demo@synteq.dev</span>
+        </span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="v2-topbar" role="banner">
+    <button class="v2-sidebar-toggle"
+            data-v2-sidebar-toggle
+            aria-label="Toggle navigation"
+            aria-expanded="true"
+            aria-controls="sidebar">
+      <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <svg class="v2-icon v2-icon--18 icon-close" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="v2-topbar__left">
+      <span class="v2-topbar__title">Form Components</span>
+    </div>
+
+    <div class="v2-topbar__right">
+      <button class="v2-iconbtn v2-theme-toggle" data-v2-toggle-theme aria-label="Toggle theme">
+        <svg class="v2-icon v2-icon--16 v2-icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="v2-icon v2-icon--16 v2-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="v2-main" aria-label="Main content">
+    <div class="v2-content v2-scroll" id="main-content">
+
+      <!-- Text Inputs Section -->
+      <div class="v2-section v2-section--compact" id="text-inputs">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h10"/>
+            </svg>
+            Text Inputs
+          </span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="v2-field">
+            <label for="username" class="v2-field__label v2-field__label--required">Username</label>
+            <input type="text" id="username" class="v2-input" placeholder="Enter username" 
+                   aria-required="true" aria-describedby="username-hint">
+            <span id="username-hint" class="v2-field__hint">3-20 characters, alphanumeric only</span>
+          </div>
+
+          <div class="v2-field v2-field--invalid">
+            <label for="email" class="v2-field__label">Email</label>
+            <input type="email" id="email" class="v2-input" value="invalid-email" 
+                   aria-invalid="true" aria-describedby="email-error">
+            <span id="email-error" class="v2-field__error">Please enter a valid email address</span>
+          </div>
+
+          <div class="v2-field">
+            <label for="password" class="v2-field__label">Password</label>
+            <input type="password" id="password" class="v2-input" placeholder="••••••••">
+          </div>
+
+          <div class="v2-field">
+            <label for="disabled" class="v2-field__label">Disabled Input</label>
+            <input type="text" id="disabled" class="v2-input" value="Cannot edit" disabled>
+          </div>
+        </div>
+      </div>
+
+      <!-- Textarea Section -->
+      <div class="v2-section v2-section--compact" id="textarea">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Textarea</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="v2-field">
+            <label for="notes" class="v2-field__label">Notes</label>
+            <textarea id="notes" class="v2-textarea" rows="4" placeholder="Enter your notes here..."></textarea>
+            <span class="v2-field__hint">Supports vertical resizing</span>
+          </div>
+
+          <div class="v2-field">
+            <label for="description" class="v2-field__label">Description</label>
+            <textarea id="description" class="v2-textarea" rows="4">Pre-filled content can be edited.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Select Section -->
+      <div class="v2-section v2-section--compact" id="select">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Select Dropdown</span>
+        </div>
+
+        <div class="v2-grid v2-grid--3">
+          <div class="v2-field">
+            <label for="region" class="v2-field__label">Region</label>
+            <select id="region" class="v2-select">
+              <option value="">Select a region</option>
+              <option value="us-east">US East</option>
+              <option value="us-west">US West</option>
+              <option value="eu-central">EU Central</option>
+              <option value="ap-southeast">AP Southeast</option>
+            </select>
+          </div>
+
+          <div class="v2-field">
+            <label for="size" class="v2-field__label">Instance Size</label>
+            <select id="size" class="v2-select">
+              <option value="small">Small (2 vCPU, 4 GB)</option>
+              <option value="medium" selected>Medium (4 vCPU, 8 GB)</option>
+              <option value="large">Large (8 vCPU, 16 GB)</option>
+            </select>
+          </div>
+
+          <div class="v2-field">
+            <label for="disabled-select" class="v2-field__label">Disabled</label>
+            <select id="disabled-select" class="v2-select" disabled>
+              <option>Cannot change</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkbox Section -->
+      <div class="v2-section v2-section--compact" id="checkbox">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Checkboxes</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox">
+              Enable notifications
+            </label>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox" checked>
+              Auto-renew subscription
+            </label>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox">
+              Send weekly reports
+            </label>
+          </div>
+
+          <div>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox" disabled>
+              Disabled unchecked
+            </label>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox" checked disabled>
+              Disabled checked
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radio Section -->
+      <div class="v2-section v2-section--compact" id="radio">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Radio Buttons</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="v2-field">
+            <span class="v2-field__label">Instance Size</span>
+            <div class="v2-radio-group" role="radiogroup" aria-label="Instance size">
+              <label class="v2-radio-label">
+                <input type="radio" name="size-radio" value="small" class="v2-radio">
+                Small (2 vCPU, 4 GB RAM)
+              </label>
+              <label class="v2-radio-label">
+                <input type="radio" name="size-radio" value="medium" class="v2-radio" checked>
+                Medium (4 vCPU, 8 GB RAM)
+              </label>
+              <label class="v2-radio-label">
+                <input type="radio" name="size-radio" value="large" class="v2-radio">
+                Large (8 vCPU, 16 GB RAM)
+              </label>
+            </div>
+          </div>
+
+          <div class="v2-field">
+            <span class="v2-field__label">Billing Cycle</span>
+            <div class="v2-radio-group" role="radiogroup" aria-label="Billing cycle">
+              <label class="v2-radio-label">
+                <input type="radio" name="billing" value="monthly" class="v2-radio" checked>
+                Monthly ($10/mo)
+              </label>
+              <label class="v2-radio-label">
+                <input type="radio" name="billing" value="yearly" class="v2-radio">
+                Yearly ($100/yr — save 17%)
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Switch Section -->
+      <div class="v2-section v2-section--compact" id="switch">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Switches</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div>
+            <label class="v2-switch-label">
+              <input type="checkbox" class="v2-switch" role="switch" aria-checked="false">
+              Enable auto-scaling
+            </label>
+            <label class="v2-switch-label">
+              <input type="checkbox" class="v2-switch" role="switch" aria-checked="true" checked>
+              Enable monitoring
+            </label>
+            <label class="v2-switch-label">
+              <input type="checkbox" class="v2-switch" role="switch" aria-checked="false">
+              Enable backups
+            </label>
+          </div>
+
+          <div>
+            <label class="v2-switch-label">
+              <input type="checkbox" class="v2-switch" role="switch" disabled>
+              Disabled switch
+            </label>
+            <label class="v2-switch-label">
+              <input type="checkbox" class="v2-switch" role="switch" checked disabled>
+              Disabled (on)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Group Section -->
+      <div class="v2-section v2-section--compact" id="input-group">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Input Groups</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="v2-field">
+            <label for="amount" class="v2-field__label">Amount</label>
+            <div class="v2-input-group">
+              <span class="v2-input-group__affix">$</span>
+              <input type="number" id="amount" class="v2-input" placeholder="0.00">
+              <span class="v2-input-group__affix">USD</span>
+            </div>
+          </div>
+
+          <div class="v2-field">
+            <label for="url" class="v2-field__label">Website URL</label>
+            <div class="v2-input-group">
+              <span class="v2-input-group__affix">https://</span>
+              <input type="text" id="url" class="v2-input" placeholder="example.com">
+            </div>
+          </div>
+
+          <div class="v2-field">
+            <label for="weight" class="v2-field__label">Weight</label>
+            <div class="v2-input-group">
+              <input type="number" id="weight" class="v2-input" placeholder="0.0" value="42.5">
+              <span class="v2-input-group__affix">kg</span>
+            </div>
+          </div>
+
+          <div class="v2-field">
+            <label for="domain" class="v2-field__label">Domain</label>
+            <div class="v2-input-group">
+              <input type="text" id="domain" class="v2-input" placeholder="myapp">
+              <span class="v2-input-group__affix">.synteq.dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Range Section -->
+      <div class="v2-section v2-section--compact" id="range">
+        <div class="v2-section__head">
+          <span class="v2-section__title">Range Sliders</span>
+        </div>
+
+        <div class="v2-grid v2-grid--2">
+          <div class="v2-range-label">
+            <div class="v2-range-label__head">
+              <span class="v2-range-label__name">CPU Limit</span>
+              <span class="v2-range-label__value" id="cpu-value">75%</span>
+            </div>
+            <input type="range" class="v2-range" min="0" max="100" value="75" 
+                   aria-label="CPU limit percentage" id="cpu-range">
+          </div>
+
+          <div class="v2-range-label">
+            <div class="v2-range-label__head">
+              <span class="v2-range-label__name">Memory Limit</span>
+              <span class="v2-range-label__value" id="mem-value">50%</span>
+            </div>
+            <input type="range" class="v2-range" min="0" max="100" value="50" 
+                   aria-label="Memory limit percentage" id="mem-range">
+          </div>
+
+          <div class="v2-range-label">
+            <div class="v2-range-label__head">
+              <span class="v2-range-label__name">Volume</span>
+              <span class="v2-range-label__value" id="vol-value">30</span>
+            </div>
+            <input type="range" class="v2-range" min="0" max="100" value="30" 
+                   aria-label="Volume level" id="vol-range">
+          </div>
+
+          <div class="v2-range-label">
+            <div class="v2-range-label__head">
+              <span class="v2-range-label__name">Disabled</span>
+              <span class="v2-range-label__value">60</span>
+            </div>
+            <input type="range" class="v2-range" min="0" max="100" value="60" disabled>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Form Example -->
+      <div class="v2-section" id="full-form">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Complete Form Example
+          </span>
+        </div>
+
+        <form style="max-width: 640px;">
+          <div class="v2-field">
+            <label for="full-name" class="v2-field__label v2-field__label--required">Full Name</label>
+            <input type="text" id="full-name" class="v2-input" placeholder="John Doe" 
+                   aria-required="true">
+          </div>
+
+          <div class="v2-field">
+            <label for="full-email" class="v2-field__label v2-field__label--required">Email Address</label>
+            <input type="email" id="full-email" class="v2-input" placeholder="john@example.com" 
+                   aria-required="true">
+          </div>
+
+          <div class="v2-field">
+            <label for="company" class="v2-field__label">Company</label>
+            <input type="text" id="company" class="v2-input" placeholder="Optional">
+          </div>
+
+          <div class="v2-field">
+            <span class="v2-field__label">Plan</span>
+            <div class="v2-radio-group" role="radiogroup" aria-label="Select plan">
+              <label class="v2-radio-label">
+                <input type="radio" name="plan" value="basic" class="v2-radio" checked>
+                Basic — $10/month
+              </label>
+              <label class="v2-radio-label">
+                <input type="radio" name="plan" value="pro" class="v2-radio">
+                Pro — $30/month
+              </label>
+              <label class="v2-radio-label">
+                <input type="radio" name="plan" value="enterprise" class="v2-radio">
+                Enterprise — Contact sales
+              </label>
+            </div>
+          </div>
+
+          <div class="v2-field">
+            <label for="message" class="v2-field__label">Message</label>
+            <textarea id="message" class="v2-textarea" rows="4" 
+                      placeholder="Tell us about your use case..."></textarea>
+          </div>
+
+          <div>
+            <label class="v2-checkbox-label">
+              <input type="checkbox" class="v2-checkbox" required>
+              I agree to the Terms of Service and Privacy Policy
+            </label>
+          </div>
+
+          <div style="display: flex; gap: var(--v2-space-3); margin-top: var(--v2-space-4);">
+            <button type="submit" class="v2-btn v2-btn--primary">Submit Form</button>
+            <button type="reset" class="v2-btn v2-btn--ghost">Reset</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="../js/synteq-ui-v2.js"></script>
+<script>
+  // Wire range sliders to display values
+  ['cpu', 'mem', 'vol'].forEach(function(id) {
+    var range = document.getElementById(id + '-range');
+    var value = document.getElementById(id + '-value');
+    if (range && value) {
+      range.addEventListener('input', function() {
+        value.textContent = range.value + (id === 'vol' ? '' : '%');
+      });
+    }
+  });
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@ A clean, viewport-locked dashboard framework built on six hard rules:
 ```
 V2/
 ├── css/
-│   ├── tokens.css            — fluid type scale, 4px spacing, radii, motion, layout shell vars
+│   ├── tokens.css            — fluid type scale, 4px spacing, radii, motion, layout shell vars, form tokens
 │   ├── theme-dark.css        — dark palette (default)
 │   ├── theme-light.css       — light palette
 │   ├── base.css              — viewport lock, in-content scroll, reset, a11y, typography utils
@@ -29,12 +29,15 @@ V2/
 │       ├── content.css       — sections, hairline separators, layout grids, stat strip
 │       ├── data.css          — stat blocks, KV rows, slim gauges, sparkline, bar chart, data table, log viewer, legend
 │       ├── controls.css      — buttons, segmented bar, input, badges, kbd pill, avatar
+│       ├── forms.css         — field wrapper, text inputs, textarea, select, checkbox, radio, switch, input group, range
 │       └── motion.css        — fade-up, stagger, shimmer skeleton, soft pulse, hover lift
 ├── js/
 │   └── synteq-ui-v2.js       — runtime: theme, dock, scroll-spy, gauges, charts, toast, command palette
-└── examples/
+├── examples/
     ├── dashboard.html        — production-style VPS detail dashboard
-    └── components.html       — interactive component explorer
+    ├── components.html       — interactive component explorer
+    ├── forms.html            — form controls showcase
+    └── overlays.html         — tabs, accordion, menu, popover, dialog, toast
 ```
 
 ---
@@ -67,6 +70,44 @@ V2/
 ```
 
 The `v2-app` grid locks to the viewport. `v2-content.v2-scroll` is the only element that produces a scrollbar. Navigation is a sticky bottom dock on desktop and mobile; the topbar toggle hides it without changing document scroll.
+
+---
+
+## Browser Support
+
+Synteq UI V2 targets modern browsers with CSS custom properties, CSS Grid, and native `<dialog>` support:
+
+| Browser | Minimum Version | Notes |
+|---------|----------------|-------|
+| **Chrome / Edge** | 90+ | Full support |
+| **Firefox** | 88+ | Full support |
+| **Safari** | 15.4+ | Full support (including iOS Safari) |
+| **Opera** | 76+ | Full support |
+
+### Required Features
+
+- **CSS Custom Properties** — all theming and tokens
+- **CSS Grid** — viewport-locked app shell layout
+- **`<dialog>` element** — modal dialogs
+- **`<details>` / `<summary>`** — accordion component
+- **`color-mix()`** — tonal badge/alert backgrounds (degrades gracefully)
+- **`dvh` units** — viewport height with mobile address bar compensation (falls back to `vh`)
+- **`clamp()`** — fluid type scale and responsive spacing
+
+### Progressive Enhancement
+
+- **`prefers-reduced-motion`** — all animations auto-disable when user prefers reduced motion
+- **`prefers-color-scheme`** — detects system theme preference on first load
+- **`forced-colors`** — automatic Windows High Contrast Mode support
+- **JavaScript optional** — static content renders without JS; interactive features (tabs, menus, toasts) require `synteq-ui-v2.js`
+
+### Not Supported
+
+- Internet Explorer 11 and below
+- Legacy Edge (pre-Chromium)
+- Safari < 15.4 (lacks `<dialog>` support)
+
+All examples tested on Chrome 120+, Firefox 121+, Safari 17+, and Edge 120+.
 
 ---
 
