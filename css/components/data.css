@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 10. TEXT-FIRST DATA VIZ (components/data.css)
+   SYNTEQ UI — 10. TEXT-FIRST DATA VIZ (components/data.css)
    Simplest visualization: stat blocks, key-value rows, slim gauges,
    inline sparklines, and a tiny bar chart. No card chrome around them.
    ========================================================================== */
@@ -120,6 +120,7 @@
   background: var(--v2-text-strong);
   transition: width var(--v2-dur-slow) var(--v2-ease);
 }
+.v2-gauge__fill--info { background: var(--v2-status-info); }
 .v2-gauge__fill--ok { background: var(--v2-status-running); }
 .v2-gauge__fill--warn { background: var(--v2-status-warning); }
 .v2-gauge__fill--err { background: var(--v2-status-error); }
@@ -216,6 +217,7 @@
 .v2-dot--stopped { background: var(--v2-status-error); }
 .v2-dot--reboot { background: var(--v2-status-warning); animation: v2-pulse 1s infinite ease-in-out; }
 /* Semantic variants (kept separate from --stopped/--reboot for back-compat) */
+.v2-dot--info  { background: var(--v2-status-info); }
 .v2-dot--ok    { background: var(--v2-status-running); }
 .v2-dot--warn  { background: var(--v2-status-warning); }
 .v2-dot--err   { background: var(--v2-status-error); }
@@ -308,6 +310,7 @@
   min-width: 0;
 }
 .v2-log__row:hover { background: var(--v2-hover); }
+.v2-log__row--info { border-left-color: color-mix(in srgb, var(--v2-status-info) 70%, transparent); }
 .v2-log__row--warn { border-left-color: color-mix(in srgb, var(--v2-status-warning) 70%, transparent); }
 .v2-log__row--error {
   border-left-color: var(--v2-status-error);
@@ -327,9 +330,10 @@
   letter-spacing: 0.04em;
   color: var(--v2-text-subtle);
 }
-.v2-log__level--warn { color: var(--v2-status-warning); }
+.v2-log__level--info { color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong)); }
+.v2-log__level--warn { color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong)); }
 .v2-log__level--error,
-.v2-log__level--fatal { color: var(--v2-status-error); }
+.v2-log__level--fatal { color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong)); }
 .v2-log__comp {
   flex-shrink: 0;
   min-width: 62px;

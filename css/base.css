@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 04. BASE RESET, VIEWPORT LOCK & A11Y (base.css)
+   SYNTEQ UI — 04. BASE RESET, VIEWPORT LOCK & A11Y (base.css)
    Key V2 rule: body NEVER scrolls. Only in-content regions scroll.
    ========================================================================== */
 *, *::before, *::after {
@@ -58,6 +58,12 @@ body { position: fixed; inset: 0; }
   outline-offset: 2px;
   border-radius: var(--v2-radius-micro);
 }
+
+/* [hidden] must always win over a component's own display rule.
+   The UA `[hidden] { display: none }` rule loses to any author rule such as
+   `.v2-btn { display: inline-flex }`, so runtime filters (command palette,
+   table rows, popovers) kept rendering the elements they meant to hide. */
+[hidden] { display: none !important; }
 
 button, a, input, select, textarea, [tabindex] {
   font-family: inherit;

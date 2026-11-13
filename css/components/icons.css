@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 05. ICONS (components/icons.css)
+   SYNTEQ UI — 05. ICONS (components/icons.css)
    Inline SVG icons sized via currentColor. Fast context recognition.
    Usage: <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">...</svg>
    ========================================================================== */
@@ -15,6 +15,7 @@
 }
 
 /* Size scale */
+.v2-icon--12 { width: 12px; height: 12px; }
 .v2-icon--14 { width: 14px; height: 14px; }
 .v2-icon--16 { width: 16px; height: 16px; }
 .v2-icon--18 { width: 18px; height: 18px; }
@@ -23,6 +24,7 @@
 /* Glyph tint helpers */
 .v2-icon--mute { color: var(--v2-text-subtle); }
 .v2-icon--brand { color: var(--v2-brand); }
+.v2-icon--info { color: var(--v2-status-info); }
 .v2-icon--ok { color: var(--v2-status-running); }
 .v2-icon--warn { color: var(--v2-status-warning); }
 .v2-icon--err { color: var(--v2-status-error); }

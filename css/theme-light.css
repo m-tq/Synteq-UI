@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 03. LIGHT THEME (theme-light.css)
+   SYNTEQ UI — 03. LIGHT THEME (theme-light.css)
    Daylight operator palette, same flat hairline architecture.
    ========================================================================== */
 [data-theme="light"],
@@ -9,8 +9,10 @@
   /* Text — high-contrast daylight hierarchy (WCAG AA verified) */
   --v2-text: #2f3434;        /* body / labels */
   --v2-text-strong: #0d1010; /* high-emphasis values, hostnames, active */
-  --v2-text-subtle: #6a7272; /* metadata, units, timestamps */
+  --v2-text-subtle: #666e6e; /* metadata, units, timestamps (AA on inset/canvas) */
   --v2-text-on-accent: #ffffff;
+  /* Same dark ink as the dark theme — see theme-dark.css for the rationale. */
+  --v2-text-on-solid: #08110e;
 
   /* Flat surfaces */
   --v2-canvas: #f4f6f6;   /* main app background */
@@ -25,6 +27,7 @@
 
   /* Semantic accents (tuned for light contrast) */
   --v2-brand: #059669;
+  --v2-status-info: #0284c7;
   --v2-status-running: #16a34a;
   --v2-status-warning: #d97706;
   --v2-status-error: #dc2626;

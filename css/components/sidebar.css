@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 10. BOTTOM NAVIGATION DOCK (components/sidebar.css)
+   SYNTEQ UI — 10. BOTTOM NAVIGATION DOCK (components/sidebar.css)
 
    Layout rules
    • Items are centred while they fit (safe centre → never clips to the left).
@@ -38,7 +38,7 @@
   text-decoration: none;
   z-index: 2;
 }
-.v2-aside__brand-mark { width: 20px; height: 20px; border-radius: var(--v2-radius-micro); background: var(--v2-brand); display: inline-flex; align-items: center; justify-content: center; color: var(--v2-text-on-accent); flex-shrink: 0; }
+.v2-aside__brand-mark { width: 20px; height: 20px; border-radius: var(--v2-radius-micro); background: var(--v2-brand); display: inline-flex; align-items: center; justify-content: center; color: var(--v2-text-on-solid); flex-shrink: 0; }
 
 /* Nav strip — safe centring + optional drag scroll */
 .v2-nav {
@@ -98,7 +98,7 @@
 .v2-nav__item:focus-visible { z-index: 3; }
 .v2-nav__item--active,
 .v2-nav__item.is-active {
-  color: var(--v2-text-strong);
+  color: var(--v2-brand);
   font-weight: var(--v2-fw-semibold);
   background: color-mix(in srgb, var(--v2-brand) 12%, transparent);
   border-top: 3px solid var(--v2-brand);
@@ -173,7 +173,7 @@
 }
 .v2-nav__menu-item:hover { background: var(--v2-hover); color: var(--v2-text-strong); }
 .v2-nav__menu-item .v2-icon { color: var(--v2-text-subtle); }
-.v2-nav__menu-item.is-active { background: color-mix(in srgb, var(--v2-brand) 12%, transparent); color: var(--v2-text-strong); font-weight: var(--v2-fw-semibold); }
+.v2-nav__menu-item.is-active { background: color-mix(in srgb, var(--v2-brand) 12%, transparent); color: var(--v2-brand); font-weight: var(--v2-fw-semibold); }
 .v2-nav__menu-item.is-active .v2-icon { color: var(--v2-brand); }
 .v2-nav__menu-item .v2-nav__badge { position: static; margin-left: auto; }
 

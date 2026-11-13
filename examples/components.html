@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Synteq UI V2 — Component Explorer</title>
-  <link rel="stylesheet" href="../css/synteq-ui-v2.css" />
+  <title>Synteq UI — Component Explorer</title>
+  <link rel="stylesheet" href="../css/synteq-ui.css" />
   <style>
     /* ── Explorer-specific chrome ─────────────────────────────────── */
 
@@ -23,7 +23,11 @@
       width: 100%;
     }
 
-    /* Live preview area */
+    /* Live preview area.
+       The stage must NOT use --v2-inset: buttons, inputs and segmented bars are
+       inset-coloured, so on an inset stage every control lost its edge and the
+       preview looked empty. Canvas + hairline keeps the components readable and
+       matches the surface they actually sit on in an app. */
     .cx-preview {
       display: flex;
       align-items: center;
@@ -31,7 +35,8 @@
       flex-wrap: wrap;
       gap: var(--v2-space-3);
       padding: var(--v2-space-5);
-      background: var(--v2-inset);
+      background: var(--v2-canvas);
+      border: var(--v2-line-h) solid var(--v2-line);
       border-radius: var(--v2-radius-control);
       min-width: 0;
     }
@@ -99,10 +104,13 @@
     }
     .cx-swatch__name { font-size:var(--v2-text-xs); color:var(--v2-text-subtle); overflow:hidden; text-overflow:ellipsis; }
 
-    /* Type specimen */
+    /* Type specimen.
+       The value column is `minmax(0, max-content)` so spec strings such as
+       "clamp(26,3.2vw,34)" get the width they need instead of bleeding into the
+       specimen column (they used to overlap the sample text). */
     .cx-type-row {
       display: grid;
-      grid-template-columns: 88px 78px minmax(0, 1fr);
+      grid-template-columns: 88px minmax(0, max-content) minmax(0, 1fr);
       align-items: baseline;
       gap: var(--v2-space-4);
       padding: var(--v2-space-2) 0;
@@ -111,7 +119,7 @@
     }
     .cx-type-row:first-child { border-top:none; }
     .cx-type-label { min-width: 0; font-size:var(--v2-text-xs); color:var(--v2-text-subtle); font-family:var(--v2-font-mono); }
-    .cx-type-val { min-width: 0; font-size:var(--v2-text-xs); color:var(--v2-text-subtle); font-family:var(--v2-font-mono); }
+    .cx-type-val { min-width: 0; font-size:var(--v2-text-xs); color:var(--v2-text-subtle); font-family:var(--v2-font-mono); overflow-wrap: anywhere; }
     .cx-type-row > :last-child { min-width: 0; overflow-wrap: anywhere; }
 
     /* Reduced width container for narrow previews — centred like the rest */
@@ -142,7 +150,7 @@
           <path d="M9 3.5C9 2.12 7.66 1 6 1 4.34 1 3 2.12 3 3.5c0 1.18.9 2.17 2.14 2.41L7.5 6.3C8.43 6.57 9 7.3 9 8.2 9 9.32 7.87 10.2 6.5 10.2S4 9.32 4 8.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </span>
-      V2 Components
+      Components
     </a>
 
     <nav class="v2-nav" aria-label="Component categories">
@@ -193,6 +201,30 @@
         <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
         Inputs
       </a>
+      <a href="#forms" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Forms
+      </a>
+      <a href="#overlays" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+        Overlays
+      </a>
+      <a href="#table" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+        Table
+      </a>
+      <a href="#tree" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h6v6H3zM15 15h6v6h-6zM15 3h6v6h-6zM6 9v6a3 3 0 0 0 3 3h6"/></svg>
+        Tree
+      </a>
+      <a href="#stepper" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="20"/><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><line x1="11" y1="6" x2="20" y2="6"/><line x1="11" y1="18" x2="20" y2="18"/></svg>
+        Stepper
+      </a>
+      <a href="#code" class="v2-nav__item">
+        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Code
+      </a>
 
       <a href="#feedback" class="v2-nav__item">
         <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -226,7 +258,7 @@
 
     <div class="v2-topbar__left">
       <span class="v2-topbar__title">Component Explorer</span>
-      <span class="v2-badge v2-badge--brand">V2</span>
+      <span class="v2-badge v2-badge--brand">2.2.0</span>
     </div>
 
     <div class="v2-topbar__right">
@@ -537,6 +569,37 @@
             </div>
           </div>
         </div>
+
+        <div class="cx-block" style="margin-top:var(--v2-space-4);">
+          <span class="v2-t-xs v2-mute">Line / area chart — axes, gridlines, hover tooltip</span>
+          <div class="v2-chart">
+            <div class="v2-chart__head">
+              <span class="v2-chart__title">Request rate</span>
+              <span class="v2-chart__meta">last 12 intervals</span>
+            </div>
+            <div class="v2-chart__body">
+              <svg class="v2-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
+                   aria-label="Request rate and error rate over the last 12 intervals"></svg>
+            </div>
+            <div class="v2-chart__legend" data-v2-chart-legend></div>
+          </div>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Stacked bars — multi-series columns with hover tooltip</span>
+          <div class="v2-chart">
+            <div class="v2-chart__head">
+              <span class="v2-chart__title">Traffic by class</span>
+              <span class="v2-chart__meta">req/s</span>
+            </div>
+            <div class="v2-chart__body">
+              <div class="v2-chart__cols" id="chart-stacked" role="img"
+                   aria-label="Stacked traffic by request class"></div>
+            </div>
+            <div class="v2-chart__xlabels" data-v2-chart-labels></div>
+            <div class="v2-chart__legend" data-v2-chart-legend></div>
+          </div>
+        </div>
       </div>
 
       <!-- ══ BUTTONS ═══════════════════════════════════════════════ -->
@@ -554,8 +617,25 @@
             <button class="v2-btn v2-btn--primary">Primary</button>
             <button class="v2-btn v2-btn--brand">Brand</button>
             <button class="v2-btn v2-btn--ghost">Ghost</button>
+            <button class="v2-btn v2-btn--info">Info</button>
+            <button class="v2-btn v2-btn--warn">Warning</button>
             <button class="v2-btn v2-btn--danger">Danger</button>
             <button class="v2-iconbtn" aria-label="Options"><svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+          </div>
+          <span class="v2-t-xs v2-mute">Tonal status variants — info · warning · danger</span>
+          <div class="cx-preview">
+            <button class="v2-btn v2-btn--info">
+              <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Show details
+            </button>
+            <button class="v2-btn v2-btn--warn">
+              <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Drain node
+            </button>
+            <button class="v2-btn v2-btn--danger">
+              <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              Destroy
+            </button>
           </div>
           <span class="v2-t-xs v2-mute">States</span>
           <div class="cx-preview">
@@ -602,6 +682,7 @@
           <span class="v2-t-xs v2-mute">Badge variants</span>
           <div class="cx-preview">
             <span class="v2-badge">Default</span>
+            <span class="v2-badge v2-badge--info">Info</span>
             <span class="v2-badge v2-badge--ok">Running</span>
             <span class="v2-badge v2-badge--warn">Degraded</span>
             <span class="v2-badge v2-badge--err">Error</span>
@@ -612,6 +693,7 @@
             <span class="v2-status" aria-label="Running"><span class="v2-dot" aria-hidden="true"></span> Running</span>
             <span class="v2-status" aria-label="Warning"><span class="v2-dot v2-dot--reboot" aria-hidden="true"></span> Rebooting</span>
             <span class="v2-status" aria-label="Stopped"><span class="v2-dot v2-dot--stopped" aria-hidden="true"></span> Stopped</span>
+            <span class="v2-status" aria-label="Pending"><span class="v2-dot v2-dot--info" aria-hidden="true"></span> Pending</span>
           </div>
           <span class="v2-t-xs v2-mute">Kbd pill · Avatar</span>
           <div class="cx-preview">
@@ -639,7 +721,7 @@
           </div>
           <span class="v2-t-xs v2-mute">Search trigger (topbar variant)</span>
           <div class="cx-preview">
-            <button class="v2-search" aria-label="Search or run a command">
+            <button class="v2-search" data-v2-search-trigger aria-label="Search or run a command">
               <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <span class="v2-search__text">Search…</span>
               <kbd class="v2-kbd">⌘K</kbd>
@@ -649,6 +731,566 @@
       </div>
 
       <!-- ══ FEEDBACK ══════════════════════════════════════════════ -->
+      <!-- ══ FORMS ═════════════════════════════════════════════════ -->
+      <div class="v2-section" id="forms">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Forms &amp; Inputs
+          </span>
+          <span class="v2-section__meta">field, input, textarea, select, checkbox, radio, switch, input group, range</span>
+        </div>
+
+        <!-- Field wrapper + input states -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Text inputs — label, hint, error, disabled</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-grid v2-grid--2" style="width:100%;">
+              <div class="v2-field">
+                <label for="cx-username" class="v2-field__label v2-field__label--required">Username</label>
+                <input type="text" id="cx-username" class="v2-input" placeholder="Enter username"
+                       aria-required="true" aria-describedby="cx-username-hint">
+                <span id="cx-username-hint" class="v2-field__hint">3-20 characters, alphanumeric only</span>
+              </div>
+              <div class="v2-field v2-field--invalid">
+                <label for="cx-email" class="v2-field__label">Email</label>
+                <input type="email" id="cx-email" class="v2-input" value="invalid-email"
+                       aria-invalid="true" aria-describedby="cx-email-error">
+                <span id="cx-email-error" class="v2-field__error">Please enter a valid email address</span>
+              </div>
+              <div class="v2-field">
+                <label for="cx-password" class="v2-field__label">Password</label>
+                <input type="password" id="cx-password" class="v2-input" placeholder="Password">
+              </div>
+              <div class="v2-field">
+                <label for="cx-disabled" class="v2-field__label">Disabled</label>
+                <input type="text" id="cx-disabled" class="v2-input" value="Cannot edit" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Textarea + select -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Textarea &amp; select</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-grid v2-grid--2" style="width:100%;">
+              <div class="v2-field">
+                <label for="cx-notes" class="v2-field__label">Notes</label>
+                <textarea id="cx-notes" class="v2-textarea" rows="3" placeholder="Enter your notes here..."></textarea>
+                <span class="v2-field__hint">Supports vertical resizing</span>
+              </div>
+              <div class="v2-field">
+                <label for="cx-region" class="v2-field__label">Region</label>
+                <select id="cx-region" class="v2-select">
+                  <option value="">Select a region</option>
+                  <option value="us-east">US East</option>
+                  <option value="us-west">US West</option>
+                  <option value="eu-central">EU Central</option>
+                  <option value="ap-southeast">AP Southeast</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkbox + radio -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Checkbox &amp; radio</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-grid v2-grid--2" style="width:100%;">
+              <div>
+                <label class="v2-checkbox-label"><input type="checkbox" class="v2-checkbox"> Enable notifications</label>
+                <label class="v2-checkbox-label"><input type="checkbox" class="v2-checkbox" checked> Auto-renew subscription</label>
+                <label class="v2-checkbox-label"><input type="checkbox" class="v2-checkbox" disabled> Disabled unchecked</label>
+                <label class="v2-checkbox-label"><input type="checkbox" class="v2-checkbox" checked disabled> Disabled checked</label>
+              </div>
+              <div class="v2-radio-group" role="radiogroup" aria-label="Instance size">
+                <label class="v2-radio-label"><input type="radio" name="cx-size" value="small" class="v2-radio"> Small (2 vCPU, 4 GB RAM)</label>
+                <label class="v2-radio-label"><input type="radio" name="cx-size" value="medium" class="v2-radio" checked> Medium (4 vCPU, 8 GB RAM)</label>
+                <label class="v2-radio-label"><input type="radio" name="cx-size" value="large" class="v2-radio"> Large (8 vCPU, 16 GB RAM)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Switch + input group -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Switch &amp; input group</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-grid v2-grid--2" style="width:100%;">
+              <div>
+                <label class="v2-switch-label"><input type="checkbox" class="v2-switch" role="switch" aria-checked="false"> Enable auto-scaling</label>
+                <label class="v2-switch-label"><input type="checkbox" class="v2-switch" role="switch" aria-checked="true" checked> Enable monitoring</label>
+                <label class="v2-switch-label"><input type="checkbox" class="v2-switch" role="switch" disabled> Disabled switch</label>
+              </div>
+              <div>
+                <div class="v2-field">
+                  <label for="cx-amount" class="v2-field__label">Amount</label>
+                  <div class="v2-input-group">
+                    <span class="v2-input-group__affix">$</span>
+                    <input type="number" id="cx-amount" class="v2-input" placeholder="0.00">
+                    <span class="v2-input-group__affix">USD</span>
+                  </div>
+                </div>
+                <div class="v2-field">
+                  <label for="cx-domain" class="v2-field__label">Domain</label>
+                  <div class="v2-input-group">
+                    <input type="text" id="cx-domain" class="v2-input" placeholder="myapp">
+                    <span class="v2-input-group__affix">.synteq.dev</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Range -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Range slider</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-grid v2-grid--2" style="width:100%;">
+              <div class="v2-range-label">
+                <div class="v2-range-label__head">
+                  <span class="v2-range-label__name">CPU limit</span>
+                  <span class="v2-range-label__value" id="cx-cpu-value">75%</span>
+                </div>
+                <input type="range" class="v2-range" min="0" max="100" value="75"
+                       aria-label="CPU limit percentage" id="cx-cpu-range">
+              </div>
+              <div class="v2-range-label">
+                <div class="v2-range-label__head">
+                  <span class="v2-range-label__name">Memory limit</span>
+                  <span class="v2-range-label__value">50%</span>
+                </div>
+                <input type="range" class="v2-range" min="0" max="100" value="50" aria-label="Memory limit percentage">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ OVERLAYS ═══════════════════════════════════════════════ -->
+      <div class="v2-section" id="overlays">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            Overlays &amp; Disclosure
+          </span>
+          <span class="v2-section__meta">tabs, accordion, menu, popover, dialog, toast</span>
+        </div>
+
+        <!-- Tabs -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Tabs — roving tabindex, arrow-key navigation</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-tabs" data-v2-tabs role="tablist" aria-label="Settings tabs" style="width:100%;">
+              <div class="v2-tabs__list">
+                <button class="v2-tabs__tab" role="tab" aria-selected="true" aria-controls="cx-panel-general" id="cx-tab-general">General</button>
+                <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="cx-panel-security" id="cx-tab-security">Security</button>
+                <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="cx-panel-billing" id="cx-tab-billing">Billing</button>
+                <button class="v2-tabs__tab" role="tab" aria-selected="false" aria-controls="cx-panel-advanced" id="cx-tab-advanced">Advanced</button>
+              </div>
+              <div class="v2-tabs__panel" role="tabpanel" id="cx-panel-general" aria-labelledby="cx-tab-general" aria-hidden="false">
+                General settings panel. Configure the account name, email, and profile picture.
+              </div>
+              <div class="v2-tabs__panel" role="tabpanel" id="cx-panel-security" aria-labelledby="cx-tab-security" aria-hidden="true">
+                Security settings panel. Manage passwords, two-factor authentication, and session history.
+              </div>
+              <div class="v2-tabs__panel" role="tabpanel" id="cx-panel-billing" aria-labelledby="cx-tab-billing" aria-hidden="true">
+                Billing settings panel. View invoices, update payment methods, and manage subscriptions.
+              </div>
+              <div class="v2-tabs__panel" role="tabpanel" id="cx-panel-advanced" aria-labelledby="cx-tab-advanced" aria-hidden="true">
+                Advanced settings panel. Developer API keys, webhooks, and custom integrations.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Accordion — native &lt;details&gt;</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-accordion" style="width:100%;">
+              <details class="v2-accordion__item" open>
+                <summary class="v2-accordion__trigger">What is Synteq UI?</summary>
+                <div class="v2-accordion__content">
+                  A viewport-locked, offline-first dashboard framework built on six hard rules, with a complete component library for operator dashboards and admin panels.
+                </div>
+              </details>
+              <details class="v2-accordion__item">
+                <summary class="v2-accordion__trigger">How do I get started?</summary>
+                <div class="v2-accordion__content">
+                  Link <code>synteq-ui.css</code> and <code>synteq-ui.js</code>, then start from the shell template in the documentation.
+                </div>
+              </details>
+              <details class="v2-accordion__item">
+                <summary class="v2-accordion__trigger">Can I customize the theme?</summary>
+                <div class="v2-accordion__content">
+                  Yes. Override the <code>--v2-*</code> custom properties in your own stylesheet — see the theme guide in DESIGN.md.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu + popover -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Menu dropdown &amp; popover — keyboard navigable, Escape to close</span>
+          <div class="cx-preview" style="gap:var(--v2-space-4);">
+            <div style="position:relative;">
+              <button class="v2-btn" data-v2-menu-trigger="cx-menu" aria-haspopup="menu" aria-expanded="false">
+                <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+                Actions
+              </button>
+              <div class="v2-menu v2-menu--bottom" id="cx-menu" role="menu" hidden>
+                <button class="v2-menu__item" role="menuitem">Edit</button>
+                <button class="v2-menu__item" role="menuitem">Refresh</button>
+                <hr class="v2-menu__separator" />
+                <button class="v2-menu__item" role="menuitem">Delete</button>
+              </div>
+            </div>
+
+            <div style="position:relative;">
+              <button class="v2-btn" data-v2-popover-trigger="cx-popover" aria-haspopup="dialog">
+                <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                Help
+              </button>
+              <div class="v2-popover" id="cx-popover" role="dialog" hidden>
+                Use the arrow keys to move between tabs; Escape closes every overlay.
+              </div>
+            </div>
+
+            <div style="position:relative;">
+              <button class="v2-btn" data-v2-popover-trigger="cx-popover-rich" aria-haspopup="dialog">Instance info</button>
+              <div class="v2-popover v2-popover--rich" id="cx-popover-rich" role="dialog" hidden>
+                <div class="v2-popover__title">VPS Instance</div>
+                <p>4 vCPU, 8 GB RAM, 160 GB SSD<br>Region: US East<br>Status: Running</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dialog + toast triggers -->
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Dialog &amp; toast — native &lt;dialog&gt; focus trap</span>
+          <div class="cx-preview" style="gap:var(--v2-space-2);">
+            <button class="v2-btn" data-v2-dialog-open="cx-dialog">Open dialog</button>
+            <button class="v2-btn v2-btn--danger" data-v2-dialog-open="cx-confirm-dialog">Confirm action</button>
+            <button class="v2-btn" data-v2-toast="Default notification">Default toast</button>
+            <button class="v2-btn v2-btn--info" data-v2-toast="Sync scheduled for 02:00 UTC" data-v2-toast-kind="info">Info toast</button>
+            <button class="v2-btn v2-btn--warn" data-v2-toast="Memory usage above 85%" data-v2-toast-kind="warn">Warning toast</button>
+            <button class="v2-btn v2-btn--primary" data-v2-toast="Deployment completed" data-v2-toast-kind="ok">Success toast</button>
+            <button class="v2-btn v2-btn--danger" data-v2-toast="Connection failed" data-v2-toast-kind="err">Error toast</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ADVANCED TABLE ════════════════════════════════════════ -->
+      <div class="v2-section" id="table">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+            Advanced Table
+          </span>
+          <span class="v2-section__meta">sort · select · filter · paginate · sticky head</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Instance inventory — click a column header to sort, shift-click to select a range</span>
+
+          <div class="v2-table-toolbar" data-v2-table-toolbar>
+            <div class="v2-table-toolbar__start">
+              <span class="v2-table-toolbar__title">
+                <svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Instances
+              </span>
+              <span class="v2-table-toolbar__meta" data-v2-table-count>12 rows</span>
+            </div>
+            <div class="v2-table-toolbar__end">
+              <label class="v2-table-toolbar__filter">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" data-v2-table-filter placeholder="Filter rows..." aria-label="Filter table rows" />
+              </label>
+              <button class="v2-btn v2-btn--ghost" data-v2-toast="Inventory refreshed" aria-label="Refresh inventory">
+                <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="v2-table-wrap" style="max-height:320px;overflow-y:auto;">
+            <table class="v2-table v2-table--sticky v2-table--compact" data-v2-table data-v2-page-size="6">
+              <thead>
+                <tr>
+                  <th class="v2-table__check" scope="col">
+                    <input type="checkbox" class="v2-checkbox" data-v2-select-all aria-label="Select all rows" />
+                  </th>
+                  <th scope="col">
+                    <button class="v2-table__sort" data-v2-sort="text">
+                      Instance
+                      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                  </th>
+                  <th scope="col">
+                    <button class="v2-table__sort" data-v2-sort="text">
+                      Region
+                      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                  </th>
+                  <th scope="col">Status</th>
+                  <th class="v2-table__num" scope="col">
+                    <button class="v2-table__sort" data-v2-sort="number">
+                      CPU %
+                      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                  </th>
+                  <th class="v2-table__num" scope="col">
+                    <button class="v2-table__sort" data-v2-sort="number">
+                      Memory %
+                      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                  </th>
+                  <th class="v2-table__num" scope="col">
+                    <button class="v2-table__sort" data-v2-sort="number">
+                      Uptime
+                      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+
+          <nav class="v2-pagination" data-v2-table-pagination aria-label="Instance table pagination"></nav>
+        </div>
+      </div>
+
+      <!-- ══ TREE ═══════════════════════════════════════════════════ -->
+      <div class="v2-section" id="tree">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h6v6H3zM15 15h6v6h-6zM15 3h6v6h-6zM6 9v6a3 3 0 0 0 3 3h6"/></svg>
+            Tree
+          </span>
+          <span class="v2-section__meta">expand / collapse · max 3 levels · arrow-key navigable</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Resource hierarchy — ArrowRight expands, ArrowLeft collapses, ArrowUp/Down move</span>
+          <div class="cx-preview cx-preview--col">
+            <div class="v2-tree" data-v2-tree style="width:100%;">
+
+              <div class="v2-tree__item">
+                <div class="v2-tree__row">
+                  <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
+                    <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                  <span class="v2-tree__label">
+                    <svg class="v2-icon v2-icon--14 v2-icon--brand" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+                    us-east-1
+                  </span>
+                  <span class="v2-tree__meta">3 nodes</span>
+                </div>
+
+                <div class="v2-tree__group">
+                  <div class="v2-tree__item">
+                    <div class="v2-tree__row">
+                      <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse octra-01">
+                        <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                      </button>
+                      <span class="v2-tree__label v2-tree__label--mono">octra-01</span>
+                      <span class="v2-tree__meta">running</span>
+                    </div>
+                    <div class="v2-tree__group">
+                      <div class="v2-tree__item">
+                        <div class="v2-tree__row">
+                          <span class="v2-tree__spacer" aria-hidden="true"></span>
+                          <span class="v2-tree__label v2-tree__label--mono">consensus</span>
+                          <span class="v2-tree__meta">12%</span>
+                        </div>
+                      </div>
+                      <div class="v2-tree__item">
+                        <div class="v2-tree__row">
+                          <span class="v2-tree__spacer" aria-hidden="true"></span>
+                          <span class="v2-tree__label v2-tree__label--mono">p2p</span>
+                          <span class="v2-tree__meta">31%</span>
+                        </div>
+                      </div>
+                      <div class="v2-tree__item">
+                        <div class="v2-tree__row">
+                          <span class="v2-tree__spacer" aria-hidden="true"></span>
+                          <span class="v2-tree__label v2-tree__label--mono">rpc</span>
+                          <span class="v2-tree__meta">8%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="v2-tree__item">
+                    <div class="v2-tree__row">
+                      <span class="v2-tree__spacer" aria-hidden="true"></span>
+                      <span class="v2-tree__label v2-tree__label--mono">octra-02</span>
+                      <span class="v2-tree__meta">degraded</span>
+                    </div>
+                  </div>
+
+                  <div class="v2-tree__item">
+                    <div class="v2-tree__row">
+                      <span class="v2-tree__spacer" aria-hidden="true"></span>
+                      <span class="v2-tree__label v2-tree__label--mono">octra-03</span>
+                      <span class="v2-tree__meta">stopped</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="v2-tree__item">
+                <div class="v2-tree__row">
+                  <button class="v2-tree__toggle" aria-expanded="false" aria-label="Expand eu-central-1">
+                    <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                  <span class="v2-tree__label">
+                    <svg class="v2-icon v2-icon--14 v2-icon--brand" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+                    eu-central-1
+                  </span>
+                  <span class="v2-tree__meta">1 node</span>
+                </div>
+                <div class="v2-tree__group">
+                  <div class="v2-tree__item">
+                    <div class="v2-tree__row">
+                      <span class="v2-tree__spacer" aria-hidden="true"></span>
+                      <span class="v2-tree__label v2-tree__label--mono">octra-04</span>
+                      <span class="v2-tree__meta">running</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEPPER ════════════════════════════════════════════════ -->
+      <div class="v2-section" id="stepper">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="20"/><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><line x1="11" y1="6" x2="20" y2="6"/><line x1="11" y1="18" x2="20" y2="18"/></svg>
+            Stepper / Timeline
+          </span>
+          <span class="v2-section__meta">vertical progress indicator · complete, active, pending</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Deployment pipeline — driven by <span class="cx-token">data-v2-step</span></span>
+          <div class="cx-preview cx-preview--col" style="align-items:flex-start;">
+            <div class="v2-stepper" id="cx-stepper" data-v2-stepper data-v2-step="2" style="width:100%;max-width:520px;">
+              <div class="v2-stepper__item">
+                <span class="v2-stepper__marker" aria-hidden="true">
+                  <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <div class="v2-stepper__body">
+                  <div class="v2-stepper__title">Provision instance</div>
+                  <div class="v2-stepper__desc">Compute, network and volume created in us-east-1.</div>
+                  <div class="v2-stepper__meta"><span class="v2-badge v2-badge--ok">done</span><span>00:42</span></div>
+                </div>
+              </div>
+
+              <div class="v2-stepper__item">
+                <span class="v2-stepper__marker" aria-hidden="true">
+                  <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <div class="v2-stepper__body">
+                  <div class="v2-stepper__title">Install runtime</div>
+                  <div class="v2-stepper__desc">Container runtime and image pulled, health probe registered.</div>
+                  <div class="v2-stepper__meta"><span class="v2-badge v2-badge--ok">done</span><span>02:11</span></div>
+                </div>
+              </div>
+
+              <div class="v2-stepper__item">
+                <span class="v2-stepper__marker" aria-hidden="true">3</span>
+                <div class="v2-stepper__body">
+                  <div class="v2-stepper__title">Sync state</div>
+                  <div class="v2-stepper__desc">Replaying consensus history — this can take a few minutes.</div>
+                  <div class="v2-stepper__meta"><span class="v2-badge v2-badge--brand">in progress</span><span>1,756,258 / 1,760,000</span></div>
+                </div>
+              </div>
+
+              <div class="v2-stepper__item">
+                <span class="v2-stepper__marker" aria-hidden="true">4</span>
+                <div class="v2-stepper__body">
+                  <div class="v2-stepper__title">Go live</div>
+                  <div class="v2-stepper__desc">Register with the load balancer and open traffic.</div>
+                  <div class="v2-stepper__meta">pending</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:var(--v2-space-2);flex-wrap:wrap;">
+              <button class="v2-btn v2-btn--ghost" data-v2-step-action="-1">Previous step</button>
+              <button class="v2-btn v2-btn--primary" data-v2-step-action="1">Next step</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CODE BLOCK ═════════════════════════════════════════════ -->
+      <div class="v2-section" id="code">
+        <div class="v2-section__head">
+          <span class="v2-section__title">
+            <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Code Block
+          </span>
+          <span class="v2-section__meta">syntax-free · line numbers · copy button</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Shell snippet — the gutter is generated at runtime, copy uses the clipboard API</span>
+          <div class="v2-code" data-v2-code data-v2-line-numbers>
+            <div class="v2-code__head">
+              <span class="v2-code__title">
+                <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                install.sh
+              </span>
+              <div class="v2-code__actions">
+                <button class="v2-code__copy" data-v2-code-copy="Copied" aria-label="Copy code">
+                  <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+              </div>
+            </div>
+            <div class="v2-code__body">
+              <pre class="v2-code__pre"><code># Synteq UI — quick start
+npm install
+npx synteq build --theme dark
+
+# Serve the component explorer locally
+npx synteq serve examples/components.html --port 4173</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="cx-block">
+          <span class="v2-t-xs v2-mute">Without a header bar — <span class="cx-token">v2-code--plain</span></span>
+          <div class="v2-code v2-code--plain" data-v2-code data-v2-line-numbers>
+            <div class="v2-code__body">
+              <pre class="v2-code__pre"><code>const chart = document.getElementById('chart-line');
+SynteqUI.renderLineChart(chart, [
+  { name: 'Requests', values: [12, 18, 22, 28, 35, 40] },
+  { name: 'Errors',   values: [1, 2, 1, 4, 3, 2] }
+], { labels: ['09:00', '09:05', '09:10', '09:15', '09:20', '09:25'], unit: 'k' });</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="v2-section" id="feedback">
         <div class="v2-section__head">
           <span class="v2-section__title">
@@ -744,6 +1386,16 @@
               </div>
             </div>
 
+            <div class="v2-progress" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100">
+              <div class="v2-progress__head">
+                <span class="v2-progress__label">Index rebuild (info)</span>
+                <span class="v2-progress__value">12%</span>
+              </div>
+              <div class="v2-progress__track">
+                <div class="v2-progress__fill v2-progress__fill--info" style="width: 12%;"></div>
+              </div>
+            </div>
+
             <div class="v2-progress">
               <div class="v2-progress__head">
                 <span class="v2-progress__label">Processing...</span>
@@ -807,6 +1459,7 @@
           <div class="cx-preview" style="gap:var(--v2-space-2);flex-wrap:wrap;">
             <span class="v2-tag">Default</span>
             <span class="v2-tag v2-tag--brand">Featured</span>
+            <span class="v2-tag v2-tag--info">Preview</span>
             <span class="v2-tag v2-tag--ok">
               Active
               <button class="v2-tag__dismiss" aria-label="Remove tag">
@@ -842,10 +1495,10 @@
             <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
             Motion
           </span>
-          <span class="v2-section__meta">auto-disabled with prefers-reduced-motion</span>
+          <span class="v2-section__meta" id="motion-mode">auto-disabled with prefers-reduced-motion</span>
         </div>
         <div class="cx-block">
-          <span class="v2-t-xs v2-mute">Fade-up mount — click to replay</span>
+          <span class="v2-t-xs v2-mute">Fade-up mount — click to replay (SynteqUI.replayAnimation)</span>
           <div class="cx-preview">
             <button class="v2-btn" id="replay-btn">Replay animation</button>
             <div id="anim-target" class="v2-fade-up" style="padding:var(--v2-space-3) var(--v2-space-4);background:var(--v2-inset);border-radius:var(--v2-radius-control);">
@@ -876,35 +1529,96 @@
   </main>
 </div>
 
-  <dialog class="v2-dialog" id="component-search" aria-label="Search components">
+  <dialog class="v2-dialog v2-dialog--sm" id="component-search" aria-labelledby="component-search-title">
     <form method="dialog" class="v2-command">
-      <div class="v2-section__head"><strong>Find a component</strong><button class="v2-btn v2-btn--icon" value="cancel" aria-label="Close">×</button></div>
+      <div class="v2-dialog__header">
+        <h2 class="v2-dialog__title" id="component-search-title">Find a component</h2>
+        <button class="v2-dialog__close" value="cancel" aria-label="Close search">
+          <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
       <input class="v2-input" data-v2-search-input placeholder="Search sections..." aria-label="Search sections" />
       <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#tokens">Design tokens</button>
       <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#buttons">Buttons and controls</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#forms">Forms and inputs</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#overlays">Overlays and disclosure</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#table">Advanced table</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#charts">Charts</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#tree">Tree</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#stepper">Stepper / timeline</button>
+      <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#code">Code block</button>
       <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#motion">Motion primitives</button>
     </form>
   </dialog>
-  <script src="../js/synteq-ui-v2.js"></script>
+<dialog class="v2-dialog" id="cx-dialog" aria-labelledby="cx-dialog-title">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title" id="cx-dialog-title">Dialog title</h2>
+    <button class="v2-dialog__close" data-v2-dialog-close aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body">
+    <p>Native <code>&lt;dialog&gt;</code> with the built-in focus trap. Press Escape or click the backdrop to close.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" data-v2-dialog-close>Cancel</button>
+    <button class="v2-btn v2-btn--primary" data-v2-dialog-close>Save changes</button>
+  </div>
+</dialog>
+
+<dialog class="v2-dialog" id="cx-confirm-dialog" role="alertdialog"
+        aria-labelledby="cx-confirm-title" aria-describedby="cx-confirm-desc">
+  <div class="v2-dialog__header">
+    <h2 class="v2-dialog__title" id="cx-confirm-title">Confirm deletion</h2>
+    <button class="v2-dialog__close" data-v2-dialog-close aria-label="Close dialog">
+      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="v2-dialog__body" id="cx-confirm-desc">
+    <p>Delete this instance? This action cannot be undone.</p>
+  </div>
+  <div class="v2-dialog__footer">
+    <button class="v2-btn v2-btn--ghost" data-v2-dialog-close>Cancel</button>
+    <button class="v2-btn v2-btn--danger" data-v2-dialog-close id="cx-confirm-delete">Delete</button>
+  </div>
+</dialog>
+
+  <script src="../js/synteq-ui.js"></script>
 <script>
 (function () {
   /* Sparklines */
   var inData  = [12,18,22,28,35,40,38,34,30,36,44,50,48,42,38];
   var outData = [4,5,7,9,12,14,11,9,8,10,13,16,14,12,10];
-  SynteqV2.renderSparkline(document.getElementById('spark-in'),  inData);
-  SynteqV2.renderSparkline(document.getElementById('spark-out'), outData);
+  SynteqUI.renderSparkline(document.getElementById('spark-in'),  inData);
+  SynteqUI.renderSparkline(document.getElementById('spark-out'), outData);
 
   /* Bar chart */
   var barData = inData.map(function(v, i) { return [v, outData[i]]; });
-  SynteqV2.renderBars(document.getElementById('bars-demo'), barData);
+  SynteqUI.renderBars(document.getElementById('bars-demo'), barData);
 
-  /* Replay button for fade-up demo */
-  document.getElementById('replay-btn').addEventListener('click', function () {
-    var el = document.getElementById('anim-target');
-    el.classList.remove('v2-fade-up');
-    void el.offsetWidth; // force reflow
-    el.classList.add('v2-fade-up');
-  });
+  /* Replay button for fade-up demo.
+     The class-toggle approach did nothing whenever the OS reported
+     prefers-reduced-motion (base.css shortens every CSS animation to 0.001ms),
+     so the replay is delegated to SynteqUI.replayAnimation(): it restarts the
+     animation through WAAPI and falls back to a 120ms cross-fade when motion is
+     reduced, which keeps the demo honest instead of showing "no effect". */
+  var replayBtn = document.getElementById('replay-btn');
+  var animTarget = document.getElementById('anim-target');
+  var motionMode = document.getElementById('motion-mode');
+  if (motionMode && SynteqUI.prefersReducedMotion && SynteqUI.prefersReducedMotion()) {
+    motionMode.textContent = 'prefers-reduced-motion: reduce — replay falls back to a 120 ms cross-fade';
+  }
+  if (replayBtn && animTarget) {
+    replayBtn.addEventListener('click', function () {
+      SynteqUI.replayAnimation(animTarget);
+    });
+  }
 
   /* Copy button wiring for code blocks */
   document.querySelectorAll('.cx-copy-btn').forEach(function (btn) {
@@ -919,8 +1633,86 @@
     });
   });
 
+  /* ---- Advanced table: build rows, then let the runtime take over ---- */
+  var instances = [
+    ['octra-01', 'us-east-1', 'Running', 'ok', 42, 61, '128d'],
+    ['octra-02', 'us-east-1', 'Running', 'ok', 78, 72, '96d'],
+    ['octra-03', 'eu-central-1', 'Degraded', 'warn', 91, 88, '41d'],
+    ['octra-04', 'us-west-2', 'Running', 'ok', 33, 47, '210d'],
+    ['octra-05', 'ap-southeast-1', 'Stopped', '', 0, 12, '5d'],
+    ['octra-06', 'eu-central-1', 'Running', 'ok', 57, 55, '63d'],
+    ['octra-07', 'us-east-1', 'Running', 'ok', 12, 30, '320d'],
+    ['octra-08', 'us-west-2', 'Error', 'err', 99, 97, '2d'],
+    ['octra-09', 'ap-southeast-1', 'Running', 'ok', 66, 58, '74d'],
+    ['octra-10', 'eu-central-1', 'Running', 'ok', 25, 41, '18d'],
+    ['octra-11', 'us-east-1', 'Running', 'ok', 48, 52, '155d'],
+    ['octra-12', 'us-west-2', 'Degraded', 'warn', 84, 79, '9d']
+  ];
+
+  var tableBody = document.querySelector('#table table tbody');
+  if (tableBody) {
+    instances.forEach(function (row) {
+      var tr = document.createElement('tr');
+      var badge = row[3] ? ' v2-badge--' + row[3] : '';
+      tr.innerHTML =
+        '<td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-v2-row-select aria-label="Select ' + row[0] + '" /></td>' +
+        '<td class="v2-table__mono">' + row[0] + '</td>' +
+        '<td class="v2-table__mute">' + row[1] + '</td>' +
+        '<td><span class="v2-badge' + badge + '">' + row[2] + '</span></td>' +
+        '<td class="v2-table__num">' + row[4] + '</td>' +
+        '<td class="v2-table__num">' + row[5] + '</td>' +
+        '<td class="v2-table__num">' + row[6] + '</td>';
+      tableBody.appendChild(tr);
+    });
+    SynteqUI.initTables();
+  }
+
+  /* ---- Line / area chart ---- */
+  var ticks = ['T-11', 'T-10', 'T-9', 'T-8', 'T-7', 'T-6', 'T-5', 'T-4', 'T-3', 'T-2', 'T-1', 'now'];
+  SynteqUI.renderLineChart(document.getElementById('chart-line'), [
+    { name: 'Requests', values: [120, 148, 132, 176, 210, 198, 242, 268, 251, 289, 312, 334] },
+    { name: 'Errors', values: [8, 12, 6, 18, 14, 22, 11, 26, 19, 15, 24, 17] }
+  ], { labels: ticks, unit: '', decimals: 0, yTicks: 4 });
+
+  /* ---- Stacked bars ---- */
+  SynteqUI.renderStackedBars(document.getElementById('chart-stacked'), [
+    { name: 'Read', values: [42, 48, 51, 44, 58, 62, 57, 66] },
+    { name: 'Write', values: [18, 22, 19, 26, 24, 31, 28, 34] },
+    { name: 'Admin', values: [6, 4, 8, 5, 7, 6, 9, 5] }
+  ], {
+    labels: ['09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35'],
+    unit: ' req/s'
+  });
+
+  /* ---- Stepper ---- */
+  var stepper = document.getElementById('cx-stepper');
+  var step = 2;
+  document.querySelectorAll('[data-v2-step-action]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      step += parseInt(btn.getAttribute('data-v2-step-action'), 10);
+      SynteqUI.setStep(stepper, step);
+    });
+  });
+
+  /* ---- Range slider value ---- */
+  var cpuRange = document.getElementById('cx-cpu-range');
+  var cpuValue = document.getElementById('cx-cpu-value');
+  if (cpuRange && cpuValue) {
+    cpuRange.addEventListener('input', function () {
+      cpuValue.textContent = cpuRange.value + '%';
+    });
+  }
+
+  /* ---- Confirm dialog ---- */
+  var confirmDelete = document.getElementById('cx-confirm-delete');
+  if (confirmDelete) {
+    confirmDelete.addEventListener('click', function () {
+      SynteqUI.toast('Instance deleted', { kind: 'ok' });
+    });
+  }
+
   /* Nav active tracking + smooth scroll are owned by the runtime
-     (SynteqV2.initNavScroll). A second scroll-spy here used to fight the
+     (SynteqUI.initNavScroll). A second scroll-spy here used to fight the
      runtime and highlight the wrong item. */
 })();
 </script>

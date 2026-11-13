@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — FEEDBACK & STATUS (components/feedback.css)
+   SYNTEQ UI — FEEDBACK & STATUS (components/feedback.css)
    Alert, progress, breadcrumb, empty state, spinner, skeleton polish.
    Flat-surface model: hairline borders + colored accent rail, no fills.
    ========================================================================== */
@@ -20,7 +20,7 @@
 }
 
 .v2-alert--info {
-  border-left-color: var(--v2-brand);
+  border-left-color: var(--v2-status-info);
 }
 
 .v2-alert--ok {
@@ -41,7 +41,7 @@
 }
 
 .v2-alert--info .v2-alert__icon {
-  color: var(--v2-brand);
+  color: var(--v2-status-info);
 }
 
 .v2-alert--ok .v2-alert__icon {
@@ -132,6 +132,10 @@
   background: var(--v2-brand);
   border-radius: var(--v2-radius-pill);
   transition: width var(--v2-dur-slow) var(--v2-ease);
+}
+
+.v2-progress__fill--info {
+  background: var(--v2-status-info);
 }
 
 .v2-progress__fill--ok {
@@ -328,25 +332,31 @@
 .v2-tag--brand {
   background: color-mix(in srgb, var(--v2-brand) 10%, transparent);
   border-color: var(--v2-brand);
-  color: var(--v2-brand);
+  color: color-mix(in srgb, var(--v2-brand) var(--v2-status-ink-mix), var(--v2-text-strong));
+}
+
+.v2-tag--info {
+  background: color-mix(in srgb, var(--v2-status-info) 10%, transparent);
+  border-color: var(--v2-status-info);
+  color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong));
 }
 
 .v2-tag--ok {
   background: color-mix(in srgb, var(--v2-status-running) 10%, transparent);
   border-color: var(--v2-status-running);
-  color: var(--v2-status-running);
+  color: color-mix(in srgb, var(--v2-status-running) var(--v2-status-ink-mix), var(--v2-text-strong));
 }
 
 .v2-tag--warn {
   background: color-mix(in srgb, var(--v2-status-warning) 10%, transparent);
   border-color: var(--v2-status-warning);
-  color: var(--v2-status-warning);
+  color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong));
 }
 
 .v2-tag--err {
   background: color-mix(in srgb, var(--v2-status-error) 10%, transparent);
   border-color: var(--v2-status-error);
-  color: var(--v2-status-error);
+  color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong));
 }
 
 .v2-tag__dismiss {

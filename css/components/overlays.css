@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — OVERLAYS & DISCLOSURE (components/overlays.css)
+   SYNTEQ UI — OVERLAYS & DISCLOSURE (components/overlays.css)
    Tabs, accordion, menu, popover, dialog, toast — all with keyboard nav,
    ARIA, and flat-surface styling (1px border + canvas bg, no box-shadow).
    ========================================================================== */
@@ -133,7 +133,7 @@
 
 /* Light theme arrow color */
 [data-theme="light"] .v2-accordion__trigger::after {
-  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%236a7272' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23666e6e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 /* ---- Menu (generalized from nav menu pattern) ---- */
@@ -280,6 +280,13 @@
 /* ---- Dialog (polish existing native dialog) ---- */
 .v2-dialog {
   width: min(460px, calc(100vw - var(--v2-space-6)));
+  /* The global reset (`* { margin: 0 }`) also zeroes the UA `dialog { margin: auto }`,
+     which pinned every modal to the top-left corner. Re-assert centring here: a
+     modal dialog is fixed + inset 0 from the UA sheet, so `margin: auto` is what
+     centres it on both axes. */
+  margin: auto;
+  max-height: calc(100dvh - var(--v2-space-8));
+  overflow-y: auto;
   padding: var(--v2-space-6);
   background: var(--v2-canvas);
   color: var(--v2-text);
@@ -371,6 +378,26 @@
   }
 }
 
+/* ---- Command palette (dialog + search input + result list) ---- */
+.v2-command {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-2);
+}
+
+/* Result rows are left-aligned full-width targets, not centred buttons:
+   `.v2-btn` centres its label, which made the palette look like a menu. */
+.v2-command [data-v2-command] {
+  justify-content: flex-start;
+  text-align: left;
+  min-height: var(--v2-input-h);
+}
+
+/* The palette's search field sits above the list, so it gets the emphasis. */
+.v2-command .v2-input {
+  margin-bottom: var(--v2-space-1);
+}
+
 /* ---- Toast (upgraded from controls.css primitive) ---- */
 .v2-toast-region {
   position: fixed;
@@ -402,7 +429,7 @@
 }
 
 .v2-toast--info {
-  border-left-color: var(--v2-brand);
+  border-left-color: var(--v2-status-info);
 }
 
 .v2-toast--ok {
@@ -423,7 +450,7 @@
 }
 
 .v2-toast--info .v2-toast__icon {
-  color: var(--v2-brand);
+  color: var(--v2-status-info);
 }
 
 .v2-toast--ok .v2-toast__icon {

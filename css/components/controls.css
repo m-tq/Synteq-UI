@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 11. CONTROLS (components/controls.css)
+   SYNTEQ UI — 11. CONTROLS (components/controls.css)
    Buttons, segmented bar, inputs, chips, badges, keyboard pills.
    Flat surfaces (no card chrome), consistent control radius.
    ========================================================================== */
@@ -73,9 +73,19 @@
   pointer-events: none;
   animation: v2-fade-up var(--v2-dur-fast) var(--v2-ease) both;
 }
-.v2-tip--ok { background: var(--v2-status-running); color: var(--v2-text-on-accent); }
-.v2-tip--warn { background: var(--v2-status-warning); color: var(--v2-text-on-accent); }
-.v2-tip--err { background: var(--v2-status-error); color: var(--v2-text-on-accent); }
+.v2-tip--info { background: var(--v2-status-info); }
+.v2-tip--ok { background: var(--v2-status-running); }
+.v2-tip--warn { background: var(--v2-status-warning); }
+.v2-tip--err { background: var(--v2-status-error); }
+/* Solid status fills stay light-to-mid tone in both themes, so the ink must
+   stay dark in both themes too (white-on-amber failed contrast in light mode). */
+.v2-tip--info,
+.v2-tip--ok,
+.v2-tip--warn,
+.v2-tip--err { color: var(--v2-text-on-solid); }
+/* The error fill is the one status colour that is dark enough on the light
+   theme to need the theme's inverted ink instead. */
+.v2-tip--err { color: var(--v2-text-on-accent); }
 .v2-tip.is-out { opacity: 0; transition: opacity var(--v2-dur-fast) var(--v2-ease); }
 
 /* ---- Button base ---- */
@@ -107,19 +117,35 @@
 }
 .v2-btn--primary:hover:not(:disabled) { opacity: 0.9; background: var(--v2-text-strong); color: var(--v2-text-on-accent); }
 
-/* Brand accent button */
+/* Brand accent button — dark ink in both themes so the green fill clears AA */
 .v2-btn--brand {
   background: var(--v2-brand);
-  color: var(--v2-text-on-accent);
+  color: var(--v2-text-on-solid);
 }
 .v2-btn--brand:hover:not(:disabled) { opacity: 0.92; }
 
 /* Danger (tonal) */
 .v2-btn--danger {
   background: color-mix(in srgb, var(--v2-status-error) 16%, transparent);
-  color: var(--v2-status-error);
+  color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong));
 }
 .v2-btn--danger:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-error) 26%, transparent); }
+
+/* Info (tonal) — neutral, non-destructive notice action */
+.v2-btn--info {
+  background: color-mix(in srgb, var(--v2-status-info) 16%, transparent);
+  color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong));
+}
+.v2-btn--info:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-info) 26%, transparent); }
+
+/* Warning (tonal) — "proceed with care" action. `--warning` is an alias. */
+.v2-btn--warn,
+.v2-btn--warning {
+  background: color-mix(in srgb, var(--v2-status-warning) 16%, transparent);
+  color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong));
+}
+.v2-btn--warn:hover:not(:disabled),
+.v2-btn--warning:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-warning) 26%, transparent); }
 
 /* Icon-only */
 .v2-btn--icon { width: 32px; padding: 0; }
@@ -160,25 +186,14 @@
 .v2-seg__btn--active { background: var(--v2-hover); color: var(--v2-text-strong); font-weight: var(--v2-fw-medium); }
 .v2-seg__btn--icon { padding: 0 9px; }
 
-/* ---- Text input ---- */
-.v2-input {
-  width: 100%;
-  height: 32px;
-  padding: 0 var(--v2-space-3);
-  background: var(--v2-inset);
-  border-radius: var(--v2-radius-control);
-  color: var(--v2-text-strong);
-  font-size: var(--v2-text-sm);
-}
-.v2-input::placeholder { color: var(--v2-text-subtle); }
-.v2-input:focus-visible { background: var(--v2-hover); }
+/* ---- Text input ----
+   The full definition lives in components/forms.css (borders + focus ring).
+   It used to be duplicated here without a border, which made the focus state
+   depend on load order. Keep this file free of field styling. */
 
-/* Feedback and overlay primitives */
-.v2-toast-region { position: fixed; right: var(--v2-space-5); bottom: calc(var(--v2-bottomnav-h) + var(--v2-space-5)); z-index: 30; display: flex; flex-direction: column; gap: var(--v2-space-2); pointer-events: none; }
-.v2-toast { padding: var(--v2-space-3) var(--v2-space-4); background: var(--v2-text-strong); color: var(--v2-text-on-accent); border-radius: var(--v2-radius-control); font-size: var(--v2-text-sm); animation: v2-fade-up var(--v2-dur-normal) var(--v2-ease) both; }
-.v2-dialog { width: min(460px, calc(100vw - var(--v2-space-6))); padding: var(--v2-space-6); background: var(--v2-canvas); color: var(--v2-text); border: var(--v2-line-h) solid var(--v2-line); border-radius: var(--v2-radius-control); }
-.v2-dialog::backdrop { background: color-mix(in srgb, var(--v2-canvas) 72%, transparent); backdrop-filter: blur(4px); }
-.v2-command { display: flex; flex-direction: column; gap: var(--v2-space-3); }
+/* Feedback and overlay primitives (toast / dialog / command palette)
+   live in components/overlays.css — they used to be duplicated here, which
+   meant every overlay property depended on @import order. */
 
 /* ---- Badges & chips (micro radius) ---- */
 .v2-badge {
@@ -192,10 +207,11 @@
   font-size: var(--v2-text-xs);
   line-height: 1.5;
 }
-.v2-badge--brand { color: var(--v2-brand); background: color-mix(in srgb, var(--v2-brand) 14%, transparent); }
-.v2-badge--ok { color: var(--v2-status-running); background: color-mix(in srgb, var(--v2-status-running) 14%, transparent); }
-.v2-badge--warn { color: var(--v2-status-warning); background: color-mix(in srgb, var(--v2-status-warning) 16%, transparent); }
-.v2-badge--err { color: var(--v2-status-error); background: color-mix(in srgb, var(--v2-status-error) 14%, transparent); }
+.v2-badge--brand { color: color-mix(in srgb, var(--v2-brand) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-brand) 14%, transparent); }
+.v2-badge--info { color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-info) 14%, transparent); }
+.v2-badge--ok { color: color-mix(in srgb, var(--v2-status-running) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-running) 14%, transparent); }
+.v2-badge--warn { color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-warning) 16%, transparent); }
+.v2-badge--err { color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-error) 14%, transparent); }
 
 /* Keyboard shortcut pill */
 .v2-kbd {

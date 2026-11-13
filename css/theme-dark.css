@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 02. DARK THEME (theme-dark.css) [default]
+   SYNTEQ UI — 02. DARK THEME (theme-dark.css) [default]
    Flat surfaces, hairline separators. No card elevation.
    ========================================================================== */
 :root,
@@ -12,6 +12,10 @@
   --v2-text-strong: #f4f6f6; /* high-emphasis values, hostnames, active */
   --v2-text-subtle: #7a8080; /* metadata, units, timestamps */
   --v2-text-on-accent: #06120f;
+  /* Ink for SOLID accent/status fills (tips, brand button, brand mark, checked
+     controls). Dark in BOTH themes: accent and status colours stay light-to-mid
+     tone, so dark ink is the readable choice (white-on-amber failed contrast). */
+  --v2-text-on-solid: #08110e;
 
   /* Flat surfaces — V2 removes the raised/strong/muted ladder from V1 */
   --v2-canvas: #0a0b0b;  /* main app background */
@@ -26,6 +30,7 @@
 
   /* Semantic accents */
   --v2-brand: #00e599;
+  --v2-status-info: #38bdf8;
   --v2-status-running: #34d399;
   --v2-status-warning: #fbbf24;
   --v2-status-error: #f87171;

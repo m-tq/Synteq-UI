@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — FORMS (components/forms.css)
+   SYNTEQ UI — FORMS (components/forms.css)
    Native HTML form controls restyled to match the flat-surface model.
    All interactive states, full keyboard support, ARIA-ready.
    ========================================================================== */
@@ -65,7 +65,12 @@
 
 .v2-input:focus-visible {
   background: var(--v2-hover);
-  border-color: var(--v2-brand);
+  /* ONE indicator per field: a brand ring drawn with outline. Previously the
+     global `:focus-visible` outline from base.css was painted around the input
+     while this rule also turned the 1px border brand — a double coloured edge. */
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 1px;
+  border-color: transparent;
 }
 
 .v2-input:disabled,
@@ -86,7 +91,10 @@
 
 .v2-input[aria-invalid="true"]:focus-visible,
 .v2-field--invalid .v2-input:focus-visible {
-  border-color: var(--v2-status-error);
+  /* Invalid fields keep the error signal, but only once: the ring turns red
+     instead of adding a red border underneath a brand ring. */
+  outline-color: var(--v2-status-error);
+  border-color: transparent;
 }
 
 /* ---- Textarea ---- */
@@ -112,7 +120,9 @@
 
 .v2-textarea:focus-visible {
   background: var(--v2-hover);
-  border-color: var(--v2-brand);
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 1px;
+  border-color: transparent;
 }
 
 .v2-textarea:disabled,
@@ -125,6 +135,12 @@
 .v2-textarea[aria-invalid="true"],
 .v2-field--invalid .v2-textarea {
   border-color: var(--v2-status-error);
+}
+
+.v2-textarea[aria-invalid="true"]:focus-visible,
+.v2-field--invalid .v2-textarea:focus-visible {
+  outline-color: var(--v2-status-error);
+  border-color: transparent;
 }
 
 /* ---- Select (native, custom arrow) ---- */
@@ -149,7 +165,9 @@
 
 .v2-select:focus-visible {
   background-color: var(--v2-hover);
-  border-color: var(--v2-brand);
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 1px;
+  border-color: transparent;
 }
 
 .v2-select:disabled {
@@ -164,7 +182,7 @@
 
 /* Light theme arrow color adjustment */
 [data-theme="light"] .v2-select {
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236a7272' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666e6e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 /* ---- Checkbox ---- */
@@ -188,7 +206,9 @@
 }
 
 .v2-checkbox:focus-visible {
-  border-color: var(--v2-brand);
+  /* Ring only — the border already carries the checked / invalid state. */
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 2px;
 }
 
 .v2-checkbox:checked {
@@ -203,7 +223,7 @@
   top: 1px;
   width: 4px;
   height: 8px;
-  border: solid var(--v2-text-on-accent);
+  border: solid var(--v2-text-on-solid);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -254,7 +274,8 @@
 }
 
 .v2-radio:focus-visible {
-  border-color: var(--v2-brand);
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 2px;
 }
 
 .v2-radio:checked {
@@ -269,7 +290,7 @@
   top: 4px;
   width: 6px;
   height: 6px;
-  background: var(--v2-text-on-accent);
+  background: var(--v2-text-on-solid);
   border-radius: 50%;
 }
 
@@ -339,7 +360,8 @@
 }
 
 .v2-switch:focus-visible {
-  border-color: var(--v2-brand);
+  outline: 2px solid var(--v2-brand);
+  outline-offset: 2px;
 }
 
 .v2-switch:checked {
@@ -348,7 +370,7 @@
 }
 
 .v2-switch:checked::after {
-  background: var(--v2-text-on-accent);
+  background: var(--v2-text-on-solid);
   transform: translateX(16px);
 }
 
@@ -402,7 +424,10 @@
 }
 
 .v2-input-group .v2-input:focus-visible {
+  /* The group border (:focus-within) is the single focus indicator, so the
+     inner input must not paint a ring of its own. */
   border: none;
+  outline: none;
   background: transparent;
 }
 

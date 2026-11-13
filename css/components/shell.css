@@ -1,4 +1,4 @@
-/* Synteq UI V2 viewport-locked shell with a sticky bottom navigation dock. */
+/* Synteq UI viewport-locked shell with a sticky bottom navigation dock. */
 .v2-app {
   --v2-nav-current: var(--v2-bottomnav-h);
   position: relative;
@@ -13,7 +13,7 @@
   transition: grid-template-rows var(--v2-dur-normal) var(--v2-ease);
 }
 .v2-app.nav-collapsed { --v2-nav-current: 0px; }
-.v2-app.nav-collapsed .v2-aside { transform: translateY(100%); opacity: 0; pointer-events: none; }
+.v2-app.nav-collapsed .v2-aside { transform: translateY(100%); opacity: 0; visibility: hidden; pointer-events: none; }
 .v2-aside { grid-area: aside; min-height: 0; }
 .v2-topbar { grid-area: topbar; min-height: 0; }
 .v2-main { grid-area: main; min-height: 0; min-width: 0; overflow: hidden; display: flex; }
@@ -22,7 +22,8 @@
   min-width: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--v2-space-5) clamp(var(--v2-space-4), 4vw, var(--v2-space-7));
+  /* Vertical spacing lives on .v2-section so one section fills exactly one screen. */
+  padding: 0 clamp(var(--v2-space-4), 4vw, var(--v2-space-7));
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -36,11 +37,11 @@
   scroll-margin-top: var(--v2-space-4);
 }
 @media (max-width: 860px) {
-  .v2-content { padding: var(--v2-space-4); gap: var(--v2-space-6); }
+  .v2-content { padding: 0 var(--v2-space-4); gap: var(--v2-space-6); }
 }
 @media (max-width: 420px) {
   :root { --v2-topbar-h: 48px; }
-  .v2-content { padding: var(--v2-space-3); gap: var(--v2-space-5); }
+  .v2-content { padding: 0 var(--v2-space-3); gap: var(--v2-space-5); }
 }
 @media (max-height: 480px) and (orientation: landscape) {
   :root {

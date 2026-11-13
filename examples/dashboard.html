@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Synteq UI V2 — Dashboard</title>
+  <title>Synteq UI — Dashboard</title>
 
   <!-- Fonts + styles (fully offline — fonts served from V2/fonts/) -->
-  <link rel="stylesheet" href="../css/synteq-ui-v2.css" />
+  <link rel="stylesheet" href="../css/synteq-ui.css" />
 
   <style>
     /* =========================================================
@@ -484,13 +484,13 @@
     <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="Open console">Open console</button>
   </form>
 </dialog>
-<script src="../js/synteq-ui-v2.js"></script>
+<script src="../js/synteq-ui.js"></script>
 <script>
 (function () {
   /* CPU sparkline */
   var cpuHistory = [18,22,20,25,31,28,35,40,38,42,36,30,34,38,41,36,34,38,35,32,35,34,33,36,35,33,35,34,33,34];
   var sparkEl = document.getElementById('cpu-spark');
-  if (sparkEl) SynteqV2.renderSparkline(sparkEl, cpuHistory);
+  if (sparkEl) SynteqUI.renderSparkline(sparkEl, cpuHistory);
 
   /* Network bars */
   var netData = [
@@ -499,7 +499,7 @@
     [35,11],[40,13],[44,14],[48,15],[52,16]
   ];
   var barsEl = document.getElementById('net-bars');
-  if (barsEl) SynteqV2.renderBars(barsEl, netData);
+  if (barsEl) SynteqUI.renderBars(barsEl, netData);
 
   /* Live counter */
   var ts = document.getElementById('refresh-ts');
@@ -514,7 +514,7 @@
   /* Show CPU gauge animation after 2s */
   setTimeout(function () {
     var fill = document.querySelector('[data-v2-gauge="34"] .v2-gauge__fill');
-    if (fill) SynteqV2.renderGauge(fill, 47);
+    if (fill) SynteqUI.renderGauge(fill, 47);
   }, 2000);
 })();
 </script>

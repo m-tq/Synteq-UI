@@ -1,29 +1,32 @@
 ---
-name: synteq-ui-v2
-description: Implements clean, viewport-locked dashboard UIs using the Synteq UI V2 framework. Zero external dependencies, offline-first, Google Sans Code font, line-separator architecture (no cards), responsive sidebar with single toggle, inline SVG icons, dual-theme (dark/light). Use when building operator dashboards, cloud resource UIs, admin panels, or any text-first data-dense interface.
+name: synteq-ui
+description: Implements clean, viewport-locked dashboard UIs using the Synteq UI framework. Zero external dependencies, offline-first, Google Sans Code font, line-separator architecture (no cards), responsive sidebar with single toggle, inline SVG icons, dual-theme (dark/light), advanced data table, axis-labelled charts, tree, stepper and code block. Use when building operator dashboards, cloud resource UIs, admin panels, or any text-first data-dense interface.
 ---
 
 ## Framework Identity
 
-- **Name:** Synteq UI V2
-- **Location in project:** `V2/` folder
-- **Single CSS entry point:** `V2/css/synteq-ui-v2.css` — imports in order: `fonts.css` → `tokens.css` → `theme-dark.css` + `theme-light.css` → `base.css` → 8 component files (`icons`, `shell`, `sidebar`, `topbar`, `content`, `data`, `controls`, `motion`)
-- **Single JS entry point:** `V2/js/synteq-ui-v2.js` — exposes `SynteqV2` global; auto-inits theme, dock, scroll-spy, toast, command palette, and data helpers
-- **Font:** Google Sans Code, self-hosted at `V2/fonts/*.ttf` (Regular, Medium, SemiBold), loaded exclusively via `V2/css/fonts.css`
+- **Name:** Synteq UI
+- **Version:** 2.2.0
+- **Location in project:** `css/` + `js/` at the repository root
+- **Single CSS entry point:** `css/synteq-ui.css` — imports in order: `fonts.css` → `tokens.css` → `theme-dark.css` + `theme-light.css` → `base.css` → 18 component files (`icons`, `shell`, `sidebar`, `topbar`, `content`, `data`, `controls`, `forms`, `overlays`, `feedback`, `tables`, `charts`, `tree`, `stepper`, `code`, `framework`, `motion`)
+- **Single JS entry point:** `js/synteq-ui.js` — exposes the `SynteqUI` global; auto-inits theme, dock, scroll-spy, toast, command palette, tables, tree, stepper, code blocks and data helpers
+- **Font:** Google Sans Code, self-hosted at `fonts/*.ttf` (Regular, Medium, SemiBold), loaded exclusively via `css/fonts.css`
 - **Zero external network requests** — fully offline-capable once files are on disk
 
 ---
 
 ## Six Non-Negotiable Rules
 
-Every implementation MUST honor all six. Violating any one of them breaks the design system.
+Every implementation MUST honor all eight. Violating any one of them breaks the design system.
 
 1. Body MUST never scroll — set `height: 100dvh; overflow: hidden` on both `html` and `body`. The only element that produces a scrollbar is `.v2-content.v2-scroll`.
-2. Font MUST be Google Sans Code loaded from `V2/fonts/` via the `fonts.css` import — NEVER link to Google Fonts or any CDN.
+2. Font MUST be Google Sans Code loaded from `fonts/` via the `fonts.css` import — NEVER link to Google Fonts or any CDN.
 3. MUST use only `--v2-*` CSS custom properties for any value that maps to a design token (color, spacing, radius, type size, motion). Never write raw hex, px, or rem values in component CSS.
 4. MUST NOT use cards, `box-shadow`, or tonal backgrounds to separate content areas. Visual hierarchy comes exclusively from `.v2-section` top-border hairlines.
-5. MUST have exactly ONE navigation dock toggle button — the topbar control with `data-v2-sidebar-toggle`. It hides/shows the sticky bottom dock; never add a second close button.
+5. MUST have exactly ONE navigation dock toggle button — the topbar control with `data-v2-sidebar-toggle`. It hides/shows the sticky bottom dock, swaps its icon between menu and close, and keeps `aria-label`/`aria-expanded` in sync; the default state is open, so the default glyph is close; never add a second close button.
 6. MUST use `aria-label` on every icon-only interactive element (buttons, links, icon controls).
+7. One section MUST fill exactly one screen: vertical padding belongs to `.v2-section`, never to `.v2-content`, and the section content is centred on both axes.
+8. The active dock item MUST colour both icon and label with `--v2-brand`; dock toggles MUST be idempotent so repeated init calls never double-bind.
 
 ---
 
@@ -37,8 +40,8 @@ Minimum boilerplate for any new V2 page. Adjust the `<title>`, breadcrumb copy, 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>My Dashboard — Synteq UI V2</title>
-  <link rel="stylesheet" href="V2/css/synteq-ui-v2.css" />
+  <title>My Dashboard — Synteq UI</title>
+  <link rel="stylesheet" href="css/synteq-ui.css" />
 </head>
 <body>
 
@@ -115,7 +118,7 @@ Minimum boilerplate for any new V2 page. Adjust the `<title>`, breadcrumb copy, 
 
 </div>
 
-<script src="V2/js/synteq-ui-v2.js"></script>
+<script src="js/synteq-ui.js"></script>
 </body>
 </html>
 ```
@@ -242,9 +245,14 @@ To override auto-coloring with brand tint (e.g. bandwidth):
 ```html
 <button class="v2-btn">Default</button>
 <button class="v2-btn v2-btn--primary">Primary</button>
+<button class="v2-btn v2-btn--brand">Brand</button>
 <button class="v2-btn v2-btn--ghost">Ghost</button>
-<button class="v2-btn v2-btn--danger">Danger</button>
 <button class="v2-btn v2-btn--block">Full width</button>
+
+<!-- Tonal status actions: tinted background (16%), status-coloured label -->
+<button class="v2-btn v2-btn--info">Info</button>
+<button class="v2-btn v2-btn--warn">Warning</button>   <!-- alias: --warning -->
+<button class="v2-btn v2-btn--danger">Danger</button>
 
 <!-- Icon-only button — aria-label required -->
 <button class="v2-btn v2-iconbtn" aria-label="Options">
@@ -252,10 +260,16 @@ To override auto-coloring with brand tint (e.g. bandwidth):
 </button>
 ```
 
+`--info` / `--warn` / `--danger` are tonal: they never fill the whole surface, so
+they stay distinguishable from `--primary` (inverted surface) and `--brand`
+(solid accent). Labels use `--v2-status-ink-mix` (60% status hue + text colour)
+so they clear WCAG AA in both themes.
+
 ### Badge variants
 
 ```html
 <span class="v2-badge">Default</span>
+<span class="v2-badge v2-badge--info">Info</span>
 <span class="v2-badge v2-badge--ok">Running</span>
 <span class="v2-badge v2-badge--warn">Degraded</span>
 <span class="v2-badge v2-badge--err">Error</span>
@@ -282,7 +296,7 @@ HTML declares the container; JS populates it. Set `--v2-bars-cols` to match your
 
 ```js
 // samples: Array of [inPct, outPct], each value 0–100
-SynteqV2.renderBars(document.getElementById('net-bars'), [
+SynteqUI.renderBars(document.getElementById('net-bars'), [
   [12, 4], [18, 6], [35, 10], [52, 16], [44, 14], [38, 12],
   [30, 8], [34, 10], [42, 13], [48, 15], [52, 16], [45, 14]
 ]);
@@ -298,7 +312,7 @@ SynteqV2.renderBars(document.getElementById('net-bars'), [
 
 ```js
 // raw values — auto-scaled to fit the viewBox
-SynteqV2.renderSparkline(
+SynteqUI.renderSparkline(
   document.getElementById('cpu-spark'),
   [18, 22, 31, 40, 36, 34, 38, 35, 33, 34, 29, 36, 42, 38, 34]
 );
@@ -404,14 +418,14 @@ Tabs auto-init with roving tabindex (arrow keys navigate). Use `data-v2-tabs` to
   <details class="v2-accordion__item" open>
     <summary class="v2-accordion__trigger">What is Synteq UI?</summary>
     <div class="v2-accordion__content">
-      <p>Synteq UI V2 is a viewport-locked, offline-first dashboard framework.</p>
+      <p>Synteq UI is a viewport-locked, offline-first dashboard framework.</p>
     </div>
   </details>
 
   <details class="v2-accordion__item">
     <summary class="v2-accordion__trigger">How do I get started?</summary>
     <div class="v2-accordion__content">
-      <p>Link to synteq-ui-v2.css and synteq-ui-v2.js in your HTML.</p>
+      <p>Link to synteq-ui.css and synteq-ui.js in your HTML.</p>
     </div>
   </details>
 </div>
@@ -502,21 +516,41 @@ JS runtime wires `data-v2-popover-trigger`. Auto-dismiss on click outside or Esc
 
 Size variants: `v2-dialog--sm`, `v2-dialog--lg`. Uses native `<dialog>` element. Backdrop click closes modal.
 
+**Centring:** `.v2-dialog` sets `margin: auto` (with `max-height` + `overflow-y: auto`) because the framework reset zeroes the UA `dialog { margin: auto }`. Without it every modal is pinned to the top-left corner. Never override the dialog `margin` with `0`.
+
+**Command palettes** (`<form method="dialog" class="v2-command">` + `data-v2-search-input`
++ `data-v2-command="#section"` rows) are wired by the runtime: input filters the
+rows, **Enter activates the first visible row** (implicit form submission is
+cancelled so the palette does not close silently), and the filter is reset when
+the dialog closes.
+
 ### Toast notification
 
 ```js
 // Default toast
-SynteqV2.toast('Operation completed');
+SynteqUI.toast('Operation completed');
 
 // With options
-SynteqV2.toast('File saved successfully', {
+SynteqUI.toast('File saved successfully', {
   kind: 'ok',        // 'info' | 'ok' | 'warn' | 'err'
-  duration: 4000,    // ms (default 3500)
+  duration: 4000,    // ms (default 4000)
   dismissible: true  // show close button
 });
 ```
 
-Toasts stack in bottom-right corner, auto-dismiss after duration. Kinds add icon + color.
+Markup triggers carry the kind as an attribute:
+
+```html
+<button class="v2-btn v2-btn--primary" data-v2-toast="Deployment completed" data-v2-toast-kind="ok">
+  Success toast
+</button>
+<button class="v2-btn v2-btn--warn" data-v2-toast="Memory above 85%" data-v2-toast-kind="warn">
+  Warning toast
+</button>
+```
+
+Toasts stack in the bottom-right corner and auto-dismiss. Kinds add an icon plus a
+left accent rail (`--info` uses `--v2-status-info`).
 
 ---
 
@@ -770,26 +804,208 @@ Invalid state (shows error, hides hint):
 </div>
 ```
 
-**States:** All form controls support `:disabled`, `:focus-visible`, and `[aria-invalid="true"]`. Disabled controls get 40-50% opacity and `cursor: not-allowed`. Invalid controls show a red border (error color).
+**States:** All form controls support `:disabled`, `:focus-visible`, and `[aria-invalid="true"]`. Disabled controls get 40-50% opacity and `cursor: not-allowed`. Invalid controls show a red border, and keep a single red focus ring while focused (never a red border *plus* a brand ring). Each control draws exactly one focus indicator: fields, selects, checkbox, radio and switch use a `2px` brand ring; an input group uses its own `:focus-within` border and the inner input draws no ring.
 
 **Touch targets:** Under `@media (pointer: coarse)`, checkbox/radio/switch sizes increase to meet 44×44 px minimum.
 
 ---
 
+## Advanced Data Components
+
+### Sortable, selectable, paginated table
+
+```html
+<div class="v2-table-toolbar">
+  <div class="v2-table-toolbar__start">
+    <span class="v2-table-toolbar__title">Instances</span>
+    <span class="v2-table-toolbar__meta" data-v2-table-count>0 rows</span>
+  </div>
+  <div class="v2-table-toolbar__end">
+    <label class="v2-table-toolbar__filter">
+      <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" data-v2-table-filter placeholder="Filter rows..." aria-label="Filter rows" />
+    </label>
+  </div>
+</div>
+
+<div class="v2-table-wrap">
+  <table class="v2-table v2-table--sticky v2-table--compact" data-v2-table data-v2-page-size="6">
+    <thead>
+      <tr>
+        <th class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-v2-select-all aria-label="Select all rows" /></th>
+        <th>
+          <button class="v2-table__sort" data-v2-sort="text">
+            Instance
+            <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+          </button>
+        </th>
+        <th class="v2-table__num"><button class="v2-table__sort" data-v2-sort="number">CPU %</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-v2-row-select aria-label="Select octra-01" /></td>
+        <td class="v2-table__mono">octra-01</td>
+        <td class="v2-table__num">42</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<nav class="v2-pagination" data-v2-table-pagination aria-label="Table pagination"></nav>
+```
+
+`data-v2-table` is the only required hook — `initTables()` (part of `init()`) finds the toolbar, filter, counter and pagination inside the enclosing `[data-v2-table-scope]` or `.v2-section`. Sorting sets `aria-sort`; selection emits `sq:rowselection`; paging emits `sq:pagechange`. Call `SynteqUI.initTables()` again after injecting rows.
+
+### Line / area chart (JS-rendered)
+
+```html
+<div class="v2-chart">
+  <div class="v2-chart__head">
+    <span class="v2-chart__title">Request rate</span>
+    <span class="v2-chart__meta">last 12 intervals</span>
+  </div>
+  <div class="v2-chart__body">
+    <svg class="v2-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
+         aria-label="Request rate and error rate"></svg>
+  </div>
+  <div class="v2-chart__legend" data-v2-chart-legend></div>
+</div>
+```
+
+```js
+SynteqUI.renderLineChart(document.getElementById('chart-line'), [
+  { name: 'Requests', values: [120, 148, 132, 176, 210, 198, 242, 268, 251, 289, 312, 334] },
+  { name: 'Errors',   values: [8, 12, 6, 18, 14, 22, 11, 26, 19, 15, 24, 17] }
+], { labels: ['T-11', 'T-10', 'T-9', 'T-8', 'T-7', 'T-6', 'T-5', 'T-4', 'T-3', 'T-2', 'T-1', 'now'], yTicks: 4 });
+```
+
+Axes, gridlines, tick labels, the legend and the hover tooltip (with crosshair) are generated. Chart height comes from `--v2-chart-h` (default `168px`). Always keep `role="img"` plus an `aria-label` on the `<svg>`.
+
+### Stacked bars (JS-rendered)
+
+```html
+<div class="v2-chart">
+  <div class="v2-chart__head"><span class="v2-chart__title">Traffic by class</span></div>
+  <div class="v2-chart__body">
+    <div class="v2-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
+  </div>
+  <div class="v2-chart__xlabels" data-v2-chart-labels></div>
+  <div class="v2-chart__legend" data-v2-chart-legend></div>
+</div>
+```
+
+```js
+SynteqUI.renderStackedBars(document.getElementById('chart-stacked'), [
+  { name: 'Read',  values: [42, 48, 51, 44, 58, 62, 57, 66] },
+  { name: 'Write', values: [18, 22, 19, 26, 24, 31, 28, 34] },
+  { name: 'Admin', values: [6, 4, 8, 5, 7, 6, 9, 5] }
+], { labels: ['09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35'] });
+```
+
+Series 1 is always at the baseline; hovering a column dims siblings and opens the tooltip.
+
+---
+
+## Navigation & Content Components
+
+### Tree (expand / collapse, max 3 levels)
+
+```html
+<div class="v2-tree" data-v2-tree>
+  <div class="v2-tree__item">
+    <div class="v2-tree__row">
+      <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
+        <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <span class="v2-tree__label">us-east-1</span>
+      <span class="v2-tree__meta">3 nodes</span>
+    </div>
+    <div class="v2-tree__group">
+      <div class="v2-tree__item">
+        <div class="v2-tree__row">
+          <span class="v2-tree__spacer" aria-hidden="true"></span>
+          <span class="v2-tree__label v2-tree__label--mono">octra-01</span>
+          <span class="v2-tree__meta">running</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+`aria-expanded` on the toggle drives the rotated caret *and* group visibility. Leaf rows use `.v2-tree__spacer` so labels stay aligned. Keyboard: `ArrowUp`/`ArrowDown` move between visible nodes, `ArrowRight` expands or enters, `ArrowLeft` collapses or goes to the parent, `Home`/`End` jump to the edges. Only three nesting levels are supported — deeper trees log a console warning.
+
+### Stepper / timeline
+
+```html
+<div class="v2-stepper" data-v2-stepper data-v2-step="2">
+  <div class="v2-stepper__item">
+    <span class="v2-stepper__marker" aria-hidden="true">
+      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+    </span>
+    <div class="v2-stepper__body">
+      <div class="v2-stepper__title">Provision instance</div>
+      <div class="v2-stepper__desc">Compute, network and volume created.</div>
+      <div class="v2-stepper__meta">00:42</div>
+    </div>
+  </div>
+  <!-- additional items: number or check glyph in the marker -->
+</div>
+```
+
+```js
+SynteqUI.setStep(stepperEl, 3);   // 0-based; earlier items become is-complete
+stepperEl.addEventListener('sq:stepchange', function (e) { console.log(e.detail.index); });
+```
+
+States applied by `setStep()`: `is-complete`, `is-active` (gets `aria-current="step"`), `is-pending`. Add `is-error` manually for a failed step. `.v2-stepper--horizontal` switches to a row layout that folds back to vertical below 720px.
+
+### Code block (line numbers + copy)
+
+```html
+<div class="v2-code" data-v2-code data-v2-line-numbers>
+  <div class="v2-code__head">
+    <span class="v2-code__title">install.sh</span>
+    <div class="v2-code__actions">
+      <button class="v2-code__copy" data-v2-code-copy="Copied" aria-label="Copy code">Copy</button>
+    </div>
+  </div>
+  <div class="v2-code__body">
+    <pre class="v2-code__pre"><code>npm install
+npx synteq build --theme dark</code></pre>
+  </div>
+</div>
+```
+
+The gutter (`.v2-code__lines`) is generated from the `<pre>` text, so never hand-write line numbers. `data-v2-line-numbers="false"` opts out. The code area never wraps — it scrolls horizontally — which keeps the gutter aligned. Use `.v2-code--plain` for a canvas surface and `.v2-code--scroll` for a bounded height (`--v2-code-h`).
+
+---
+
 ## JS API Reference
 
-All methods are on the `SynteqV2` global, available after `synteq-ui-v2.js` loads.
+All methods are on the `SynteqUI` global, available after `synteq-ui.js` loads.
 
 | Method | Signature | Notes |
 |---|---|---|
-| `setTheme` | `setTheme(theme: 'dark' \| 'light') → string` | Sets `data-theme` on `<html>`, persists to `localStorage` key `sq-v2-theme` |
+| `setTheme` | `setTheme(theme: 'dark' \| 'light') → string` | Sets `data-theme` on `<html>`, persists to `localStorage` key `sq-theme` |
 | `getTheme` | `getTheme() → 'dark' \| 'light'` | Reads current `data-theme` attribute |
 | `toggleTheme` | `toggleTheme() → string` | Flips between dark and light |
 | `renderGauge` | `renderGauge(fillEl, pct, opts?)` | `pct` is 0–100. `opts.kind`: `'auto'` (default, thresholds), `'brand'` (quorum/bandwidth), `'neutral'` (no state colour). Also updates `aria-valuenow` on the progressbar parent. |
 | `renderBars` | `renderBars(stageEl, samples, opts?)` | Each sample is `[inPct, outPct]`, 0–100. `opts.minCols` pads short series with empty columns; `opts.stepSec` labels tooltips as `T-30s`. Clears and rebuilds the container. Sets `data-v2-bars-empty` when there is no data. |
 | `renderSparkline` | `renderSparkline(svgEl, values)` | Raw values, auto-scaled into the SVG `viewBox` (default `0 0 200 40`). Fewer than 2 values clears the path and sets `data-v2-spark-empty`. Series is remembered and redrawn on resize. |
+| `renderLineChart` | `renderLineChart(svgEl, series, opts?)` | `series` = `[{ name, values: [] }]`. `opts`: `labels`, `yTicks`, `xTickEvery`, `min`, `max`, `unit`, `decimals`, `format`, `area`. Draws axes, gridlines and tick labels, fills `[data-v2-chart-legend]`, and shows a hover tooltip + crosshair. Redraws on resize. |
+| `renderStackedBars` | `renderStackedBars(colsEl, series, opts?)` | `series` = `[{ name, values: [] }]`; elements are summed per column. `opts`: `labels`, `max`, `minCols`, `unit`, `format`. Fills `[data-v2-chart-labels]` and `[data-v2-chart-legend]`; hover dims siblings and opens the tooltip. |
+| `initTables` | `initTables()` | Wires every `[data-v2-table]`: sorting, selection (shift-click ranges), filtering, pagination. Idempotent — call after injecting rows. |
+| `sortTable` | `sortTable(tableEl, colIndex, direction, opts?) → boolean` | `direction` = `'ascending' \| 'descending'`; `opts.type` = `'text' \| 'number' \| 'date'`. Updates `aria-sort` and re-renders the current page. |
+| `initTree` | `initTree()` | Wires every `[data-v2-tree]`: toggle clicks, roving keyboard navigation and `aria-expanded` syncing. Warns when a tree is deeper than 3 levels. |
+| `setStep` | `setStep(stepperEl, index) → number` | Marks items before `index` `is-complete`, `index` `is-active` (with `aria-current="step"`), the rest `is-pending`. Emits `sq:stepchange`. |
+| `initStepper` | `initStepper()` | Applies `data-v2-step` (default `0`) to every `[data-v2-stepper]`. |
+| `initCodeBlocks` | `initCodeBlocks()` | Generates the line-number gutter and wires `[data-v2-code-copy]` for every `[data-v2-code]`. |
 | `scrollToSection` | `scrollToSection(id, opts?) → boolean` | Scrolls `.v2-content` to `#id`; `opts.behavior` = `'smooth' \| 'auto'`. Hash deep links (`/#logs`) and `hashchange` are handled automatically. |
-| `tip` | `tip(anchorEl, message, opts?) → Element` | Transient anchored label (the copy handler shows "Copied" through it). `opts.kind` = `'ok' \| 'warn' \| 'err'`, `opts.duration` default 1500 ms. Fixed-positioned, viewport-clamped, `role="status"`, one at a time. |
+| `tip` | `tip(anchorEl, message, opts?) → Element` | Transient anchored label (the copy handler shows "Copied" through it). `opts.kind` = `'info' \| 'ok' \| 'warn' \| 'err'`, `opts.duration` default 1500 ms. Fixed-positioned, viewport-clamped, `role="status"`, one at a time. |
+| `replayAnimation` | `replayAnimation(el, opts?) → Animation \| null` | Restarts a mount animation on demand (used by "Replay animation" demos). `opts.preset` = `'fade-up' \| 'fade' \| 'zoom-in'`, `opts.duration` (default 280 ms), `opts.force` ignores reduced-motion. Cancels running animations first and drives the effect through the Web Animations API, so it works even though `base.css` shortens CSS animations to `0.001ms` under `prefers-reduced-motion` — in that case it plays a 120 ms opacity-only cross-fade (no movement). |
+| `prefersReducedMotion` | `prefersReducedMotion() → boolean` | Reports the live `prefers-reduced-motion: reduce` state; use it to show an honest "reduced motion" hint in demos. |
 | `initSparklines` | `initSparklines()` | Renders every `.v2-spark` from its stored series or `data-v2-spark="1,2,3"`. Called automatically on `DOMContentLoaded`. |
 | `initNavDock` | `initNavDock()` | Adds drag-to-scroll and the `More` drop-up when dock destinations overflow. Called automatically on `DOMContentLoaded`. |
 | `initGauges` | `initGauges()` | Processes all `[data-v2-gauge]` elements in the DOM. Called automatically on `DOMContentLoaded`. |
@@ -825,7 +1041,7 @@ The dock remains sticky at the bottom on mobile. Do **not** add group labels
 icon + label items. When destinations overflow the strip:
 
 - the strip becomes drag-scrollable (mouse/pen) and accepts horizontal wheel input;
-- a `More` button (with a drop-up listing every off-screen item) is injected automatically by `SynteqV2.initNavDock()`;
+- a `More` button (with a drop-up listing every off-screen item) is injected automatically by `SynteqUI.initNavDock()`;
 - the active item is scrolled into view whenever the scroll-spy changes.
 
 **Automatic close triggers (no code required):**
@@ -834,7 +1050,7 @@ icon + label items. When destinations overflow the strip:
 
 The sidebar itself has **no close button**. Do not add one — it creates a two-toggle situation that conflicts with sidebar state management.
 
-Dock visibility preference is persisted under `localStorage` key `sq-v2-sidebar`.
+Dock visibility preference is persisted under `localStorage` key `sq-sidebar`.
 
 ---
 
@@ -849,9 +1065,9 @@ Set initial theme on `<html>`:
 Switch at runtime:
 
 ```js
-SynteqV2.setTheme('light');   // explicit
-SynteqV2.toggleTheme();       // flip
-SynteqV2.getTheme();          // → 'dark' | 'light'
+SynteqUI.setTheme('light');   // explicit
+SynteqUI.toggleTheme();       // flip
+SynteqUI.getTheme();          // → 'dark' | 'light'
 ```
 
 Wire any button automatically — no JS needed:
@@ -860,7 +1076,7 @@ Wire any button automatically — no JS needed:
 <button data-v2-toggle-theme aria-label="Toggle theme">...</button>
 ```
 
-The JS runtime detects `prefers-color-scheme` on first load if no saved preference exists, then writes the result to `localStorage` key `sq-v2-theme`. Subsequent loads restore from localStorage.
+The JS runtime detects `prefers-color-scheme` on first load if no saved preference exists, then writes the result to `localStorage` key `sq-theme`. Subsequent loads restore from localStorage.
 
 ---
 
@@ -894,6 +1110,7 @@ All icons are inline SVG sourced from a 24×24 viewBox (Lucide or equivalent str
 |---|---|
 | `v2-icon--mute` | Subtle/muted text color |
 | `v2-icon--brand` | Brand accent |
+| `v2-icon--info` | Blue / informational |
 | `v2-icon--ok` | Green / success |
 | `v2-icon--warn` | Amber / warning |
 | `v2-icon--err` | Red / error |
@@ -918,6 +1135,13 @@ Base class `v2-icon` is always required. Example with size and tint:
 
 4. **Wrapping content in card elements with `box-shadow` or tonal backgrounds.** V2's flat surface model means every surface is the same canvas color. Visual grouping comes from `.v2-section` hairlines only. Introducing elevation or tonal wrappers breaks visual consistency.
 
-5. **Linking to Google Fonts CDN for Google Sans Code.** The font is self-hosted in `V2/fonts/`. A CDN link introduces an external network request, breaks offline-first operation, and loads a different version of the typeface than the one the design was built against.
+5. **Linking to Google Fonts CDN for Google Sans Code.** The font is self-hosted in `fonts/`. A CDN link introduces an external network request, breaks offline-first operation, and loads a different version of the typeface than the one the design was built against.
 
-6. **Rendering a sparkline without a `viewBox`.** `renderSparkline` draws in viewBox units (default `0 0 200 40`). Keep a `viewBox` on the `<svg>` (any size works) instead of relying on rendered pixel dimensions — that is what keeps the path inside the chart at every breakpoint. Call `SynteqV2.initSparklines()` after dynamic content changes so new charts (and resized ones) are redrawn.
+6. **Rendering a sparkline without a `viewBox`.** `renderSparkline` draws in viewBox units (default `0 0 200 40`). Keep a `viewBox` on the `<svg>` (any size works) instead of relying on rendered pixel dimensions — that is what keeps the path inside the chart at every breakpoint. Call `SynteqUI.initSparklines()` after dynamic content changes so new charts (and resized ones) are redrawn.
+
+7. **Hiding elements with `.hidden = true` on a component that sets its own `display`.** `.v2-btn`, `.v2-menu` and friends declare `display: flex/inline-flex`, which beats the UA `[hidden]` rule. `base.css` now ships `[hidden] { display: none !important; }`; if you add a component with a `display` rule, rely on that reset instead of writing another `[hidden]` override.
+
+8. **Giving a field two focus indicators.** The global `:focus-visible` outline in `base.css` is the ring everything else uses. Text fields, selects and checkboxes draw their own brand ring, so never add `border-color` *and* an outline on the same focus state — that is the double-border bug. Keep one indicator per control.
+
+9. **Overriding `.v2-dialog { margin }`.** The modal is centred by `margin: auto` (the UA rule is zeroed by the framework reset). Setting `margin: 0` or a custom value drags the dialog to the top-left corner.
+

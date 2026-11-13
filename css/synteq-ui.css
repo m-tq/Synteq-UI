@@ -1,8 +1,8 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — MASTER STYLESHEET (css/synteq-ui-v2.css)
+   SYNTEQ UI — MASTER STYLESHEET (css/synteq-ui.css)
    Lean, viewport-locked, line-separator architecture. No cards.
 
-   Design rules (V2 base set):
+   Design rules (six hard rules):
    1. Body never scrolls — only in-content regions scroll.
    2. Responsive on any screen type (fluid type + breakpoint grid).
    3. Simple & lightweight — minimal token set, flat surfaces.
@@ -25,5 +25,10 @@
 @import "./components/forms.css";
 @import "./components/overlays.css";
 @import "./components/feedback.css";
+@import "./components/tables.css";
+@import "./components/charts.css";
+@import "./components/tree.css";
+@import "./components/stepper.css";
+@import "./components/code.css";
 @import "./components/framework.css";
 @import "./components/motion.css";

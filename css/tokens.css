@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SYNTEQ UI V2 — 01. CORE DESIGN TOKENS (tokens.css)
+   SYNTEQ UI — 01. CORE DESIGN TOKENS (tokens.css)
    Lean, fluid, responsive-first. No color values here (see theme-*.css).
    ========================================================================== */
 :root {
@@ -63,4 +63,11 @@
   /* Form controls */
   --v2-input-h: 32px;       /* standard input/select/button height */
   --v2-field-gap: var(--v2-space-1); /* gap between label and input */
+
+  /* Status ink mix — how much of a semantic status hue is blended into the
+     surrounding text colour when that status colour is used as TEXT on a tinted
+     surface (tonal buttons, badges, tags, log levels). 60% keeps the hue
+     recognisable while clearing WCAG AA in both themes; 100% (pure status
+     colour) only passes on the dark theme. */
+  --v2-status-ink-mix: 60%;
 }

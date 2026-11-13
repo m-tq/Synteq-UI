@@ -1,0 +1,191 @@
+/* ==========================================================================
+   SYNTEQ UI - STEPPER / TIMELINE (components/stepper.css)
+   Vertical progress indicator. Marker column + hairline rail, no cards,
+   no shadows. A horizontal variant is available for compact headers.
+   ========================================================================== */
+
+.v2-stepper {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.v2-stepper__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--v2-space-6) minmax(0, 1fr);
+  column-gap: var(--v2-space-3);
+  padding-bottom: var(--v2-space-5);
+  min-width: 0;
+}
+
+.v2-stepper__item:last-child {
+  padding-bottom: 0;
+}
+
+/* Rail - connects each marker to the next one */
+.v2-stepper__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: var(--v2-space-3);
+  top: var(--v2-space-5);
+  bottom: 0;
+  width: var(--v2-line-h);
+  background: var(--v2-line);
+  transform: translateX(-50%);
+}
+
+.v2-stepper__marker {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--v2-space-5);
+  height: var(--v2-space-5);
+  border: var(--v2-line-h-strong) solid var(--v2-line-strong);
+  border-radius: var(--v2-radius-pill);
+  background: var(--v2-canvas);
+  color: var(--v2-text-subtle);
+  font-family: var(--v2-font-mono);
+  font-size: var(--v2-text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.v2-stepper__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v2-space-1);
+  padding-top: calc(var(--v2-space-1) / 2);
+  min-width: 0;
+}
+
+.v2-stepper__title {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-md);
+  font-weight: var(--v2-fw-medium);
+  color: var(--v2-text);
+  min-width: 0;
+}
+
+.v2-stepper__desc {
+  font-size: var(--v2-text-sm);
+  color: var(--v2-text-subtle);
+  line-height: var(--v2-leading-base);
+  overflow-wrap: anywhere;
+}
+
+.v2-stepper__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--v2-space-2);
+  font-size: var(--v2-text-xs);
+  color: var(--v2-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- States ---- */
+.v2-stepper__item.is-complete .v2-stepper__marker {
+  border-color: var(--v2-status-running);
+  color: var(--v2-status-running);
+}
+
+.v2-stepper__item.is-complete::after {
+  background: var(--v2-status-running);
+}
+
+.v2-stepper__item.is-complete .v2-stepper__title {
+  color: var(--v2-text);
+}
+
+.v2-stepper__item.is-active .v2-stepper__marker {
+  border-width: 2px;
+  border-color: var(--v2-brand);
+  color: var(--v2-brand);
+  font-weight: var(--v2-fw-semibold);
+}
+
+.v2-stepper__item.is-active .v2-stepper__title {
+  color: var(--v2-text-strong);
+}
+
+.v2-stepper__item.is-pending .v2-stepper__marker {
+  border-style: dashed;
+}
+
+.v2-stepper__item.is-error .v2-stepper__marker {
+  border-color: var(--v2-status-error);
+  color: var(--v2-status-error);
+}
+
+.v2-stepper__item.is-error::after {
+  background: var(--v2-line);
+}
+
+/* ---- Horizontal variant ---- */
+.v2-stepper--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.v2-stepper--horizontal .v2-stepper__item {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: var(--v2-space-6) minmax(0, 1fr);
+  column-gap: 0;
+  row-gap: var(--v2-space-2);
+  padding-bottom: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.v2-stepper--horizontal .v2-stepper__item:not(:last-child)::after {
+  left: calc(var(--v2-space-3) + var(--v2-space-5));
+  right: 0;
+  top: var(--v2-space-3);
+  bottom: auto;
+  width: auto;
+  height: var(--v2-line-h);
+  transform: none;
+}
+
+.v2-stepper--horizontal .v2-stepper__marker {
+  justify-self: start;
+}
+
+.v2-stepper--horizontal .v2-stepper__body {
+  padding-top: 0;
+}
+
+@media (max-width: 720px) {
+  .v2-stepper--horizontal {
+    flex-direction: column;
+  }
+
+  .v2-stepper--horizontal .v2-stepper__item {
+    grid-template-columns: var(--v2-space-6) minmax(0, 1fr);
+    grid-template-rows: auto;
+    column-gap: var(--v2-space-3);
+    padding-bottom: var(--v2-space-4);
+  }
+
+  .v2-stepper--horizontal .v2-stepper__item:not(:last-child)::after {
+    left: var(--v2-space-3);
+    right: auto;
+    top: var(--v2-space-5);
+    bottom: 0;
+    width: var(--v2-line-h);
+    height: auto;
+    transform: translateX(-50%);
+  }
+
+  .v2-stepper--horizontal .v2-stepper__marker {
+    justify-self: center;
+  }
+}

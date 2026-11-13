@@ -1,4 +1,4 @@
-# Synteq UI V2 — Design System Reference
+# Synteq UI — Design System Reference
 
 > **Audience:** Humans and AI agents building with or extending the framework.
 > This document is the authoritative reference for architecture, tokens, components, and rules.
@@ -7,7 +7,7 @@
 
 ## 1. Mission
 
-Synteq UI V2 is a **viewport-locked, offline-first, text-first** dashboard UI framework. It is purpose-built for operator dashboards — dense information displays where every pixel matters and page loading patterns must never interrupt the operator's view.
+Synteq UI is a **viewport-locked, offline-first, text-first** dashboard UI framework. It is purpose-built for operator dashboards — dense information displays where every pixel matters and page loading patterns must never interrupt the operator's view.
 
 ### Six Hard Rules
 
@@ -38,18 +38,20 @@ V2 abandons the multi-tier tonal elevation model of V1. There is a **single canv
 - `box-shadow` elevation layers
 - Tonal surface tiers (V1's raised / strong / muted hierarchy)
 
-### V2 vs V1 at a Glance
+### Design Evolution (v1 → v2)
 
-| | V1 | V2 |
+| | v1 | v2 |
 |---|---|---|
 | Surface hierarchy | 5-tier tonal elevation | Single flat canvas |
 | Visual separation | Tonal card backgrounds | `1px` hairline separators only |
 | Navigation | Fixed left sidebar | Sticky bottom dock with icon labels and hide/show motion |
 | Page scroll | `min-height: 100%` | `height: 100dvh; overflow: hidden` — only `.v2-content` scrolls |
 | Gauge | 86-tick discrete bar | Continuous smooth fill bar |
-| Network chart | 48-bar histogram (112px) | 24-col dual-segment bars (72px) |
+| Network chart | 48-bar histogram (112px) | Dual-segment bars (72px) + axis-labelled line/area and stacked columns |
+| Tables | Static markup | Sortable, selectable, filterable, paginated module |
 | Motion | Transition-only | Fade-up mount + stagger + shimmer + IntersectionObserver |
-| JS global | `SynteqUI.*` | `SynteqV2.*` |
+| JS global | `SynteqUI.*` | `SynteqUI.*` (renamed from the interim `SynteqV2` alias) |
+| Entry points | `synteq-ui-v2.css` / `synteq-ui-v2.js` | `synteq-ui.css` / `synteq-ui.js` |
 
 ---
 
@@ -161,6 +163,7 @@ Switch themes via `data-theme="dark"` or `data-theme="light"` on `<html>`.
 | `--v2-text-strong` | `#f4f6f6` | `#0d1010` | High-emphasis: values, hostnames, active state |
 | `--v2-text-subtle` | `#7a8080` | `#6a7272` | Metadata, units, timestamps, muted labels |
 | `--v2-text-on-accent` | `#06120f` | `#ffffff` | Text placed on brand/accent surfaces |
+| `--v2-text-on-solid` | `#08110e` | `#08110e` | Ink for **solid** accent/status fills (tip pills, brand button, brand mark, checked controls). Dark in both themes because the fills are light-to-mid tone |
 
 #### Line Separators
 
@@ -175,9 +178,19 @@ Switch themes via `data-theme="dark"` or `data-theme="light"` on `<html>`.
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
 | `--v2-brand` | `#00e599` | `#059669` | Primary accent — active icons, brand button, sparkline |
+| `--v2-status-info` | `#38bdf8` | `#0284c7` | Informational / pending / neutral notice |
 | `--v2-status-running` | `#34d399` | `#16a34a` | Running / healthy / delta up |
 | `--v2-status-warning` | `#fbbf24` | `#d97706` | Degraded / warning |
 | `--v2-status-error` | `#f87171` | `#dc2626` | Error / stopped / delta down |
+
+#### Status Ink
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--v2-status-ink-mix` | `60%` | Share of the status hue blended into `--v2-text-strong` when a status colour is used as **text** on a tinted surface (tonal buttons, badges, tags, log levels). 100% (raw hue) only clears WCAG AA on the dark theme; 60% clears it on both. |
+
+Tonal variant backgrounds stay at `14–16%` of the status colour, so the fill is
+never loud enough to compete with the primary/brand button.
 
 #### Telemetry & Chart
 
@@ -193,31 +206,42 @@ Switch themes via `data-theme="dark"` or `data-theme="light"` on `<html>`.
 ## 4. File Map
 
 ```
-V2/
+synteq-ui/
 ├── css/
 │   ├── fonts.css                 — @font-face declarations for self-hosted Google Sans Code
 │   ├── tokens.css                — all structural tokens: type, spacing, radius, motion, layout shell
 │   ├── theme-dark.css            — dark palette color tokens (default theme)
 │   ├── theme-light.css           — light palette color tokens
 │   ├── base.css                  — viewport lock, scroll reset, focus ring, element reset, typography utils
-│   ├── synteq-ui-v2.css          — master @import bundle (single <link> for consumers)
+│   ├── synteq-ui.css             — master @import bundle (single <link> for consumers)
 │   └── components/
-│       ├── icons.css             — inline SVG icon sizing (.v2-icon) and tint modifier classes
+│       ├── icons.css             — inline SVG icon sizing (.v2-icon, 12–20px) and tint modifiers
 │       ├── shell.css             — viewport-locked grid (.v2-app), dock collapse, content scroll region
 │       ├── sidebar.css           — sticky bottom dock, nav items, brand and account controls
 │       ├── topbar.css            — topbar layout, sidebar toggle button, breadcrumb, search, icon buttons
 │       ├── content.css           — section separators, section head, layout grids (.v2-grid), stat strip
 │       ├── data.css              — stat blocks, KV rows, slim gauges, sparklines, bar chart, legend, status dots
-│       ├── controls.css          — buttons (all variants), segmented bar, text input, badges, kbd pill, avatar
+│       ├── controls.css          — buttons (all variants incl. info/warn), segmented bar, badges, kbd pill, avatar
+│       ├── forms.css             — field wrapper, inputs, textarea, select, checkbox, radio, switch, range
+│       ├── overlays.css          — tabs, accordion, menu, popover, dialog (centred), command palette, toast
+│       ├── feedback.css          — alert, progress, spinner, breadcrumb, empty state, skeleton, tag
+│       ├── tables.css            — toolbar, sortable headers, row selection, pagination, sticky head
+│       ├── charts.css            — line/area chart, stacked bars, hover tooltip, chart legend
+│       ├── tree.css              — expand/collapse hierarchy (three levels)
+│       ├── stepper.css           — vertical progress indicator / timeline
+│       ├── code.css              — syntax-free code surface with gutter and copy button
+│       ├── framework.css         — density control, forced-colors, touch targets
 │       └── motion.css            — fade-up animation, stagger children, skeleton shimmer, soft pulse, hover lift
 ├── js/
-│   └── synteq-ui-v2.js           — zero-dependency runtime: theme, dock, scroll-spy, toast, command palette, data helpers
+│   └── synteq-ui.js              — zero-dependency runtime: theme, dock, scroll-spy, toast, command palette,
+│                                   tables, tree, stepper, code blocks, data helpers
 ├── fonts/
 │   ├── GoogleSansCode-Regular.ttf    — weight 400 (SIL OFL)
 │   ├── GoogleSansCode-Medium.ttf     — weight 500 (SIL OFL)
 │   └── GoogleSansCode-SemiBold.ttf   — weight 600 (SIL OFL)
 └── examples/
-    └── dashboard.html            — full demo: VPS detail dashboard with all components
+    ├── dashboard.html            — full demo: VPS detail dashboard
+    └── components.html           — component explorer (single source of truth for every component)
 ```
 
 ---
@@ -336,7 +360,7 @@ All data components are text-first. No canvas, no third-party charting library.
 |-------|---------|
 | `.v2-gauge` | Flex column container. Pair with `data-v2-gauge="0–100"` for auto-init. Add `role="progressbar"` with ARIA attrs. |
 | `.v2-gauge__track` | `6px` tall track bar. Background: `--v2-track`. `overflow: hidden`. |
-| `.v2-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqV2.renderGauge`). Transitions via `--v2-dur-slow`. |
+| `.v2-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqUI.renderGauge`). Transitions via `--v2-dur-slow`. |
 | `.v2-gauge__fill--ok` | Green fill (`< 75%`, auto-applied by JS). |
 | `.v2-gauge__fill--warn` | Amber fill (`75–89%`). |
 | `.v2-gauge__fill--err` | Red fill (`≥ 90%`). |
@@ -479,8 +503,11 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 
 **States (all controls):**
 - `:disabled` → 40-50% opacity, `cursor: not-allowed`
-- `:focus-visible` → brand border (inputs) or brand ring (checkbox/radio/switch)
-- `[aria-invalid="true"]` → `--v2-status-error` border
+- `:focus-visible` → **one** indicator only:
+  - text input / textarea / select → `2px solid var(--v2-brand)` outline, `outline-offset: 1px`; the 1px field border stays transparent
+  - checkbox / radio / switch → `2px solid var(--v2-brand)` outline, `outline-offset: 2px` (the border keeps carrying checked / invalid state)
+  - input group → the group border turns brand via `:focus-within`; the inner input draws no ring
+- `[aria-invalid="true"]` → `--v2-status-error` border; when focused, the ring turns error-red instead of adding a second red border
 - `[readonly]` → dimmed, no interaction
 
 **Touch targets:** `@media (pointer: coarse)` increases checkbox/radio to 20×20, switch to 44×24 to meet WCAG 2.2 AA minimum (44×44 effective tap area with label).
@@ -496,13 +523,15 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 | `.v2-btn` | Base: `--v2-inset` background, `--v2-text`, `height: 32px`, `--v2-radius-control`. |
 | `.v2-btn--ghost` | Transparent background, `--v2-text-subtle`. |
 | `.v2-btn--primary` | `--v2-text-strong` background, inverted text. High-emphasis action. |
-| `.v2-btn--brand` | `--v2-brand` background, accent text. |
-| `.v2-btn--danger` | Tonal red background (`16%`), red text. Destructive action. |
+| `.v2-btn--brand` | `--v2-brand` background, `--v2-text-on-solid` ink. |
+| `.v2-btn--info` | Tonal blue background (`16%`), status-ink label. Informational action. |
+| `.v2-btn--warn` (alias `.v2-btn--warning`) | Tonal amber background (`16%`), status-ink label. "Proceed with care". |
+| `.v2-btn--danger` | Tonal red background (`16%`), status-ink label. Destructive action. |
 | `.v2-btn--icon` | Square variant: `width: 32px`, `padding: 0`. **Requires `aria-label`**. |
 | `.v2-btn--block` | `width: 100%`. Use inside `.v2-btn__stack` for a vertical action group. |
 | `.v2-copy--ok` | Clipboard confirmation state added by the runtime for 1.8 s (green tint). |
-| `.v2-tip` | Transient anchored label (`SynteqV2.tip(el, msg)`): inverted surface, `--v2-radius-micro`, `--v2-text-xs`, `pointer-events: none`, `z-index: 60`. |
-| `.v2-tip--ok` / `--warn` / `--err` | Tinted variants of the tip for success / warning / failure feedback. |
+| `.v2-tip` | Transient anchored label (`SynteqUI.tip(el, msg)`): inverted surface, `--v2-radius-micro`, `--v2-text-xs`, `pointer-events: none`, `z-index: 60`. |
+| `.v2-tip--info` / `--ok` / `--warn` / `--err` | Tinted variants of the tip (solid status fill + `--v2-text-on-solid` ink). |
 | `.v2-tip.is-out` | Fade-out state applied before the runtime removes the node. |
 
 #### Segmented Bar
@@ -519,7 +548,7 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 | Class | Purpose |
 |-------|---------|
 | `.v2-input` | Text input. `--v2-inset` background, `--v2-radius-control`, `height: 32px`. |
-| `.v2-badge` | Status chip. `--v2-radius-micro`. Modifiers: `--brand`, `--ok`, `--warn`, `--err`. |
+| `.v2-badge` | Status chip. `--v2-radius-micro`. Modifiers: `--brand`, `--info`, `--ok`, `--warn`, `--err`. |
 | `.v2-kbd` | Keyboard shortcut pill. Mono font, `--v2-radius-micro`, `height: 18px`. |
 | `.v2-avatar` | User monogram square. `26×26px`, `--v2-radius-micro`, brand tint background. |
 
@@ -537,6 +566,14 @@ All animations use `--v2-ease` and are globally suppressed by `prefers-reduced-m
 | `.v2-live` | Soft pulse (opacity `1→0.5→1`) on a `2s` loop. Used for live data indicators. |
 | `.v2-skeleton` | Shimmer placeholder for async content. Linear gradient sweep animation. |
 | `.v2-row-hover` | Hover lift utility. Transitions `background-color` at `--v2-dur-fast`. |
+| `SynteqUI.replayAnimation(el, opts)` | On-demand replay of a mount animation. Uses WAAPI (`preset`: `fade-up` \| `fade` \| `zoom-in`, default 280ms), cancels any running animation first, and honours `opts.force`. |
+
+**Reduced motion and replays.** `base.css` shortens every CSS animation to
+`0.001ms` under `prefers-reduced-motion: reduce`. A class-toggle "replay" then
+produces no visible effect, which reads as a broken demo. `replayAnimation()`
+therefore keeps the *response*: it drops the movement and plays a 120ms
+opacity-only cross-fade, because a replay is explicitly requested by the user.
+Ambient motion stays suppressed.
 
 ---
 
@@ -554,6 +591,7 @@ Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must 
 
 | Class | Size |
 |-------|------|
+| `.v2-icon--12` | `12 × 12px` |
 | `.v2-icon--14` | `14 × 14px` |
 | `.v2-icon--16` | `16 × 16px` |
 | `.v2-icon--18` | `18 × 18px` |
@@ -570,6 +608,112 @@ Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must 
 | `.v2-icon--err` | `--v2-status-error` |
 
 All icons inherit `stroke: currentColor` — tint is set by parent element color or a modifier class. `.v2-ico-label` is a flex wrapper for icon + text pairs.
+
+---
+
+### 5.9 Advanced Table
+
+The table module is behaviour, not chrome: `tables.css` adds hairline-separated
+toolbar and pagination rails around the existing `.v2-table`, never a frame.
+
+```
+.v2-table-toolbar
+ ├── .v2-table-toolbar__start → __title + __meta[data-v2-table-count]
+ └── .v2-table-toolbar__end   → __filter + actions
+.v2-table-wrap
+ └── table.v2-table.v2-table--sticky
+      ├── thead th[aria-sort] > button.v2-table__sort
+      ├── th.v2-table__check > [data-v2-select-all]
+      └── tbody tr.is-selected
+           └── td.v2-table__check > [data-v2-row-select]
+nav.v2-pagination
+ ├── .v2-pagination__info
+ └── .v2-pagination__pages > button.v2-pagination__btn[aria-current]
+```
+
+| Concern | Rule |
+|---|---|
+| Sorting | Header cells carry `aria-sort`; the caret rotates 180° on `descending`. Only one column is sorted at a time. |
+| Selection | `tr.is-selected` tints the row with `color-mix(brand 7%)`; the select-all checkbox uses the native `indeterminate` state. |
+| Pagination | Page buttons are windowed to 5 with `…` gaps; the current page uses a brand border, never a filled background. |
+| Filtering | Case-insensitive substring match over the row text; an empty result renders one generated row with `.v2-table__empty`. |
+| Separation | Toolbar `border-bottom` + pagination `border-top`, both `--v2-line`. No shadows, no tonal fills. |
+| Density | `--compact` trims vertical padding, `--dense` also drops the type one step. |
+
+### 5.10 Chart Extensions
+
+Two modules share one frame (`.v2-chart`) and one tooltip (`.v2-chart__tip`).
+
+| Layer | Element | Notes |
+|---|---|---|
+| Frame | `.v2-chart` → `__head`, `__body`, `__legend` | Column flex; head uses `--v2-text-md` title + `--v2-text-xs` meta |
+| Line/area | `svg.v2-chart__svg` | `viewBox` equals the element's pixel box, so 1 unit = 1 px and tick text never scales |
+| Grid | `.v2-chart__grid` (lines), `__axis` (value axis), `__tick` (labels) | Grid uses `--v2-line`, axis `--v2-line-strong` |
+| Series | `.v2-chart__area`, `__line`, `__dot` + `__s1…s4` | Tints: brand → tel-out → warning → subtle |
+| Hover | `.v2-chart__cursor` + `.v2-chart__tip` | Crosshair is a dashed 1px line; the tooltip is `canvas` + `--v2-line-strong` border |
+| Stacked | `.v2-chart__cols` → `.v2-chart__col` → `.v2-chart__seg` | `column-reverse` keeps series 1 on the baseline; the grid template comes from `--v2-chart-cols` |
+
+Height is a single variable (`--v2-chart-h`, `168px`; `--v2-chart-h-sm`, `128px`
+below 520px) so a chart and a stacked column block line up on the same row.
+
+### 5.11 Tree
+
+```
+.v2-tree
+ └── .v2-tree__item
+      ├── .v2-tree__row  → .v2-tree__toggle | __spacer + __label + __meta
+      └── .v2-tree__group (nested .v2-tree__item …)
+```
+
+- Indentation comes from nesting; each `.v2-tree__group` owns a `border-left` rail
+  (`--v2-line`, `--v2-line-strong` from the second level down) plus
+  `margin-left: --v2-space-5`.
+- The caret is a 14px chevron rotated 90° while `aria-expanded="true"`; leaf rows
+  reuse the same slot with `.v2-tree__spacer` to keep labels aligned.
+- Third-level labels drop to `--v2-text-sm` / `--v2-text-subtle`. Three levels is
+  the supported maximum; `initTree()` warns beyond that.
+- `.v2-tree__meta` is pushed right with `margin-left: auto` and hides below 520px.
+
+### 5.12 Stepper / Timeline
+
+```
+.v2-stepper[data-v2-step]
+ └── .v2-stepper__item (grid: 24px marker column + body)
+      ├── .v2-stepper__marker        → number, check glyph or icon
+      ├── ::after                    → connecting rail (hidden on last item)
+      └── .v2-stepper__body → __title, __desc, __meta
+```
+
+| State | Marker | Rail |
+|---|---|---|
+| `is-complete` | `--v2-status-running` border + glyph | green (`--v2-status-running`) |
+| `is-active` | 2px `--v2-brand` border, `aria-current="step"` | `--v2-line` |
+| `is-pending` | dashed `--v2-line-strong` border | `--v2-line` |
+| `is-error` | `--v2-status-error` border | neutral |
+
+`.v2-stepper--horizontal` turns the items into equal-width columns with a
+horizontal rail between markers, and folds back to the vertical layout below
+720px — the rail is repositioned, not duplicated.
+
+### 5.13 Code Block
+
+```
+.v2-code[data-v2-code]
+ ├── .v2-code__head → __title + __actions > button.v2-code__copy
+ └── .v2-code__body
+      ├── .v2-code__lines   (generated, aria-hidden)
+      └── pre.v2-code__pre > code
+```
+
+- Gutter and code share `font-family`, `font-size` and `line-height`
+  (`--v2-code-leading`, default `1.65`), which is what keeps numbers aligned.
+  Both use the same vertical padding.
+- `white-space: pre` on the `<pre>` guarantees one text line per number; the
+  block scrolls horizontally instead of wrapping.
+- The gutter sits on `--v2-inset` with a trailing hairline and is hidden below
+  520px, where width is more valuable than numbering.
+- `.v2-code--plain` swaps the surface to `--v2-canvas`; `.v2-code--scroll` bounds
+  the height through `--v2-code-h` (default `320px`).
 
 ---
 
@@ -599,7 +743,7 @@ Wire it with the attribute `data-v2-sidebar-toggle`. The JS runtime attaches the
 
 - Toggling sets/removes `.nav-collapsed` on `.v2-app` and updates `aria-expanded`.
 - The bottom dock row transitions to zero; the dock slides down with opacity transition.
-- State is persisted under `sq-v2-sidebar` (`"open"` / `"closed"`) and restored on load.
+- State is persisted under `sq-sidebar` (`"open"` / `"closed"`) and restored on load.
 - Navigation anchors smooth-scroll inside `.v2-content`; scroll-spy keeps `aria-current` and active state synchronized.
 - When the dock overflows, the strip is drag-scrollable and a `More` drop-up lists off-screen destinations. `Escape` closes the drop-up (it does not hide the dock).
 
@@ -620,14 +764,14 @@ CSS rules swap their `display` based on `.nav-collapsed`. The open state shows t
 
 ## 8. Theme Extension Guide
 
-Synteq UI V2 ships with two themes: dark (default) and light. Both are defined entirely through CSS custom properties (`--v2-*` tokens). You can extend or override these themes without modifying framework files.
+Synteq UI ships with two themes: dark (default) and light. Both are defined entirely through CSS custom properties (`--v2-*` tokens). You can extend or override these themes without modifying framework files.
 
 ### Overriding Theme Tokens
 
-Create a custom stylesheet **after** `synteq-ui-v2.css`:
+Create a custom stylesheet **after** `synteq-ui.css`:
 
 ```html
-<link rel="stylesheet" href="V2/css/synteq-ui-v2.css" />
+<link rel="stylesheet" href="css/synteq-ui.css" />
 <link rel="stylesheet" href="custom-theme.css" />
 ```
 
@@ -684,7 +828,7 @@ Add a new `[data-theme="mytheme"]` block:
 Activate via JS:
 
 ```js
-SynteqV2.setTheme('mytheme');
+SynteqUI.setTheme('mytheme');
 ```
 
 Or set `data-theme="mytheme"` on `<html>` in your markup.
@@ -732,7 +876,7 @@ The framework includes automatic support for Windows High Contrast Mode via `@me
 
 ### Best Practices
 
-1. **Never modify framework files directly.** Use a separate custom stylesheet that loads after `synteq-ui-v2.css`.
+1. **Never modify framework files directly.** Use a separate custom stylesheet that loads after `synteq-ui.css`.
 2. **Test both themes.** If you override a token, verify it works in dark and light mode.
 3. **Maintain contrast ratios.** Keep text-to-background contrast at ≥ 4.5:1 (WCAG AA). Use a contrast checker.
 4. **Scope overrides to themes.** Use `[data-theme="dark"]` / `[data-theme="light"]` instead of global `:root` overrides when colors differ between themes.
@@ -748,14 +892,14 @@ The framework includes automatic support for Windows High Contrast Mode via `@me
 | ✅ DO | Use `.v2-section` `border-top` as the only separator between content blocks. One rule, one place. |
 | ✅ DO | Apply `v2-scroll` and `overflow-y: auto` exclusively on `.v2-content` (or other explicitly designated scroll regions). Never on `body`, `html`, `.v2-main`, or `.v2-app`. |
 | ✅ DO | Add `aria-label` to every icon-only button (`.v2-iconbtn`, `.v2-btn--icon`, `.v2-sidebar-toggle`). |
-| ✅ DO | Load fonts from `V2/fonts/` only — they are self-hosted. Reference them via `fonts.css` which is already imported by `synteq-ui-v2.css`. |
+| ✅ DO | Load fonts from `fonts/` only — they are self-hosted. Reference them via `fonts.css` which is already imported by `synteq-ui.css`. |
 | ✅ DO | Add `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` on every `.v2-gauge` track element. |
 | ✅ DO | Use `data-v2-stagger` on containers whose children should animate in on scroll entry. Let JS handle the IntersectionObserver — do not manually add `.v2-stagger` in HTML. |
 | ✅ DO | Set `data-theme` on `<html>` — not on `<body>` or inner elements — to apply theme tokens to the full document. |
 | ❌ DO NOT | Add a second sidebar toggle button inside `.v2-aside`. There is exactly one toggle, in the topbar. |
 | ❌ DO NOT | Add `border`, `box-shadow`, or a distinct `background-color` to create card-like wrappers around content. Use `.v2-section` separators instead. |
 | ❌ DO NOT | Add `border-bottom` to `.v2-section__head`. The separator above the section is sufficient — a second rule directly below the header creates a double-line artifact. |
-| ❌ DO NOT | Use external font CDNs (Google Fonts, Bunny Fonts, etc.). The Google Sans Code files are included under SIL OFL in `V2/fonts/`. |
+| ❌ DO NOT | Use external font CDNs (Google Fonts, Bunny Fonts, etc.). The Google Sans Code files are included under SIL OFL in `fonts/`. |
 | ❌ DO NOT | Override `--v2-aside-w` to create a wider sidebar — it is already at its maximum (`240px`). If you need more navigation space, rely on the dock overflow behaviour (drag-scroll + More drop-up) instead of adding group labels. |
 | ❌ DO NOT | Directly set `body.style.overflow = 'hidden'` in your own JS except through the sidebar API — the base CSS already locks `overflow: hidden` on `html` and `body`. The sidebar runtime does set this transiently on mobile to prevent scroll bleed during drawer-open; do not fight it. |
 
@@ -763,13 +907,15 @@ The framework includes automatic support for Windows High Contrast Mode via `@me
 
 ## 10. Accessibility
 
-Synteq UI V2 targets **WCAG 2.2 Level AA**. Full validation requires manual testing with assistive technologies.
+Synteq UI targets **WCAG 2.2 Level AA**. Full validation requires manual testing with assistive technologies.
 
 ### Focus Management
 
 - `:focus-visible` is applied globally in `base.css` with a `2px solid --v2-text-strong` outline and `outline-offset: 2px`.
 - `:focus` (mouse click) is suppressed — outline only appears on keyboard navigation.
 - Focus `border-radius` matches `--v2-radius-micro` to avoid sharp clipping artifacts.
+- **Form controls replace that global ring with their own**, so a field never shows two coloured edges: `2px solid --v2-brand` (offset `1px` for fields/selects, `2px` for checkbox/radio/switch). An input group uses `:focus-within` on the wrapper and its inner input suppresses the ring. Invalid + focused fields turn the ring red instead of stacking a red border under a brand ring.
+- Modal centring relies on `margin: auto` on `.v2-dialog`; the reset zeroes the UA value, and `margin: 0` would pin dialogs to the top-left corner.
 
 ### Color Contrast
 
@@ -779,15 +925,24 @@ All theme color pairs are verified at ≥ 4.5:1 against their respective backgro
 |------|-------|-------------|
 | `--v2-text` on `--v2-canvas` | Both | ≥ 4.5:1 (AA) |
 | `--v2-text-strong` on `--v2-canvas` | Both | ≥ 7:1 (AAA) |
-| `--v2-text-subtle` on `--v2-canvas` | Both | Approaching 4.5:1 — use for non-essential metadata only |
+| `--v2-text-subtle` on `--v2-canvas` | Both | ≥ 4.5:1 (dark `#7a8080`, light `#666e6e`) |
 | `--v2-brand` on `--v2-canvas` | Dark | ≥ 4.5:1 |
 | `--v2-brand` on `--v2-canvas` | Light | ≥ 4.5:1 (tuned to `#059669`) |
+| Tonal status labels (button / badge / tag / log level) | Both | ≥ 4.5:1 — resolved through `--v2-status-ink-mix` (`60%`), see §3.6 |
+| `--v2-text-on-solid` on status fills (tips) | Both | ≥ 4.68:1 (`--err` uses `--v2-text-on-accent`, 4.83:1 in light) |
+| `--v2-text-on-solid` on `--v2-brand` (brand button / mark) | Both | 5.08:1 (light) / 11.55:1 (dark) |
 
 ### Interactive Element Roles
 
 - Gauge track elements: `role="progressbar"`, `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax="100"`. The JS `renderGauge()` function updates `aria-valuenow` automatically on each call.
 - Bar chart containers: `role="img"`, `aria-label="[chart description]"`.
 - Sparkline SVGs: `role="img"`, `aria-label="[metric] trend"`.
+- Line/area chart SVGs and stacked-column containers: `role="img"` with an `aria-label` that names the series and the window they cover.
+- Sortable table headers: `aria-sort="ascending|descending"` is written by `sortTable()`; only one header carries it at a time.
+- Row selection: `aria-label="Select <row name>"` on every `[data-v2-row-select]` checkbox, plus an `aria-label` on the select-all box. Shift-click selects a range and fires `sq:rowselection`.
+- Tree toggles: `aria-expanded` is the single source of truth; every toggle needs an `aria-label` ("Collapse us-east-1"). Leaf rows use an `aria-hidden` spacer instead of an inert button.
+- Stepper: the current item receives `aria-current="step"`; markers hold a glyph or number and are `aria-hidden` because the title carries the meaning.
+- Code block gutter: `.v2-code__lines` is `aria-hidden="true"` so the copy reads as plain text.
 - Segmented bars: `role="group"`, `aria-label="[group name]"` on the `.v2-seg` wrapper.
 - All icon-only interactive elements (`.v2-iconbtn`, `.v2-btn--icon`, `.v2-sidebar-toggle`): explicit `aria-label`.
 - Decorative icons: `aria-hidden="true"` on every `<svg>`.
@@ -806,6 +961,13 @@ scroll-behavior: auto !important;
 This applies to all elements, including gauge fills, sparklines, skeleton shimmers, and stagger animations. No additional per-component reduced-motion handling is needed.
 
 The JS runtime also checks `prefersReduced()` before attaching the IntersectionObserver for `.v2-stagger` — if reduced motion is active, the observer is never created and no mount animations fire.
+
+**Exception — explicit replays.** Because that rule also shortens a
+*user-requested* replay to `0.001ms` (it looks like the button is broken),
+`SynteqUI.replayAnimation()` drives the effect through the Web Animations API and
+swaps the movement for a `120ms` opacity-only cross-fade while reduced motion is
+active. Ambient motion stays fully suppressed; only an action the user just asked
+for still produces a visible response.
 
 ### Screen Reader Utilities
 
