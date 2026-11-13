@@ -8,8 +8,8 @@
 .v2-tree {
   display: flex;
   flex-direction: column;
-  gap: var(--v2-line-h);
-  font-size: var(--v2-text-md);
+  gap: var(--sq-line-h);
+  font-size: var(--sq-text-md);
   min-width: 0;
 }
 
@@ -22,24 +22,24 @@
 .v2-tree__row {
   display: flex;
   align-items: center;
-  gap: var(--v2-space-1);
-  padding: var(--v2-space-1) var(--v2-space-2);
-  border-radius: var(--v2-radius-control);
-  color: var(--v2-text);
+  gap: var(--sq-space-1);
+  padding: var(--sq-space-1) var(--sq-space-2);
+  border-radius: var(--sq-radius-control);
+  color: var(--sq-text);
   min-width: 0;
-  transition: background-color var(--v2-dur-instant) var(--v2-ease);
+  transition: background-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-tree__row:hover {
-  background: var(--v2-hover);
+  background: var(--sq-hover);
 }
 
 .v2-tree__row--active {
-  background: color-mix(in srgb, var(--v2-brand) 9%, transparent);
+  background: color-mix(in srgb, var(--sq-brand) 9%, transparent);
 }
 
 .v2-tree__row--active .v2-tree__label {
-  color: var(--v2-text-strong);
+  color: var(--sq-text-strong);
 }
 
 /* Toggle button - the caret rotates when the group is open */
@@ -47,24 +47,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--v2-space-4);
-  height: var(--v2-space-4);
+  width: var(--sq-space-4);
+  height: var(--sq-space-4);
   flex-shrink: 0;
   background: none;
   border: 0;
   padding: 0;
-  border-radius: var(--v2-radius-micro);
-  color: var(--v2-text-subtle);
+  border-radius: var(--sq-radius-micro);
+  color: var(--sq-text-subtle);
   cursor: pointer;
-  transition: color var(--v2-dur-instant) var(--v2-ease);
+  transition: color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-tree__toggle:hover {
-  color: var(--v2-text-strong);
+  color: var(--sq-text-strong);
 }
 
 .v2-tree__toggle svg {
-  transition: transform var(--v2-dur-fast) var(--v2-ease);
+  transition: transform var(--sq-dur-fast) var(--sq-ease);
 }
 
 .v2-tree__toggle[aria-expanded="true"] svg {
@@ -73,32 +73,32 @@
 
 /* Leaf rows keep their label aligned with sibling toggles */
 .v2-tree__spacer {
-  width: var(--v2-space-4);
-  height: var(--v2-space-4);
+  width: var(--sq-space-4);
+  height: var(--sq-space-4);
   flex-shrink: 0;
 }
 
 .v2-tree__label {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-2);
+  gap: var(--sq-space-2);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--v2-text);
+  color: var(--sq-text);
 }
 
 .v2-tree__label--mono {
-  font-family: var(--v2-font-mono);
-  font-size: var(--v2-text-sm);
+  font-family: var(--sq-font-mono);
+  font-size: var(--sq-text-sm);
 }
 
 .v2-tree__meta {
   margin-left: auto;
-  padding-left: var(--v2-space-3);
-  font-size: var(--v2-text-xs);
-  color: var(--v2-text-subtle);
+  padding-left: var(--sq-space-3);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-subtle);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   flex-shrink: 0;
@@ -108,10 +108,10 @@
 .v2-tree__group {
   display: flex;
   flex-direction: column;
-  gap: var(--v2-line-h);
-  margin-left: var(--v2-space-5);
-  padding-left: var(--v2-space-2);
-  border-left: var(--v2-line-h) solid var(--v2-line);
+  gap: var(--sq-line-h);
+  margin-left: var(--sq-space-5);
+  padding-left: var(--sq-space-2);
+  border-left: var(--sq-line-h) solid var(--sq-line);
   min-width: 0;
 }
 
@@ -121,23 +121,23 @@
 
 /* Level tint for the deepest (third) level */
 .v2-tree__group .v2-tree__group {
-  border-left-color: var(--v2-line-strong);
+  border-left-color: var(--sq-line-strong);
 }
 
 .v2-tree__group .v2-tree__group .v2-tree__row {
-  font-size: var(--v2-text-sm);
-  color: var(--v2-text-subtle);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-subtle);
 }
 
 .v2-tree__empty {
-  padding: var(--v2-space-2) var(--v2-space-3);
-  font-size: var(--v2-text-xs);
-  color: var(--v2-text-subtle);
+  padding: var(--sq-space-2) var(--sq-space-3);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-subtle);
 }
 
 @media (max-width: 520px) {
   .v2-tree__group {
-    margin-left: var(--v2-space-4);
+    margin-left: var(--sq-space-4);
   }
 
   .v2-tree__meta {

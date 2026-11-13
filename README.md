@@ -175,21 +175,21 @@ SynteqUI.scrollToSection('logs', { behavior: 'auto' });
 
 ## Copy to clipboard
 
-Add `data-v2-copy` to any button or link — the runtime handles it by delegation,
+Add `data-sq-copy` to any button or link — the runtime handles it by delegation,
 so buttons created *after* page load work too:
 
 ```html
 <button class="v2-btn v2-btn--icon" aria-label="Copy address"
-        data-v2-copy="oct3oMBjs5Jx…">⧉</button>
+        data-sq-copy="oct3oMBjs5Jx…">⧉</button>
 ```
 
-- Empty `data-v2-copy=""` copies the text of the button's **previous sibling**
+- Empty `data-sq-copy=""` copies the text of the button's **previous sibling**
   (handy for label/value pairs).
 - The attribute value is read at click time, so you can keep it in sync with
   live data without re-binding.
 - Feedback: a **"Copied" tip** appears above the button, `.v2-copy--ok` tints it
   green for 1.8 s and `aria-label` flips to the confirmation text. Customise the
-  wording per button with `data-v2-copy-label="Address copied"`; a failed copy
+  wording per button with `data-sq-copy-label="Address copied"`; a failed copy
   shows `Copy failed` in the error tint instead.
 - On insecure origins (`http://` without a secure context) it falls back to a
   hidden textarea + `execCommand('copy')` instead of failing silently.
@@ -199,7 +199,7 @@ so buttons created *after* page load work too:
 ## Click feedback
 
 Every control (`.v2-btn`, `.v2-iconbtn`, `.v2-seg__btn`, `.v2-search`, the
-sidebar toggle, the dock's `More` button and anything with `data-v2-copy`) gets
+sidebar toggle, the dock's `More` button and anything with `data-sq-copy`) gets
 the same press treatment: a 1 px push, a 0.985 inward scale and an 8 %
 `currentColor` wash. No elevation, no ripple library.
 
@@ -227,14 +227,14 @@ SynteqUI.toggleTheme();
 SynteqUI.getTheme(); // → 'dark' | 'light'
 ```
 
-Add `data-v2-toggle-theme` to any button for automatic wiring.  
+Add `data-sq-toggle-theme` to any button for automatic wiring.  
 Theme preference is persisted in `localStorage` under key `sq-theme`.
 
 ---
 
 ## Sections & Line Separators
 
-V2 has no cards. Content is organized into `.v2-section` blocks separated by a single `1px` top border. Every section fills the space between the topbar and the dock and **centres its content vertically**, while the section column is **centred horizontally** at `--v2-content-max` (default `1200px`).
+Synteq UI has no cards. Content is organized into `.v2-section` blocks separated by a single `1px` top border. Every section fills the space between the topbar and the dock and **centres its content vertically**, while the section column is **centred horizontally** at `--sq-content-max` (default `1200px`).
 
 ```html
 <div class="v2-section">
@@ -266,10 +266,10 @@ For inline stat separation, use the stat strip (vertical hairlines between items
 
 ## Gauges
 
-Add `data-v2-gauge="72"` to the track element and `.v2-gauge__fill` inside it. `initGauges()` runs automatically on DOMContentLoaded.
+Add `data-sq-gauge="72"` to the track element and `.v2-gauge__fill` inside it. `initGauges()` runs automatically on DOMContentLoaded.
 
 ```html
-<div class="v2-gauge" data-v2-gauge="72"
+<div class="v2-gauge" data-sq-gauge="72"
      role="progressbar" aria-label="CPU" aria-valuenow="72"
      aria-valuemin="0" aria-valuemax="100">
   <div class="v2-gauge__head">
@@ -298,8 +298,8 @@ Color thresholds: `< 75%` → green, `75–89%` → amber, `≥ 90%` → red.
 | Value | Fill colour | Use for |
 |---|---|---|
 | `auto` (default) | ok / warn / err by threshold | CPU, memory, disk |
-| `brand` | `--v2-brand` | quorum progress, bandwidth |
-| `neutral` | `--v2-text-strong` | secondary/comparison bars |
+| `brand` | `--sq-brand` | quorum progress, bandwidth |
+| `neutral` | `--sq-text-strong` | secondary/comparison bars |
 
 ---
 
@@ -320,10 +320,10 @@ SynteqUI.renderBars(document.getElementById('net-bars'), [
 ```html
 <div class="v2-bars" id="net-bars"
      role="img" aria-label="Network I/O chart"
-     style="--v2-bars-cols:24;"></div>
+     style="--sq-bars-cols:24;"></div>
 ```
 
-When the series is empty the container gets `data-v2-bars-empty="true"` (styled at 35 % opacity) so you can show a "collecting samples…" hint next to it.
+When the series is empty the container gets `data-sq-bars-empty="true"` (styled at 35 % opacity) so you can show a "collecting samples…" hint next to it.
 
 ---
 
@@ -343,14 +343,14 @@ SynteqUI.renderSparkline(
 ```
 
 Add `.v2-spark--out` to use the outbound (red) color palette.
-`.v2-spark--tall` raises the chart to 56 px (or set `--v2-spark-h` on any
+`.v2-spark--tall` raises the chart to 56 px (or set `--sq-spark-h` on any
 instance). When fewer than two samples are available the runtime clears the path
-and sets `data-v2-spark-empty="true"` instead of leaving stale data on screen.
+and sets `data-sq-spark-empty="true"` instead of leaving stale data on screen.
 
 The sparkline is drawn in **viewBox units** (the `<svg viewBox>` above, defaulting to
 `0 0 200 40`), so the same path scales to any rendered width without overflowing.
 The series is remembered and redrawn on resize; `SynteqUI.initSparklines()` renders
-every `.v2-spark` automatically, including `<svg class="v2-spark" data-v2-spark="12,18,9,22">`.
+every `.v2-spark` automatically, including `<svg class="v2-spark" data-sq-spark="12,18,9,22">`.
 
 ---
 
@@ -369,7 +369,7 @@ crisp at any width and the chart redraws (debounced) on resize.
     <svg class="v2-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
          aria-label="Request rate and error rate"></svg>
   </div>
-  <div class="v2-chart__legend" data-v2-chart-legend></div>
+  <div class="v2-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -391,19 +391,19 @@ SynteqUI.renderLineChart(document.getElementById('chart-line'), [
 The hover tooltip (`.v2-chart__tip`) is created on demand inside
 `.v2-chart__body`: move the pointer over the plot and it snaps to the nearest
 sample, draws a dashed crosshair and lists every series with its swatch and
-value. Chart height is controlled by `--v2-chart-h` (default `168px`, `128px`
+value. Chart height is controlled by `--sq-chart-h` (default `168px`, `128px`
 under 520px).
 
 | Class | Purpose |
 |---|---|
 | `.v2-chart` | Column frame: head, body, legend |
-| `.v2-chart__svg` | Line/area canvas (`height: var(--v2-chart-h)`) |
+| `.v2-chart__svg` | Line/area canvas (`height: var(--sq-chart-h)`) |
 | `.v2-chart__grid` / `__axis` / `__tick` | Gridlines, value axis, tick labels (generated) |
 | `.v2-chart__area` / `__line` / `__dot` | Series primitives (generated) |
 | `.v2-chart__s1…s4` | Series tints: brand, tel-out, warning, subtle |
 | `.v2-chart__cursor` | Dashed hover crosshair (generated) |
 | `.v2-chart__tip` | Hover tooltip (generated) |
-| `.v2-chart__legend` | Legend row; add `data-v2-chart-legend` to auto-fill it |
+| `.v2-chart__legend` | Legend row; add `data-sq-chart-legend` to auto-fill it |
 
 ---
 
@@ -415,8 +415,8 @@ under 520px).
   <div class="v2-chart__body">
     <div class="v2-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
   </div>
-  <div class="v2-chart__xlabels" data-v2-chart-labels></div>
-  <div class="v2-chart__legend" data-v2-chart-legend></div>
+  <div class="v2-chart__xlabels" data-sq-chart-labels></div>
+  <div class="v2-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -468,7 +468,7 @@ only, tabular numbers, no zebra striping.
 | Class | Purpose |
 |---|---|
 | `.v2-table-wrap` | Horizontal scroll container with a thin scrollbar (long addresses / wide tables) |
-| `.v2-table` | `border-collapse`, `--v2-text-sm`, tabular numbers, hover row |
+| `.v2-table` | `border-collapse`, `--sq-text-sm`, tabular numbers, hover row |
 | `.v2-table__num` | Right-aligned mono cell (counts, epochs, bytes) |
 | `.v2-table__mono` | Mono cell, default alignment (hashes, addresses) |
 | `.v2-table__mute` | Quiet metadata cell |
@@ -483,39 +483,39 @@ Cells never wrap (`white-space: nowrap`) — truncate long values in the cell wi
 The table module layers sorting, selection, filtering and pagination on top of
 the base `.v2-table`. One runtime call (`initTables()`, already part of the
 default `init()`) wires everything found in the enclosing
-`[data-v2-table-scope]` or `.v2-section`.
+`[data-sq-table-scope]` or `.v2-section`.
 
 ```html
 <div class="v2-table-toolbar">
   <div class="v2-table-toolbar__start">
     <span class="v2-table-toolbar__title">Instances</span>
-    <span class="v2-table-toolbar__meta" data-v2-table-count>0 rows</span>
+    <span class="v2-table-toolbar__meta" data-sq-table-count>0 rows</span>
   </div>
   <div class="v2-table-toolbar__end">
     <label class="v2-table-toolbar__filter">
       <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- search --></svg>
-      <input type="search" data-v2-table-filter placeholder="Filter rows..." aria-label="Filter rows" />
+      <input type="search" data-sq-table-filter placeholder="Filter rows..." aria-label="Filter rows" />
     </label>
   </div>
 </div>
 
 <div class="v2-table-wrap">
-  <table class="v2-table v2-table--sticky v2-table--compact" data-v2-table data-v2-page-size="6">
+  <table class="v2-table v2-table--sticky v2-table--compact" data-sq-table data-sq-page-size="6">
     <thead>
       <tr>
-        <th class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-v2-select-all aria-label="Select all rows" /></th>
+        <th class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-select-all aria-label="Select all rows" /></th>
         <th>
-          <button class="v2-table__sort" data-v2-sort="text">
+          <button class="v2-table__sort" data-sq-sort="text">
             Instance
             <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
           </button>
         </th>
-        <th class="v2-table__num"><button class="v2-table__sort" data-v2-sort="number">CPU %</button></th>
+        <th class="v2-table__num"><button class="v2-table__sort" data-sq-sort="number">CPU %</button></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-v2-row-select aria-label="Select octra-01" /></td>
+        <td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-row-select aria-label="Select octra-01" /></td>
         <td class="v2-table__mono">octra-01</td>
         <td class="v2-table__num">42</td>
       </tr>
@@ -523,19 +523,19 @@ default `init()`) wires everything found in the enclosing
   </table>
 </div>
 
-<nav class="v2-pagination" data-v2-table-pagination aria-label="Table pagination"></nav>
+<nav class="v2-pagination" data-sq-table-pagination aria-label="Table pagination"></nav>
 ```
 
 | Hook | Purpose |
 |---|---|
-| `data-v2-table` | Marks the table for the runtime; the only required attribute |
-| `data-v2-page-size` | Rows per page (omit for a single, unfiltered page) |
-| `data-v2-sort="text\|number\|date"` | Comparator for that column's button |
-| `data-v2-select-all` / `data-v2-row-select` | Select-all + per-row checkboxes (shift-click selects a range) |
-| `data-v2-table-filter` | Live text filter over the row contents |
-| `data-v2-table-count` | Element that receives `n rows` / `n of m selected` |
-| `data-v2-table-pagination` | Container the runtime fills with page buttons |
-| `data-v2-empty-label` | Copy for the generated "no matching rows" row |
+| `data-sq-table` | Marks the table for the runtime; the only required attribute |
+| `data-sq-page-size` | Rows per page (omit for a single, unfiltered page) |
+| `data-sq-sort="text\|number\|date"` | Comparator for that column's button |
+| `data-sq-select-all` / `data-sq-row-select` | Select-all + per-row checkboxes (shift-click selects a range) |
+| `data-sq-table-filter` | Live text filter over the row contents |
+| `data-sq-table-count` | Element that receives `n rows` / `n of m selected` |
+| `data-sq-table-pagination` | Container the runtime fills with page buttons |
+| `data-sq-empty-label` | Copy for the generated "no matching rows" row |
 
 Sorting writes `aria-sort="ascending|descending"` on the header cell and removes
 it from the others, so screen readers announce the active column. Selection
@@ -581,7 +581,7 @@ Mono rows with level accents, built for streaming tails.
 | Class | Purpose |
 |---|---|
 | `.v2-log` | Flex column, mono 11 px, 1.55 line-height |
-| `.v2-log--scroll` | `max-height: var(--v2-log-h, 420px)` + thin scrollbar + `overscroll-behavior: contain` |
+| `.v2-log--scroll` | `max-height: var(--sq-log-h, 420px)` + thin scrollbar + `overscroll-behavior: contain` |
 | `.v2-log--bordered` | Hairline top + bottom separators |
 | `.v2-log__row` | One line: ts · level · component · message, 2 px transparent left rail |
 | `.v2-log__row--warn` / `--error` | Amber / red left rail (error also tints the row) |
@@ -600,7 +600,7 @@ nesting the groups — each level owns its own hairline rail, so no depth maths 
 needed. `aria-expanded` on the toggle is the single source of truth.
 
 ```html
-<div class="v2-tree" data-v2-tree>
+<div class="v2-tree" data-sq-tree>
   <div class="v2-tree__item">
     <div class="v2-tree__row">
       <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
@@ -625,7 +625,7 @@ needed. `aria-expanded` on the toggle is the single source of truth.
 
 | Class / hook | Purpose |
 |---|---|
-| `data-v2-tree` | Enables the runtime (click + keyboard handling) |
+| `data-sq-tree` | Enables the runtime (click + keyboard handling) |
 | `.v2-tree__item` | One node: a row plus an optional `.v2-tree__group` |
 | `.v2-tree__row` | Toggle · label · meta on one line |
 | `.v2-tree__toggle` | Caret button; rotate is driven by `aria-expanded` |
@@ -646,7 +646,7 @@ the design system only supports three.
 Vertical progress indicator for multi-step flows and deployment timelines.
 
 ```html
-<div class="v2-stepper" data-v2-stepper data-v2-step="2">
+<div class="v2-stepper" data-sq-stepper data-sq-step="2">
   <div class="v2-stepper__item">
     <span class="v2-stepper__marker" aria-hidden="true">
       <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
@@ -663,7 +663,7 @@ Vertical progress indicator for multi-step flows and deployment timelines.
 
 | Class | Purpose |
 |---|---|
-| `.v2-stepper` | Column container; `data-v2-stepper` + `data-v2-step` drive the state |
+| `.v2-stepper` | Column container; `data-sq-stepper` + `data-sq-step` drive the state |
 | `.v2-stepper__item` | Grid row: marker column + body; owns the connecting rail |
 | `.v2-stepper__marker` | Circle marker (number, check icon or anything inline) |
 | `.v2-stepper__title` / `__desc` / `__meta` | Body slots |
@@ -688,11 +688,11 @@ Syntax-free code surface with an optional header bar, a runtime-generated
 line-number gutter and a copy button.
 
 ```html
-<div class="v2-code" data-v2-code data-v2-line-numbers>
+<div class="v2-code" data-sq-code data-sq-line-numbers>
   <div class="v2-code__head">
     <span class="v2-code__title">install.sh</span>
     <div class="v2-code__actions">
-      <button class="v2-code__copy" data-v2-code-copy="Copied" aria-label="Copy code">Copy</button>
+      <button class="v2-code__copy" data-sq-code-copy="Copied" aria-label="Copy code">Copy</button>
     </div>
   </div>
   <div class="v2-code__body">
@@ -704,17 +704,17 @@ npx synteq build --theme dark</code></pre>
 
 | Class / hook | Purpose |
 |---|---|
-| `data-v2-code` | Enables the runtime (gutter + copy wiring) |
-| `data-v2-line-numbers="false"` | Opt out of the gutter |
+| `data-sq-code` | Enables the runtime (gutter + copy wiring) |
+| `data-sq-line-numbers="false"` | Opt out of the gutter |
 | `.v2-code__head` | Optional bar with title and actions |
 | `.v2-code__body` | Flex row: gutter (generated) + `<pre>` |
 | `.v2-code__pre` | `white-space: pre`, horizontal scroll, no wrapping |
-| `[data-v2-code-copy]` | Copy trigger; the attribute value is the confirmation label |
-| `.v2-code--plain` / `.v2-code--scroll` | Canvas surface / bounded height (`--v2-code-h`) |
+| `[data-sq-code-copy]` | Copy trigger; the attribute value is the confirmation label |
+| `.v2-code--plain` / `.v2-code--scroll` | Canvas surface / bounded height (`--sq-code-h`) |
 | `.v2-code--plain` caption | `.v2-code__caption` for a footnote under the block |
 
 Line numbers are generated from the `<pre>` text on init, and the code copy
-button reuses the same clipboard helper and "Copied" tip as `[data-v2-copy]`.
+button reuses the same clipboard helper and "Copied" tip as `[data-sq-copy]`.
 The gutter is hidden below 520px so code keeps the full width on phones.
 
 ---
@@ -771,7 +771,7 @@ so one status never has to borrow another's hue:
 | Log row / level | `--info` | `--warn` |
 
 Tonal variants (button / badge / tag / log level) paint the status hue at
-`--v2-status-ink-mix` (60%) over the text colour, which is what keeps every
+`--sq-status-ink-mix` (60%) over the text colour, which is what keeps every
 combination above WCAG AA in both themes.
 
 ### Focus treatment
@@ -791,10 +791,10 @@ second red border underneath it.
 ## Motion
 
 Mount animation fires automatically on `.v2-stagger` children.  
-For scroll-triggered stagger, add `data-v2-stagger` to the container — the JS runtime observes it and adds `.v2-stagger` on entry.
+For scroll-triggered stagger, add `data-sq-stagger` to the container — the JS runtime observes it and adds `.v2-stagger` on entry.
 
 ```html
-<div data-v2-stagger>
+<div data-sq-stagger>
   <!-- each child fades up in sequence -->
   <div>...</div>
   <div>...</div>
@@ -890,9 +890,9 @@ Tint helpers: `v2-icon--mute`, `v2-icon--brand`, `v2-icon--info`, `v2-icon--ok`,
 
 ---
 
-## Design Evolution (v1 → v2)
+## Design Evolution
 
-| | v1 | v2 |
+| | Legacy | Current |
 |---|---|---|
 | Surface hierarchy | 5-tier tonal elevation (canvas → raised → strong → muted → hover) | Flat — single canvas surface |
 | Visual separation | Tonal background shift on cards | `1px` hairline separators only |
@@ -902,17 +902,16 @@ Tint helpers: `v2-icon--mute`, `v2-icon--brand`, `v2-icon--info`, `v2-icon--ok`,
 | Network chart | 48-bar stacked histogram (112px tall) | 2 chart modules — dual-segment bars (72px) plus axis-labelled line/area and stacked columns |
 | Tables | Static table | Sortable, selectable, filterable, paginated |
 | Motion | Transition-only | Fade-up mount + stagger + shimmer + IntersectionObserver |
-| Runtime | `SynteqUI.*` | `SynteqUI.*` (renamed from the interim `SynteqV2` alias) |
-| Entry points | `synteq-ui-v2.css` / `synteq-ui-v2.js` | `synteq-ui.css` / `synteq-ui.js` |
+
 
 ---
 
 ## Accessibility
 
-- All interactive elements support `:focus-visible`; each control paints **one** ring only (2px brand for fields/checkboxes, 2px `--v2-text-strong` for everything else)
+- All interactive elements support `:focus-visible`; each control paints **one** ring only (2px brand for fields/checkboxes, 2px `--sq-text-strong` for everything else)
 - Gauge tracks carry `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
 - Icon-only buttons require explicit `aria-label`
 - Status dots use `aria-label` on the parent element
 - `prefers-reduced-motion` is honored globally; `SynteqUI.replayAnimation()` degrades to an opacity-only cross-fade instead of doing nothing
-- Color tokens maintain ≥ 4.5:1 contrast ratio (WCAG 2.2 AA) in both themes — tonal status surfaces (buttons, badges, tags, log levels) resolve their label colour through `--v2-status-ink-mix`, so a status hue is never painted raw on a light background
+- Color tokens maintain ≥ 4.5:1 contrast ratio (WCAG 2.2 AA) in both themes — tonal status surfaces (buttons, badges, tags, log levels) resolve their label colour through `--sq-status-ink-mix`, so a status hue is never painted raw on a light background
 - `[hidden] { display: none !important; }` is part of the reset, so runtime filters really hide elements

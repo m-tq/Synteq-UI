@@ -8,36 +8,36 @@
 .v2-field {
   display: flex;
   flex-direction: column;
-  gap: var(--v2-field-gap);
+  gap: var(--sq-field-gap);
   width: 100%;
 }
 
 .v2-field__label {
   display: flex;
   align-items: center;
-  gap: var(--v2-space-2);
-  font-size: var(--v2-text-sm);
-  font-weight: var(--v2-fw-medium);
-  color: var(--v2-text-strong);
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-fw-medium);
+  color: var(--sq-text-strong);
 }
 
 .v2-field__label--required::after {
   content: '*';
-  color: var(--v2-status-error);
-  margin-left: var(--v2-space-1);
+  color: var(--sq-status-error);
+  margin-left: var(--sq-space-1);
 }
 
 .v2-field__hint {
-  font-size: var(--v2-text-xs);
-  color: var(--v2-text-subtle);
-  line-height: var(--v2-leading-base);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-subtle);
+  line-height: var(--sq-leading-base);
 }
 
 .v2-field__error {
   display: none;
-  font-size: var(--v2-text-xs);
-  color: var(--v2-status-error);
-  line-height: var(--v2-leading-base);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-status-error);
+  line-height: var(--sq-leading-base);
 }
 
 .v2-field--invalid .v2-field__error {
@@ -47,28 +47,28 @@
 /* ---- Text input (existing .v2-input enhanced with states) ---- */
 .v2-input {
   width: 100%;
-  height: var(--v2-input-h);
-  padding: 0 var(--v2-space-3);
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid transparent;
-  border-radius: var(--v2-radius-control);
-  color: var(--v2-text-strong);
-  font-size: var(--v2-text-sm);
-  font-family: var(--v2-font-sans);
-  transition: border-color var(--v2-dur-instant) var(--v2-ease),
-              background-color var(--v2-dur-instant) var(--v2-ease);
+  height: var(--sq-input-h);
+  padding: 0 var(--sq-space-3);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid transparent;
+  border-radius: var(--sq-radius-control);
+  color: var(--sq-text-strong);
+  font-size: var(--sq-text-sm);
+  font-family: var(--sq-font-sans);
+  transition: border-color var(--sq-dur-instant) var(--sq-ease),
+              background-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-input::placeholder {
-  color: var(--v2-text-subtle);
+  color: var(--sq-text-subtle);
 }
 
 .v2-input:focus-visible {
-  background: var(--v2-hover);
+  background: var(--sq-hover);
   /* ONE indicator per field: a brand ring drawn with outline. Previously the
      global `:focus-visible` outline from base.css was painted around the input
      while this rule also turned the 1px border brand — a double coloured edge. */
-  outline: 2px solid var(--v2-brand);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 1px;
   border-color: transparent;
 }
@@ -77,50 +77,50 @@
 .v2-input[readonly] {
   opacity: 0.5;
   cursor: not-allowed;
-  background: var(--v2-inset);
+  background: var(--sq-inset);
 }
 
 .v2-input:disabled::placeholder {
-  color: var(--v2-text-subtle);
+  color: var(--sq-text-subtle);
 }
 
 .v2-input[aria-invalid="true"],
 .v2-field--invalid .v2-input {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 .v2-input[aria-invalid="true"]:focus-visible,
 .v2-field--invalid .v2-input:focus-visible {
   /* Invalid fields keep the error signal, but only once: the ring turns red
      instead of adding a red border underneath a brand ring. */
-  outline-color: var(--v2-status-error);
+  outline-color: var(--sq-status-error);
   border-color: transparent;
 }
 
 /* ---- Textarea ---- */
 .v2-textarea {
   width: 100%;
-  min-height: calc(var(--v2-input-h) * 2.5);
-  padding: var(--v2-space-2) var(--v2-space-3);
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid transparent;
-  border-radius: var(--v2-radius-control);
-  color: var(--v2-text-strong);
-  font-size: var(--v2-text-sm);
-  font-family: var(--v2-font-sans);
-  line-height: var(--v2-leading-base);
+  min-height: calc(var(--sq-input-h) * 2.5);
+  padding: var(--sq-space-2) var(--sq-space-3);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid transparent;
+  border-radius: var(--sq-radius-control);
+  color: var(--sq-text-strong);
+  font-size: var(--sq-text-sm);
+  font-family: var(--sq-font-sans);
+  line-height: var(--sq-leading-base);
   resize: vertical;
-  transition: border-color var(--v2-dur-instant) var(--v2-ease),
-              background-color var(--v2-dur-instant) var(--v2-ease);
+  transition: border-color var(--sq-dur-instant) var(--sq-ease),
+              background-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-textarea::placeholder {
-  color: var(--v2-text-subtle);
+  color: var(--sq-text-subtle);
 }
 
 .v2-textarea:focus-visible {
-  background: var(--v2-hover);
-  outline: 2px solid var(--v2-brand);
+  background: var(--sq-hover);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 1px;
   border-color: transparent;
 }
@@ -134,38 +134,38 @@
 
 .v2-textarea[aria-invalid="true"],
 .v2-field--invalid .v2-textarea {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 .v2-textarea[aria-invalid="true"]:focus-visible,
 .v2-field--invalid .v2-textarea:focus-visible {
-  outline-color: var(--v2-status-error);
+  outline-color: var(--sq-status-error);
   border-color: transparent;
 }
 
 /* ---- Select (native, custom arrow) ---- */
 .v2-select {
   width: 100%;
-  height: var(--v2-input-h);
-  padding: 0 var(--v2-space-6) 0 var(--v2-space-3);
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid transparent;
-  border-radius: var(--v2-radius-control);
-  color: var(--v2-text-strong);
-  font-size: var(--v2-text-sm);
-  font-family: var(--v2-font-sans);
+  height: var(--sq-input-h);
+  padding: 0 var(--sq-space-6) 0 var(--sq-space-3);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid transparent;
+  border-radius: var(--sq-radius-control);
+  color: var(--sq-text-strong);
+  font-size: var(--sq-text-sm);
+  font-family: var(--sq-font-sans);
   appearance: none;
   cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%237a8080' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right var(--v2-space-3) center;
-  transition: border-color var(--v2-dur-instant) var(--v2-ease),
-              background-color var(--v2-dur-instant) var(--v2-ease);
+  background-position: right var(--sq-space-3) center;
+  transition: border-color var(--sq-dur-instant) var(--sq-ease),
+              background-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-select:focus-visible {
-  background-color: var(--v2-hover);
-  outline: 2px solid var(--v2-brand);
+  background-color: var(--sq-hover);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 1px;
   border-color: transparent;
 }
@@ -177,7 +177,7 @@
 
 .v2-select[aria-invalid="true"],
 .v2-field--invalid .v2-select {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 /* Light theme arrow color adjustment */
@@ -191,29 +191,29 @@
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid var(--v2-line-strong);
-  border-radius: var(--v2-radius-micro);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid var(--sq-line-strong);
+  border-radius: var(--sq-radius-micro);
   cursor: pointer;
   position: relative;
-  transition: background-color var(--v2-dur-instant) var(--v2-ease),
-              border-color var(--v2-dur-instant) var(--v2-ease);
+  transition: background-color var(--sq-dur-instant) var(--sq-ease),
+              border-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-checkbox:hover {
-  background: var(--v2-hover);
-  border-color: var(--v2-text);
+  background: var(--sq-hover);
+  border-color: var(--sq-text);
 }
 
 .v2-checkbox:focus-visible {
   /* Ring only — the border already carries the checked / invalid state. */
-  outline: 2px solid var(--v2-brand);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 2px;
 }
 
 .v2-checkbox:checked {
-  background: var(--v2-brand);
-  border-color: var(--v2-brand);
+  background: var(--sq-brand);
+  border-color: var(--sq-brand);
 }
 
 .v2-checkbox:checked::after {
@@ -223,7 +223,7 @@
   top: 1px;
   width: 4px;
   height: 8px;
-  border: solid var(--v2-text-on-solid);
+  border: solid var(--sq-text-on-solid);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -234,16 +234,16 @@
 }
 
 .v2-checkbox[aria-invalid="true"] {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 /* Checkbox label wrapper */
 .v2-checkbox-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-2);
-  font-size: var(--v2-text-sm);
-  color: var(--v2-text);
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
   cursor: pointer;
   user-select: none;
 }
@@ -259,28 +259,28 @@
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid var(--v2-line-strong);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid var(--sq-line-strong);
   border-radius: 50%;
   cursor: pointer;
   position: relative;
-  transition: background-color var(--v2-dur-instant) var(--v2-ease),
-              border-color var(--v2-dur-instant) var(--v2-ease);
+  transition: background-color var(--sq-dur-instant) var(--sq-ease),
+              border-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-radio:hover {
-  background: var(--v2-hover);
-  border-color: var(--v2-text);
+  background: var(--sq-hover);
+  border-color: var(--sq-text);
 }
 
 .v2-radio:focus-visible {
-  outline: 2px solid var(--v2-brand);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 2px;
 }
 
 .v2-radio:checked {
-  background: var(--v2-brand);
-  border-color: var(--v2-brand);
+  background: var(--sq-brand);
+  border-color: var(--sq-brand);
 }
 
 .v2-radio:checked::after {
@@ -290,7 +290,7 @@
   top: 4px;
   width: 6px;
   height: 6px;
-  background: var(--v2-text-on-solid);
+  background: var(--sq-text-on-solid);
   border-radius: 50%;
 }
 
@@ -300,16 +300,16 @@
 }
 
 .v2-radio[aria-invalid="true"] {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 /* Radio label wrapper */
 .v2-radio-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-2);
-  font-size: var(--v2-text-sm);
-  color: var(--v2-text);
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
   cursor: pointer;
   user-select: none;
 }
@@ -323,7 +323,7 @@
 .v2-radio-group {
   display: flex;
   flex-direction: column;
-  gap: var(--v2-space-2);
+  gap: var(--sq-space-2);
 }
 
 /* ---- Switch (checkbox styled as track + dot) ---- */
@@ -332,13 +332,13 @@
   width: 36px;
   height: 20px;
   flex-shrink: 0;
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid var(--v2-line-strong);
-  border-radius: var(--v2-radius-pill);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid var(--sq-line-strong);
+  border-radius: var(--sq-radius-pill);
   cursor: pointer;
   position: relative;
-  transition: background-color var(--v2-dur-fast) var(--v2-ease),
-              border-color var(--v2-dur-fast) var(--v2-ease);
+  transition: background-color var(--sq-dur-fast) var(--sq-ease),
+              border-color var(--sq-dur-fast) var(--sq-ease);
 }
 
 .v2-switch::after {
@@ -348,29 +348,29 @@
   top: 2px;
   width: 14px;
   height: 14px;
-  background: var(--v2-text-strong);
+  background: var(--sq-text-strong);
   border-radius: 50%;
-  transition: transform var(--v2-dur-fast) var(--v2-ease),
-              background-color var(--v2-dur-fast) var(--v2-ease);
+  transition: transform var(--sq-dur-fast) var(--sq-ease),
+              background-color var(--sq-dur-fast) var(--sq-ease);
 }
 
 .v2-switch:hover {
-  background: var(--v2-hover);
-  border-color: var(--v2-text);
+  background: var(--sq-hover);
+  border-color: var(--sq-text);
 }
 
 .v2-switch:focus-visible {
-  outline: 2px solid var(--v2-brand);
+  outline: 2px solid var(--sq-brand);
   outline-offset: 2px;
 }
 
 .v2-switch:checked {
-  background: var(--v2-brand);
-  border-color: var(--v2-brand);
+  background: var(--sq-brand);
+  border-color: var(--sq-brand);
 }
 
 .v2-switch:checked::after {
-  background: var(--v2-text-on-solid);
+  background: var(--sq-text-on-solid);
   transform: translateX(16px);
 }
 
@@ -383,9 +383,9 @@
 .v2-switch-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-2);
-  font-size: var(--v2-text-sm);
-  color: var(--v2-text);
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
   cursor: pointer;
   user-select: none;
 }
@@ -400,19 +400,19 @@
   display: flex;
   align-items: stretch;
   width: 100%;
-  background: var(--v2-inset);
-  border: var(--v2-line-h) solid transparent;
-  border-radius: var(--v2-radius-control);
+  background: var(--sq-inset);
+  border: var(--sq-line-h) solid transparent;
+  border-radius: var(--sq-radius-control);
   overflow: hidden;
-  transition: border-color var(--v2-dur-instant) var(--v2-ease);
+  transition: border-color var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-input-group:focus-within {
-  border-color: var(--v2-brand);
+  border-color: var(--sq-brand);
 }
 
 .v2-input-group--invalid {
-  border-color: var(--v2-status-error);
+  border-color: var(--sq-status-error);
 }
 
 .v2-input-group .v2-input {
@@ -434,17 +434,17 @@
 .v2-input-group__affix {
   display: inline-flex;
   align-items: center;
-  padding: 0 var(--v2-space-3);
-  font-size: var(--v2-text-sm);
-  color: var(--v2-text-subtle);
+  padding: 0 var(--sq-space-3);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-subtle);
   white-space: nowrap;
   flex-shrink: 0;
-  border-left: var(--v2-line-h) solid var(--v2-line);
+  border-left: var(--sq-line-h) solid var(--sq-line);
 }
 
 .v2-input-group__affix:first-child {
   border-left: none;
-  border-right: var(--v2-line-h) solid var(--v2-line);
+  border-right: var(--sq-line-h) solid var(--sq-line);
 }
 
 /* ---- Range slider ---- */
@@ -452,11 +452,11 @@
   appearance: none;
   width: 100%;
   height: 6px;
-  background: var(--v2-track);
-  border-radius: var(--v2-radius-pill);
+  background: var(--sq-track);
+  border-radius: var(--sq-radius-pill);
   outline: none;
   cursor: pointer;
-  transition: opacity var(--v2-dur-instant) var(--v2-ease);
+  transition: opacity var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-range:disabled {
@@ -469,10 +469,10 @@
   appearance: none;
   width: 16px;
   height: 16px;
-  background: var(--v2-brand);
+  background: var(--sq-brand);
   border-radius: 50%;
   cursor: pointer;
-  transition: transform var(--v2-dur-instant) var(--v2-ease);
+  transition: transform var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-range::-webkit-slider-thumb:hover {
@@ -484,7 +484,7 @@
 }
 
 .v2-range:disabled::-webkit-slider-thumb {
-  background: var(--v2-text-subtle);
+  background: var(--sq-text-subtle);
   cursor: not-allowed;
 }
 
@@ -492,11 +492,11 @@
 .v2-range::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: var(--v2-brand);
+  background: var(--sq-brand);
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  transition: transform var(--v2-dur-instant) var(--v2-ease);
+  transition: transform var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-range::-moz-range-thumb:hover {
@@ -508,7 +508,7 @@
 }
 
 .v2-range:disabled::-moz-range-thumb {
-  background: var(--v2-text-subtle);
+  background: var(--sq-text-subtle);
   cursor: not-allowed;
 }
 
@@ -521,7 +521,7 @@
 .v2-range-label {
   display: flex;
   flex-direction: column;
-  gap: var(--v2-space-2);
+  gap: var(--sq-space-2);
   width: 100%;
 }
 
@@ -529,16 +529,16 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: var(--v2-text-sm);
+  font-size: var(--sq-text-sm);
 }
 
 .v2-range-label__name {
-  color: var(--v2-text);
+  color: var(--sq-text);
 }
 
 .v2-range-label__value {
-  color: var(--v2-text-strong);
-  font-weight: var(--v2-fw-medium);
+  color: var(--sq-text-strong);
+  font-weight: var(--sq-fw-medium);
   font-variant-numeric: tabular-nums;
 }
 

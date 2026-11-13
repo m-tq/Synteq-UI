@@ -1,6 +1,6 @@
 /* ==========================================================================
    SYNTEQ UI — 04. BASE RESET, VIEWPORT LOCK & A11Y (base.css)
-   Key V2 rule: body NEVER scrolls. Only in-content regions scroll.
+   Key rule: body NEVER scrolls. Only in-content regions scroll.
    ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -16,17 +16,17 @@ html, body {
 }
 
 body {
-  background-color: var(--v2-canvas);
-  color: var(--v2-text);
-  font-family: var(--v2-font-sans);
-  font-size: var(--v2-text-md);
-  line-height: var(--v2-leading-base);
+  background-color: var(--sq-canvas);
+  color: var(--sq-text);
+  font-family: var(--sq-font-sans);
+  font-size: var(--sq-text-md);
+  line-height: var(--sq-leading-base);
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition:
-    background-color var(--v2-dur-fast) var(--v2-ease),
-    color var(--v2-dur-fast) var(--v2-ease);
+    background-color var(--sq-dur-fast) var(--sq-ease),
+    color var(--sq-dur-fast) var(--sq-ease);
 }
 
 /* Prevent browser scroll restoration or overscroll chaining from moving the shell. */
@@ -38,25 +38,25 @@ body { position: fixed; inset: 0; }
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: var(--v2-line-strong) transparent;
+  scrollbar-color: var(--sq-line-strong) transparent;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
 .v2-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .v2-scroll::-webkit-scrollbar-thumb {
-  background: var(--v2-line-strong);
+  background: var(--sq-line-strong);
   border-radius: 4px;
 }
-.v2-scroll::-webkit-scrollbar-thumb:hover { background: var(--v2-glyph); }
+.v2-scroll::-webkit-scrollbar-thumb:hover { background: var(--sq-glyph); }
 .v2-scroll::-webkit-scrollbar-track { background: transparent; }
 .v2-scroll::-webkit-scrollbar-corner { background: transparent; }
 
 /* Keyboard-first focus ring (never on mouse click) */
 :focus { outline: none; }
 :focus-visible {
-  outline: 2px solid var(--v2-text-strong);
+  outline: 2px solid var(--sq-text-strong);
   outline-offset: 2px;
-  border-radius: var(--v2-radius-micro);
+  border-radius: var(--sq-radius-micro);
 }
 
 /* [hidden] must always win over a component's own display rule.
@@ -73,10 +73,10 @@ button, a, input, select, textarea, [tabindex] {
   background: none;
   text-decoration: none;
   transition:
-    background-color var(--v2-dur-instant) var(--v2-ease),
-    color var(--v2-dur-instant) var(--v2-ease),
-    transform var(--v2-dur-instant) var(--v2-ease),
-    opacity var(--v2-dur-instant) var(--v2-ease);
+    background-color var(--sq-dur-instant) var(--sq-ease),
+    color var(--sq-dur-instant) var(--sq-ease),
+    transform var(--sq-dur-instant) var(--sq-ease),
+    opacity var(--sq-dur-instant) var(--sq-ease);
 }
 
 button { cursor: pointer; }
@@ -88,17 +88,17 @@ button:disabled, [aria-disabled="true"] {
 a { color: inherit; }
 
 /* Typography utility classes */
-.v2-mono { font-family: var(--v2-font-mono); font-variant-numeric: tabular-nums; }
-.v2-t-xs { font-size: var(--v2-text-xs); }
-.v2-t-sm { font-size: var(--v2-text-sm); }
-.v2-t-md { font-size: var(--v2-text-md); }
-.v2-t-lg { font-size: var(--v2-text-lg); }
-.v2-t-xl { font-size: var(--v2-text-xl); }
-.v2-t-2xl { font-size: var(--v2-text-2xl); line-height: var(--v2-leading-tight); }
-.v2-t-3xl { font-size: var(--v2-text-3xl); line-height: var(--v2-leading-tight); }
-.v2-mute { color: var(--v2-text-subtle); }
-.v2-strong { color: var(--v2-text-strong); font-weight: var(--v2-fw-medium); }
-.v2-semibold { font-weight: var(--v2-fw-semibold); }
+.v2-mono { font-family: var(--sq-font-mono); font-variant-numeric: tabular-nums; }
+.v2-t-xs { font-size: var(--sq-text-xs); }
+.v2-t-sm { font-size: var(--sq-text-sm); }
+.v2-t-md { font-size: var(--sq-text-md); }
+.v2-t-lg { font-size: var(--sq-text-lg); }
+.v2-t-xl { font-size: var(--sq-text-xl); }
+.v2-t-2xl { font-size: var(--sq-text-2xl); line-height: var(--sq-leading-tight); }
+.v2-t-3xl { font-size: var(--sq-text-3xl); line-height: var(--sq-leading-tight); }
+.v2-mute { color: var(--sq-text-subtle); }
+.v2-strong { color: var(--sq-text-strong); font-weight: var(--sq-fw-medium); }
+.v2-semibold { font-weight: var(--sq-fw-semibold); }
 
 /* Visually hidden (sr-only) */
 .v2-sr-only {

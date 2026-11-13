@@ -15,7 +15,7 @@
 .v2-sidebar-toggle,
 .v2-theme-toggle,
 .v2-nav__more,
-[data-v2-copy] { position: relative; overflow: hidden; }
+[data-sq-copy] { position: relative; overflow: hidden; }
 
 .v2-btn::after,
 .v2-iconbtn::after,
@@ -23,7 +23,7 @@
 .v2-search::after,
 .v2-sidebar-toggle::after,
 .v2-nav__more::after,
-[data-v2-copy]::after {
+[data-sq-copy]::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -31,7 +31,7 @@
   pointer-events: none;
   opacity: 0;
   background: currentColor;
-  transition: opacity var(--v2-dur-instant) var(--v2-ease);
+  transition: opacity var(--sq-dur-instant) var(--sq-ease);
 }
 
 .v2-btn:active:not(:disabled),
@@ -39,7 +39,7 @@
 .v2-seg__btn:active:not(:disabled),
 .v2-search:active:not(:disabled),
 .v2-sidebar-toggle:active,
-[data-v2-copy]:active {
+[data-sq-copy]:active {
   transform: translateY(1px) scale(0.985);
 }
 
@@ -49,7 +49,7 @@
 .v2-search:active:not(:disabled)::after,
 .v2-sidebar-toggle:active::after,
 .v2-nav__more:active::after,
-[data-v2-copy]:active::after { opacity: .08; }
+[data-sq-copy]:active::after { opacity: .08; }
 
 /* ---- Transient tip (copy confirmation, control feedback) ----
    Anchored above the trigger, auto-dismissed by the runtime. Flat inverted
@@ -57,95 +57,95 @@
 .v2-tip {
   position: fixed;
   z-index: 60;
-  max-width: min(280px, calc(100vw - var(--v2-space-4)));
-  padding: var(--v2-space-1) var(--v2-space-2);
-  border-radius: var(--v2-radius-micro);
-  background: var(--v2-text-strong);
-  color: var(--v2-text-on-accent);
-  font-family: var(--v2-font-sans);
-  font-size: var(--v2-text-xs);
-  font-weight: var(--v2-fw-medium);
+  max-width: min(280px, calc(100vw - var(--sq-space-4)));
+  padding: var(--sq-space-1) var(--sq-space-2);
+  border-radius: var(--sq-radius-micro);
+  background: var(--sq-text-strong);
+  color: var(--sq-text-on-accent);
+  font-family: var(--sq-font-sans);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-fw-medium);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: var(--v2-line-h) solid var(--v2-line-strong);
+  border: var(--sq-line-h) solid var(--sq-line-strong);
   pointer-events: none;
-  animation: v2-fade-up var(--v2-dur-fast) var(--v2-ease) both;
+  animation: v2-fade-up var(--sq-dur-fast) var(--sq-ease) both;
 }
-.v2-tip--info { background: var(--v2-status-info); }
-.v2-tip--ok { background: var(--v2-status-running); }
-.v2-tip--warn { background: var(--v2-status-warning); }
-.v2-tip--err { background: var(--v2-status-error); }
+.v2-tip--info { background: var(--sq-status-info); }
+.v2-tip--ok { background: var(--sq-status-running); }
+.v2-tip--warn { background: var(--sq-status-warning); }
+.v2-tip--err { background: var(--sq-status-error); }
 /* Solid status fills stay light-to-mid tone in both themes, so the ink must
    stay dark in both themes too (white-on-amber failed contrast in light mode). */
 .v2-tip--info,
 .v2-tip--ok,
 .v2-tip--warn,
-.v2-tip--err { color: var(--v2-text-on-solid); }
+.v2-tip--err { color: var(--sq-text-on-solid); }
 /* The error fill is the one status colour that is dark enough on the light
    theme to need the theme's inverted ink instead. */
-.v2-tip--err { color: var(--v2-text-on-accent); }
-.v2-tip.is-out { opacity: 0; transition: opacity var(--v2-dur-fast) var(--v2-ease); }
+.v2-tip--err { color: var(--sq-text-on-accent); }
+.v2-tip.is-out { opacity: 0; transition: opacity var(--sq-dur-fast) var(--sq-ease); }
 
 /* ---- Button base ---- */
 .v2-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--v2-space-2);
+  gap: var(--sq-space-2);
   height: 32px;
-  padding: 0 var(--v2-space-3);
-  border-radius: var(--v2-radius-control);
-  background: var(--v2-inset);
-  color: var(--v2-text);
-  font-size: var(--v2-text-sm);
-  font-weight: var(--v2-fw-medium);
+  padding: 0 var(--sq-space-3);
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-inset);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-fw-medium);
   line-height: 1;
   white-space: nowrap;
 }
-.v2-btn:hover:not(:disabled) { background: var(--v2-hover); color: var(--v2-text-strong); }
+.v2-btn:hover:not(:disabled) { background: var(--sq-hover); color: var(--sq-text-strong); }
 
 /* Ghost (text-only) button */
-.v2-btn--ghost { background: transparent; color: var(--v2-text-subtle); }
-.v2-btn--ghost:hover:not(:disabled) { background: var(--v2-hover); color: var(--v2-text-strong); }
+.v2-btn--ghost { background: transparent; color: var(--sq-text-subtle); }
+.v2-btn--ghost:hover:not(:disabled) { background: var(--sq-hover); color: var(--sq-text-strong); }
 
 /* Primary (high-emphasis inverted surface) */
 .v2-btn--primary {
-  background: var(--v2-text-strong);
-  color: var(--v2-text-on-accent);
+  background: var(--sq-text-strong);
+  color: var(--sq-text-on-accent);
 }
-.v2-btn--primary:hover:not(:disabled) { opacity: 0.9; background: var(--v2-text-strong); color: var(--v2-text-on-accent); }
+.v2-btn--primary:hover:not(:disabled) { opacity: 0.9; background: var(--sq-text-strong); color: var(--sq-text-on-accent); }
 
 /* Brand accent button — dark ink in both themes so the green fill clears AA */
 .v2-btn--brand {
-  background: var(--v2-brand);
-  color: var(--v2-text-on-solid);
+  background: var(--sq-brand);
+  color: var(--sq-text-on-solid);
 }
 .v2-btn--brand:hover:not(:disabled) { opacity: 0.92; }
 
 /* Danger (tonal) */
 .v2-btn--danger {
-  background: color-mix(in srgb, var(--v2-status-error) 16%, transparent);
-  color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong));
+  background: color-mix(in srgb, var(--sq-status-error) 16%, transparent);
+  color: color-mix(in srgb, var(--sq-status-error) var(--sq-status-ink-mix), var(--sq-text-strong));
 }
-.v2-btn--danger:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-error) 26%, transparent); }
+.v2-btn--danger:hover:not(:disabled) { background: color-mix(in srgb, var(--sq-status-error) 26%, transparent); }
 
 /* Info (tonal) — neutral, non-destructive notice action */
 .v2-btn--info {
-  background: color-mix(in srgb, var(--v2-status-info) 16%, transparent);
-  color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong));
+  background: color-mix(in srgb, var(--sq-status-info) 16%, transparent);
+  color: color-mix(in srgb, var(--sq-status-info) var(--sq-status-ink-mix), var(--sq-text-strong));
 }
-.v2-btn--info:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-info) 26%, transparent); }
+.v2-btn--info:hover:not(:disabled) { background: color-mix(in srgb, var(--sq-status-info) 26%, transparent); }
 
 /* Warning (tonal) — "proceed with care" action. `--warning` is an alias. */
 .v2-btn--warn,
 .v2-btn--warning {
-  background: color-mix(in srgb, var(--v2-status-warning) 16%, transparent);
-  color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong));
+  background: color-mix(in srgb, var(--sq-status-warning) 16%, transparent);
+  color: color-mix(in srgb, var(--sq-status-warning) var(--sq-status-ink-mix), var(--sq-text-strong));
 }
 .v2-btn--warn:hover:not(:disabled),
-.v2-btn--warning:hover:not(:disabled) { background: color-mix(in srgb, var(--v2-status-warning) 26%, transparent); }
+.v2-btn--warning:hover:not(:disabled) { background: color-mix(in srgb, var(--sq-status-warning) 26%, transparent); }
 
 /* Icon-only */
 .v2-btn--icon { width: 32px; padding: 0; }
@@ -153,37 +153,37 @@
 /* Clipboard feedback — the runtime adds .v2-copy--ok for 1.8 s after a copy */
 .v2-copy--ok,
 .v2-copy--ok[aria-label] {
-  color: var(--v2-status-running) !important;
-  background: color-mix(in srgb, var(--v2-status-running) 14%, transparent) !important;
+  color: var(--sq-status-running) !important;
+  background: color-mix(in srgb, var(--sq-status-running) 14%, transparent) !important;
 }
-.v2-copy--ok .v2-icon { color: var(--v2-status-running); }
+.v2-copy--ok .v2-icon { color: var(--sq-status-running); }
 
 /* Full-width (action stack) */
 .v2-btn--block { width: 100%; }
-.v2-btn__stack { display: flex; flex-direction: column; gap: var(--v2-space-2); }
+.v2-btn__stack { display: flex; flex-direction: column; gap: var(--sq-space-2); }
 
 /* ---- Segmented bar (Console | Power | Reboot) ---- */
 .v2-seg {
   display: inline-flex;
   align-items: stretch;
-  background: var(--v2-inset);
-  border-radius: var(--v2-radius-control);
+  background: var(--sq-inset);
+  border-radius: var(--sq-radius-control);
   overflow: hidden;
 }
 .v2-seg__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--v2-space-2);
-  padding: 0 var(--v2-space-3);
+  gap: var(--sq-space-2);
+  padding: 0 var(--sq-space-3);
   height: 32px;
-  color: var(--v2-text);
-  font-size: var(--v2-text-sm);
-  border-right: var(--v2-line-h) solid var(--v2-line);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+  border-right: var(--sq-line-h) solid var(--sq-line);
 }
 .v2-seg__btn:last-child { border-right: none; }
-.v2-seg__btn:hover:not(:disabled) { background: var(--v2-hover); color: var(--v2-text-strong); }
-.v2-seg__btn--active { background: var(--v2-hover); color: var(--v2-text-strong); font-weight: var(--v2-fw-medium); }
+.v2-seg__btn:hover:not(:disabled) { background: var(--sq-hover); color: var(--sq-text-strong); }
+.v2-seg__btn--active { background: var(--sq-hover); color: var(--sq-text-strong); font-weight: var(--sq-fw-medium); }
 .v2-seg__btn--icon { padding: 0 9px; }
 
 /* ---- Text input ----
@@ -199,19 +199,19 @@
 .v2-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-1);
-  padding: 1px var(--v2-space-2);
-  background: var(--v2-inset);
-  color: var(--v2-text);
-  border-radius: var(--v2-radius-micro);
-  font-size: var(--v2-text-xs);
+  gap: var(--sq-space-1);
+  padding: 1px var(--sq-space-2);
+  background: var(--sq-inset);
+  color: var(--sq-text);
+  border-radius: var(--sq-radius-micro);
+  font-size: var(--sq-text-xs);
   line-height: 1.5;
 }
-.v2-badge--brand { color: color-mix(in srgb, var(--v2-brand) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-brand) 14%, transparent); }
-.v2-badge--info { color: color-mix(in srgb, var(--v2-status-info) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-info) 14%, transparent); }
-.v2-badge--ok { color: color-mix(in srgb, var(--v2-status-running) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-running) 14%, transparent); }
-.v2-badge--warn { color: color-mix(in srgb, var(--v2-status-warning) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-warning) 16%, transparent); }
-.v2-badge--err { color: color-mix(in srgb, var(--v2-status-error) var(--v2-status-ink-mix), var(--v2-text-strong)); background: color-mix(in srgb, var(--v2-status-error) 14%, transparent); }
+.v2-badge--brand { color: color-mix(in srgb, var(--sq-brand) var(--sq-status-ink-mix), var(--sq-text-strong)); background: color-mix(in srgb, var(--sq-brand) 14%, transparent); }
+.v2-badge--info { color: color-mix(in srgb, var(--sq-status-info) var(--sq-status-ink-mix), var(--sq-text-strong)); background: color-mix(in srgb, var(--sq-status-info) 14%, transparent); }
+.v2-badge--ok { color: color-mix(in srgb, var(--sq-status-running) var(--sq-status-ink-mix), var(--sq-text-strong)); background: color-mix(in srgb, var(--sq-status-running) 14%, transparent); }
+.v2-badge--warn { color: color-mix(in srgb, var(--sq-status-warning) var(--sq-status-ink-mix), var(--sq-text-strong)); background: color-mix(in srgb, var(--sq-status-warning) 16%, transparent); }
+.v2-badge--err { color: color-mix(in srgb, var(--sq-status-error) var(--sq-status-ink-mix), var(--sq-text-strong)); background: color-mix(in srgb, var(--sq-status-error) 14%, transparent); }
 
 /* Keyboard shortcut pill */
 .v2-kbd {
@@ -220,26 +220,26 @@
   justify-content: center;
   min-width: 18px;
   height: 18px;
-  padding: 0 var(--v2-space-1);
-  background: var(--v2-inset);
-  color: var(--v2-text-subtle);
-  border-radius: var(--v2-radius-micro);
-  font-family: var(--v2-font-mono);
-  font-size: var(--v2-text-xs);
+  padding: 0 var(--sq-space-1);
+  background: var(--sq-inset);
+  color: var(--sq-text-subtle);
+  border-radius: var(--sq-radius-micro);
+  font-family: var(--sq-font-mono);
+  font-size: var(--sq-text-xs);
   line-height: 1;
 }
 
 /* Avatar monogram (micro radius, brand tint) */
 .v2-avatar {
   width: 26px; height: 26px;
-  border-radius: var(--v2-radius-micro);
-  background: color-mix(in srgb, var(--v2-brand) 18%, transparent);
-  color: var(--v2-brand);
+  border-radius: var(--sq-radius-micro);
+  background: color-mix(in srgb, var(--sq-brand) 18%, transparent);
+  color: var(--sq-brand);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--v2-font-mono);
-  font-size: var(--v2-text-xs);
-  font-weight: var(--v2-fw-bold);
+  font-family: var(--sq-font-mono);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-fw-bold);
   flex-shrink: 0;
 }

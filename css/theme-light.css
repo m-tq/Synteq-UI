@@ -7,33 +7,33 @@
   color-scheme: light;
 
   /* Text — high-contrast daylight hierarchy (WCAG AA verified) */
-  --v2-text: #2f3434;        /* body / labels */
-  --v2-text-strong: #0d1010; /* high-emphasis values, hostnames, active */
-  --v2-text-subtle: #666e6e; /* metadata, units, timestamps (AA on inset/canvas) */
-  --v2-text-on-accent: #ffffff;
+  --sq-text: #2f3434;        /* body / labels */
+  --sq-text-strong: #0d1010; /* high-emphasis values, hostnames, active */
+  --sq-text-subtle: #666e6e; /* metadata, units, timestamps (AA on inset/canvas) */
+  --sq-text-on-accent: #ffffff;
   /* Same dark ink as the dark theme — see theme-dark.css for the rationale. */
-  --v2-text-on-solid: #08110e;
+  --sq-text-on-solid: #08110e;
 
   /* Flat surfaces */
-  --v2-canvas: #f4f6f6;   /* main app background */
-  --v2-sidebar: #ffffff;   /* navigation background */
-  --v2-hover: #e8ecec;    /* interactive hover/active surface */
-  --v2-inset: #eef1f1;    /* inset rows / inputs / gauge track */
+  --sq-canvas: #f4f6f6;   /* main app background */
+  --sq-sidebar: #ffffff;   /* navigation background */
+  --sq-hover: #e8ecec;    /* interactive hover/active surface */
+  --sq-inset: #eef1f1;    /* inset rows / inputs / gauge track */
 
   /* Line separators */
-  --v2-line: #e1e5e5;        /* default hairline */
-  --v2-line-strong: #cfd4d4; /* emphasized separator */
-  --v2-line-accent: #b9d9cf; /* accent-tinted separator */
+  --sq-line: #e1e5e5;        /* default hairline */
+  --sq-line-strong: #cfd4d4; /* emphasized separator */
+  --sq-line-accent: #b9d9cf; /* accent-tinted separator */
 
   /* Semantic accents (tuned for light contrast) */
-  --v2-brand: #059669;
-  --v2-status-info: #0284c7;
-  --v2-status-running: #16a34a;
-  --v2-status-warning: #d97706;
-  --v2-status-error: #dc2626;
-  --v2-tel-in: #16a34a;
-  --v2-tel-out: #e11d48;
-  --v2-track: #e2e6e6;
+  --sq-brand: #059669;
+  --sq-status-info: #0284c7;
+  --sq-status-running: #16a34a;
+  --sq-status-warning: #d97706;
+  --sq-status-error: #dc2626;
+  --sq-tel-in: #16a34a;
+  --sq-tel-out: #e11d48;
+  --sq-track: #e2e6e6;
 
-  --v2-glyph: #5a6363;
+  --sq-glyph: #5a6363;
 }

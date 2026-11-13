@@ -8,22 +8,22 @@
  */
 
 /* ---- Density Control ---- */
-[data-v2-density="compact"] {
-  --v2-space-1: 3px;
-  --v2-space-2: 6px;
-  --v2-space-3: 9px;
-  --v2-space-4: 12px;
-  --v2-space-5: 16px;
-  --v2-space-6: 20px;
+[data-sq-density="compact"] {
+  --sq-space-1: 3px;
+  --sq-space-2: 6px;
+  --sq-space-3: 9px;
+  --sq-space-4: 12px;
+  --sq-space-5: 16px;
+  --sq-space-6: 20px;
 }
 
-[data-v2-density="comfortable"] {
-  --v2-space-1: 6px;
-  --v2-space-2: 10px;
-  --v2-space-3: 14px;
-  --v2-space-4: 18px;
-  --v2-space-5: 24px;
-  --v2-space-6: 28px;
+[data-sq-density="comfortable"] {
+  --sq-space-1: 6px;
+  --sq-space-2: 10px;
+  --sq-space-3: 14px;
+  --sq-space-4: 18px;
+  --sq-space-5: 24px;
+  --sq-space-6: 28px;
 }
 
 /* ---- Forced Colors (Windows High Contrast) ---- */

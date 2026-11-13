@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Synteq UI — Dashboard</title>
 
-  <!-- Fonts + styles (fully offline — fonts served from V2/fonts/) -->
+  <!-- Fonts + styles (fully offline — fonts served from fonts/) -->
   <link rel="stylesheet" href="../css/synteq-ui.css" />
 
   <style>
@@ -18,26 +18,26 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: var(--v2-space-3);
+      gap: var(--sq-space-3);
       flex-wrap: wrap;
     }
     .dash-hero__left {
       display: flex;
       align-items: baseline;
-      gap: var(--v2-space-3);
+      gap: var(--sq-space-3);
       flex-wrap: wrap;
     }
     .dash-hero__hostname {
-      font-size: var(--v2-text-3xl);
-      font-weight: var(--v2-fw-semibold);
-      color: var(--v2-text-strong);
+      font-size: var(--sq-text-3xl);
+      font-weight: var(--sq-fw-semibold);
+      color: var(--sq-text-strong);
       letter-spacing: -0.025em;
       line-height: 1.1;
     }
     .dash-hero__actions {
       display: flex;
       align-items: center;
-      gap: var(--v2-space-2);
+      gap: var(--sq-space-2);
       flex-wrap: wrap;
     }
 
@@ -45,14 +45,14 @@
     .gauge-list {
       display: flex;
       flex-direction: column;
-      gap: var(--v2-space-5);
+      gap: var(--sq-space-5);
     }
 
     /* Two-column layout within a section */
     .dash-pair {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
-      gap: var(--v2-space-6);
+      gap: var(--sq-space-6);
       align-items: start;
     }
     @media (max-width: 760px) { .dash-pair { grid-template-columns: 1fr; } }
@@ -61,46 +61,46 @@
     .ip-row {
       display: inline-flex;
       align-items: center;
-      gap: var(--v2-space-2);
-      font-family: var(--v2-font-mono);
-      font-size: var(--v2-text-sm);
-      color: var(--v2-text-strong);
+      gap: var(--sq-space-2);
+      font-family: var(--sq-font-mono);
+      font-size: var(--sq-text-sm);
+      color: var(--sq-text-strong);
     }
 
     /* Event log */
     .log-row {
       display: flex;
       align-items: baseline;
-      gap: var(--v2-space-3);
-      padding: var(--v2-space-3) 0;
-      font-size: var(--v2-text-sm);
+      gap: var(--sq-space-3);
+      padding: var(--sq-space-3) 0;
+      font-size: var(--sq-text-sm);
     }
-    .log-ts { font-family: var(--v2-font-mono); color: var(--v2-text-subtle); min-width: 58px; font-size: var(--v2-text-xs); flex-shrink: 0; }
-    .log-msg { color: var(--v2-text); flex: 1; min-width: 0; }
+    .log-ts { font-family: var(--sq-font-mono); color: var(--sq-text-subtle); min-width: 58px; font-size: var(--sq-text-xs); flex-shrink: 0; }
+    .log-msg { color: var(--sq-text); flex: 1; min-width: 0; }
 
     /* Pricing */
-    .price-row { display: flex; align-items: baseline; gap: var(--v2-space-2); }
-    .price-row__val { font-size: var(--v2-text-2xl); font-weight: var(--v2-fw-semibold); color: var(--v2-text-strong); letter-spacing: -0.02em; }
-    .price-row__per { font-size: var(--v2-text-sm); color: var(--v2-text-subtle); }
+    .price-row { display: flex; align-items: baseline; gap: var(--sq-space-2); }
+    .price-row__val { font-size: var(--sq-text-2xl); font-weight: var(--sq-fw-semibold); color: var(--sq-text-strong); letter-spacing: -0.02em; }
+    .price-row__per { font-size: var(--sq-text-sm); color: var(--sq-text-subtle); }
 
     /* Uptime bar */
     .uptime-bar { display: flex; width: 100%; height: 6px; border-radius: 999px; overflow: hidden; gap: 2px; }
     .uptime-bar__seg { height: 100%; border-radius: 999px; }
 
     /* User pill in footer */
-    .v2-user { display: flex; align-items: center; gap: var(--v2-space-2); min-width: 0; text-decoration: none; }
+    .v2-user { display: flex; align-items: center; gap: var(--sq-space-2); min-width: 0; text-decoration: none; }
     .v2-user__info { display: flex; flex-direction: column; min-width: 0; }
-    .v2-user__name { font-size: var(--v2-text-sm); color: var(--v2-text-strong); font-weight: var(--v2-fw-medium); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .v2-user__email { font-size: var(--v2-text-xs); color: var(--v2-text-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .v2-user__name { font-size: var(--sq-text-sm); color: var(--sq-text-strong); font-weight: var(--sq-fw-medium); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .v2-user__email { font-size: var(--sq-text-xs); color: var(--sq-text-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Copy feedback */
-    .v2-copy--ok { color: var(--v2-status-running) !important; }
+    .v2-copy--ok { color: var(--sq-status-running) !important; }
   </style>
 </head>
 <body>
 
 <!-- =====================================================================
-     V2 APP SHELL — viewport-locked grid (no page scroll)
+     APP SHELL — viewport-locked grid (no page scroll)
      ===================================================================== -->
 <div class="v2-app" id="app">
 
@@ -172,7 +172,7 @@
        ================================================================ -->
   <header class="v2-topbar" role="banner">
     <!-- Sidebar toggle (hamburger / X) -->
-    <button class="v2-sidebar-toggle" data-v2-sidebar-toggle aria-label="Toggle navigation" aria-expanded="true" aria-controls="sidebar">
+    <button class="v2-sidebar-toggle" data-sq-sidebar-toggle aria-label="Toggle navigation" aria-expanded="true" aria-controls="sidebar">
       <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       <svg class="v2-icon v2-icon--18 icon-close" viewBox="0 0 24 24" aria-hidden="true" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -194,14 +194,14 @@
 
     <div class="v2-topbar__right">
       <!-- Search -->
-      <button class="v2-search" data-v2-search-trigger aria-label="Search or run a command (⌘K)">
+      <button class="v2-search" data-sq-search-trigger aria-label="Search or run a command (⌘K)">
         <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span class="v2-search__text">Search…</span>
         <kbd class="v2-kbd">⌘K</kbd>
       </button>
 
       <!-- Theme toggle -->
-      <button class="v2-iconbtn v2-theme-toggle" data-v2-toggle-theme aria-label="Toggle theme">
+      <button class="v2-iconbtn v2-theme-toggle" data-sq-toggle-theme aria-label="Toggle theme">
         <svg class="v2-icon v2-icon--16 v2-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="v2-icon v2-icon--16 v2-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
@@ -280,11 +280,11 @@
         <div class="v2-kv" style="max-width:480px;">
           <div class="v2-kv__row">
             <span class="v2-kv__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> IPv4</span>
-            <span class="v2-kv__value"><span class="ip-row">185.220.101.42 <button class="v2-iconbtn" style="width:22px;height:22px;" data-v2-copy="185.220.101.42" aria-label="Copy IPv4"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></span>
+            <span class="v2-kv__value"><span class="ip-row">185.220.101.42 <button class="v2-iconbtn" style="width:22px;height:22px;" data-sq-copy="185.220.101.42" aria-label="Copy IPv4"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></span>
           </div>
           <div class="v2-kv__row">
             <span class="v2-kv__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> IPv6</span>
-            <span class="v2-kv__value"><span class="ip-row">2a0b:f4c2::1 <button class="v2-iconbtn" style="width:22px;height:22px;" data-v2-copy="2a0b:f4c2::1" aria-label="Copy IPv6"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></span>
+            <span class="v2-kv__value"><span class="ip-row">2a0b:f4c2::1 <button class="v2-iconbtn" style="width:22px;height:22px;" data-sq-copy="2a0b:f4c2::1" aria-label="Copy IPv6"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></span>
           </div>
           <div class="v2-kv__row">
             <span class="v2-kv__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> OS</span>
@@ -311,8 +311,8 @@
 
         <div class="dash-pair">
           <!-- Gauges -->
-          <div class="gauge-list" data-v2-stagger>
-            <div class="v2-gauge" data-v2-gauge="34" role="progressbar" aria-label="CPU usage" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
+          <div class="gauge-list" data-sq-stagger>
+            <div class="v2-gauge" data-sq-gauge="34" role="progressbar" aria-label="CPU usage" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
               <div class="v2-gauge__head">
                 <span class="v2-gauge__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg> CPU</span>
                 <span class="v2-gauge__value">34<span class="v2-gauge__max"> / 100%</span></span>
@@ -320,7 +320,7 @@
               <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
             </div>
 
-            <div class="v2-gauge" data-v2-gauge="81" role="progressbar" aria-label="Memory usage" aria-valuenow="81" aria-valuemin="0" aria-valuemax="100">
+            <div class="v2-gauge" data-sq-gauge="81" role="progressbar" aria-label="Memory usage" aria-valuenow="81" aria-valuemin="0" aria-valuemax="100">
               <div class="v2-gauge__head">
                 <span class="v2-gauge__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><line x1="8" y1="12" x2="8.01" y2="12"/><line x1="12" y1="12" x2="12.01" y2="12"/><line x1="16" y1="12" x2="16.01" y2="12"/></svg> Memory</span>
                 <span class="v2-gauge__value">6.5<span class="v2-gauge__max"> / 8 GB</span></span>
@@ -328,7 +328,7 @@
               <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
             </div>
 
-            <div class="v2-gauge" data-v2-gauge="57" role="progressbar" aria-label="Disk usage" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100">
+            <div class="v2-gauge" data-sq-gauge="57" role="progressbar" aria-label="Disk usage" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100">
               <div class="v2-gauge__head">
                 <span class="v2-gauge__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v4c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 9v4c0 1.66 4.03 3 9 3s9-1.34 9-3V9"/></svg> Disk</span>
                 <span class="v2-gauge__value">91.2<span class="v2-gauge__max"> / 160 GB</span></span>
@@ -336,7 +336,7 @@
               <div class="v2-gauge__track"><div class="v2-gauge__fill"></div></div>
             </div>
 
-            <div class="v2-gauge" data-v2-gauge="18" role="progressbar" aria-label="Bandwidth usage" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">
+            <div class="v2-gauge" data-sq-gauge="18" role="progressbar" aria-label="Bandwidth usage" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">
               <div class="v2-gauge__head">
                 <span class="v2-gauge__label"><svg class="v2-icon v2-icon--14 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Bandwidth</span>
                 <span class="v2-gauge__value">0.72<span class="v2-gauge__max"> / 4 TB</span></span>
@@ -346,7 +346,7 @@
           </div>
 
           <!-- CPU Sparkline -->
-          <div style="display:flex;flex-direction:column;gap:var(--v2-space-2);">
+          <div style="display:flex;flex-direction:column;gap:var(--sq-space-2);">
             <span class="v2-t-xs v2-mute" style="text-transform:uppercase;letter-spacing:.06em;">CPU — 30 min</span>
             <svg class="v2-spark" id="cpu-spark" viewBox="0 0 200 40" preserveAspectRatio="none" role="img" aria-label="CPU usage over 30 minutes"></svg>
             <div class="v2-legend">
@@ -388,7 +388,7 @@
           </div>
         </div>
 
-        <div class="v2-bars" id="net-bars" role="img" aria-label="Network I/O bar chart" style="--v2-bars-cols:24;"></div>
+        <div class="v2-bars" id="net-bars" role="img" aria-label="Network I/O bar chart" style="--sq-bars-cols:24;"></div>
         <div style="display:flex;justify-content:space-between;">
           <span class="v2-t-xs v2-mute">24 min ago</span>
           <span class="v2-t-xs v2-mute">now</span>
@@ -410,27 +410,27 @@
           <!-- KV -->
           <div class="v2-kv">
             <div class="v2-kv__row"><span class="v2-kv__label">Hostname</span><span class="v2-kv__value v2-strong v2-mono">octra</span></div>
-            <div class="v2-kv__row"><span class="v2-kv__label">Instance ID</span><span class="v2-kv__value v2-mono" style="font-size:var(--v2-text-xs);color:var(--v2-text-subtle);">01a15e7e-4c64-7293-ad4f</span></div>
+            <div class="v2-kv__row"><span class="v2-kv__label">Instance ID</span><span class="v2-kv__value v2-mono" style="font-size:var(--sq-text-xs);color:var(--sq-text-subtle);">01a15e7e-4c64-7293-ad4f</span></div>
             <div class="v2-kv__row"><span class="v2-kv__label">Plan</span><span class="v2-kv__value">Shared VPS · SSD-4</span></div>
-            <div class="v2-kv__row"><span class="v2-kv__label">Kernel</span><span class="v2-kv__value v2-mono" style="font-size:var(--v2-text-xs);color:var(--v2-text-subtle);">6.8.0-45-generic</span></div>
+            <div class="v2-kv__row"><span class="v2-kv__label">Kernel</span><span class="v2-kv__value v2-mono" style="font-size:var(--sq-text-xs);color:var(--sq-text-subtle);">6.8.0-45-generic</span></div>
             <div class="v2-kv__row"><span class="v2-kv__label">Created</span><span class="v2-kv__value">14 Jan 2025</span></div>
             <div class="v2-kv__row"><span class="v2-kv__label">Uptime</span><span class="v2-kv__value"><span class="v2-badge v2-badge--ok">99.97%</span></span></div>
           </div>
 
           <!-- Pricing + actions -->
-          <div style="display:flex;flex-direction:column;gap:var(--v2-space-4);">
+          <div style="display:flex;flex-direction:column;gap:var(--sq-space-4);">
             <span class="v2-t-xs v2-mute">Monthly cost</span>
             <div class="price-row">
               <span class="price-row__val">$15.70</span>
               <span class="price-row__per">/month</span>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:var(--v2-space-2);">
+            <div style="display:flex;flex-direction:column;gap:var(--sq-space-2);">
               <span class="v2-t-xs v2-mute">Uptime — last 90 days</span>
               <div class="uptime-bar" role="img" aria-label="Uptime 99.97%">
-                <div class="uptime-bar__seg" style="flex:1;background:var(--v2-status-running);opacity:.7;"></div>
-                <div class="uptime-bar__seg" style="width:4px;background:var(--v2-status-warning);"></div>
-                <div class="uptime-bar__seg" style="flex:1;background:var(--v2-status-running);opacity:.7;"></div>
+                <div class="uptime-bar__seg" style="flex:1;background:var(--sq-status-running);opacity:.7;"></div>
+                <div class="uptime-bar__seg" style="width:4px;background:var(--sq-status-warning);"></div>
+                <div class="uptime-bar__seg" style="flex:1;background:var(--sq-status-running);opacity:.7;"></div>
               </div>
               <div style="display:flex;justify-content:space-between;">
                 <span class="v2-t-xs v2-mute">90d ago</span>
@@ -438,7 +438,7 @@
               </div>
             </div>
 
-            <div class="v2-btn__stack" style="padding-top:var(--v2-space-2);">
+            <div class="v2-btn__stack" style="padding-top:var(--sq-space-2);">
               <button class="v2-btn v2-btn--block"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Resize VPS</button>
               <button class="v2-btn v2-btn--block v2-btn--ghost"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Switch to dedicated cores</button>
               <button class="v2-btn v2-btn--danger v2-btn--block"><svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg> Destroy instance</button>
@@ -469,7 +469,7 @@
 
       </div><!-- /section 5 -->
 
-      <div style="height:var(--v2-space-6);" aria-hidden="true"></div>
+      <div style="height:var(--sq-space-6);" aria-hidden="true"></div>
     </div><!-- /.v2-content -->
   </main>
 
@@ -478,10 +478,10 @@
 <dialog class="v2-dialog" id="command-dialog" aria-labelledby="command-title">
   <form method="dialog" class="v2-command">
     <div class="v2-section__head"><strong id="command-title">Quick actions</strong><button class="v2-btn v2-btn--icon" value="cancel" aria-label="Close">×</button></div>
-    <input class="v2-input" data-v2-search-input placeholder="Search actions..." aria-label="Search actions" />
-    <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="#resources">Jump to resources</button>
-    <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="Restart instance">Restart instance</button>
-    <button class="v2-btn v2-btn--ghost" type="button" data-v2-command="Open console">Open console</button>
+    <input class="v2-input" data-sq-search-input placeholder="Search actions..." aria-label="Search actions" />
+    <button class="v2-btn v2-btn--ghost" type="button" data-sq-command="#resources">Jump to resources</button>
+    <button class="v2-btn v2-btn--ghost" type="button" data-sq-command="Restart instance">Restart instance</button>
+    <button class="v2-btn v2-btn--ghost" type="button" data-sq-command="Open console">Open console</button>
   </form>
 </dialog>
 <script src="../js/synteq-ui.js"></script>
@@ -513,7 +513,7 @@
 
   /* Show CPU gauge animation after 2s */
   setTimeout(function () {
-    var fill = document.querySelector('[data-v2-gauge="34"] .v2-gauge__fill');
+    var fill = document.querySelector('[data-sq-gauge="34"] .v2-gauge__fill');
     if (fill) SynteqUI.renderGauge(fill, 47);
   }, 2000);
 })();

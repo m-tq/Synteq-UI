@@ -19,7 +19,7 @@
  *    motion aware) for "replay" demos and success feedback
  *  - Nav scroll + scroll-spy (BoundingClientRect-based, works inside
  *    any scrollable .v2-content container)
- *  - Clipboard copy buttons [data-v2-copy]
+ *  - Clipboard copy buttons [data-sq-copy]
  */
 (function (global) {
   'use strict';
@@ -65,7 +65,7 @@
      Usage:  renderGauge(el, 72.5)                  // thresholds
              renderGauge(el, 100, { kind:'brand' }) // quorum-style
              renderGauge(el, 42, { kind:'neutral' })// no state colour
-             or set data-v2-gauge="72.5" and call initGauges()
+             or set data-sq-gauge="72.5" and call initGauges()
      ====================================================== */
   function renderGauge(fillEl, pct, opts) {
     if (!fillEl) return;
@@ -90,10 +90,10 @@
   }
 
   function initGauges() {
-    $$('[data-v2-gauge]').forEach(function (track) {
+    $$('[data-sq-gauge]').forEach(function (track) {
       const fill = track.querySelector('.v2-gauge__fill');
       if (!fill) return;
-      const pct = parseFloat(track.getAttribute('data-v2-gauge')) || 0;
+      const pct = parseFloat(track.getAttribute('data-sq-gauge')) || 0;
       renderGauge(fill, pct);
     });
   }
@@ -117,10 +117,10 @@
     var total = padCols + samples.length;
 
     stageEl.innerHTML = '';
-    stageEl.style.setProperty('--v2-bars-cols', Math.max(1, total));
+    stageEl.style.setProperty('--sq-bars-cols', Math.max(1, total));
     stageEl.classList.toggle('is-empty', samples.length === 0);
-    if (samples.length === 0) stageEl.setAttribute('data-v2-bars-empty', 'true');
-    else stageEl.removeAttribute('data-v2-bars-empty');
+    if (samples.length === 0) stageEl.setAttribute('data-sq-bars-empty', 'true');
+    else stageEl.removeAttribute('data-sq-bars-empty');
 
     // Leading empty columns keep the chart geometry stable while data fills in
     for (var p = 0; p < padCols; p++) {
@@ -168,11 +168,11 @@
       // Not enough samples yet — clear the previous path and publish an empty
       // state so consumers can render a placeholder instead of stale data.
       while (sparkEl.firstChild) sparkEl.removeChild(sparkEl.firstChild);
-      sparkEl.__v2SparkValues = [];
-      sparkEl.setAttribute('data-v2-spark-empty', 'true');
+      sparkEl.__sqSparkValues = [];
+      sparkEl.setAttribute('data-sq-spark-empty', 'true');
       return;
     }
-    sparkEl.removeAttribute('data-v2-spark-empty');
+    sparkEl.removeAttribute('data-sq-spark-empty');
     // Clear previous
     while (sparkEl.firstChild) sparkEl.removeChild(sparkEl.firstChild);
 
@@ -185,7 +185,7 @@
     if (!vb || !vb.width) sparkEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
 
     // Remember the series so the sparkline can be redrawn on resize
-    sparkEl.__v2SparkValues = values.slice();
+    sparkEl.__sqSparkValues = values.slice();
 
     // Pad keeps the 1.5px stroke and the 2.5px end dot inside the viewBox
     const pad = 4;
@@ -224,19 +224,19 @@
     sparkEl.appendChild(dot);
   }
 
-  /* Draws every .v2-spark from its remembered series (or data-v2-spark="1,2,3")
+  /* Draws every .v2-spark from its remembered series (or data-sq-spark="1,2,3")
      and redraws them once the viewport is resized. */
   function initSparklines() {
     $$('.v2-spark').forEach(function (el) {
-      if (!el.__v2SparkValues) {
-        var raw = el.getAttribute('data-v2-spark');
+      if (!el.__sqSparkValues) {
+        var raw = el.getAttribute('data-sq-spark');
         if (raw) {
-          el.__v2SparkValues = raw.split(',')
+          el.__sqSparkValues = raw.split(',')
             .map(function (n) { return parseFloat(n); })
             .filter(function (n) { return !isNaN(n); });
         }
       }
-      if (el.__v2SparkValues) renderSparkline(el, el.__v2SparkValues);
+      if (el.__sqSparkValues) renderSparkline(el, el.__sqSparkValues);
     });
 
     if (initSparklines.bound) return;
@@ -246,7 +246,7 @@
       clearTimeout(timer);
       timer = setTimeout(function () {
         $$('.v2-spark').forEach(function (el) {
-          if (el.__v2SparkValues) renderSparkline(el, el.__v2SparkValues);
+          if (el.__sqSparkValues) renderSparkline(el, el.__sqSparkValues);
         });
       }, 120);
     });
@@ -256,7 +256,7 @@
     var app = document.getElementById('app') || $('.v2-app');
     if (!app) return;
     app.classList.remove('nav-collapsed');
-    $$('[data-v2-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'true'); });
+    $$('[data-sq-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'true'); });
     try { localStorage.setItem('sq-sidebar', 'open'); } catch (_) {}
   }
 
@@ -264,7 +264,7 @@
     var app = document.getElementById('app') || $('.v2-app');
     if (!app) return;
     app.classList.add('nav-collapsed');
-    $$('[data-v2-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'false'); });
+    $$('[data-sq-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'false'); });
     try { localStorage.setItem('sq-sidebar', 'closed'); } catch (_) {}
   }
 
@@ -275,9 +275,9 @@
   }
 
   function initSidebar() {
-    $$('[data-v2-sidebar-toggle]').forEach(function (btn) {
-      if (btn.getAttribute('data-v2-sidebar-bound') === 'true') return;
-      btn.setAttribute('data-v2-sidebar-bound', 'true');
+    $$('[data-sq-sidebar-toggle]').forEach(function (btn) {
+      if (btn.getAttribute('data-sq-sidebar-bound') === 'true') return;
+      btn.setAttribute('data-sq-sidebar-bound', 'true');
       btn.addEventListener('click', function (e) { e.stopPropagation(); sidebarToggle(); });
     });
 
@@ -316,7 +316,7 @@
         }
       });
     }, { threshold: 0.1 });
-    $$('[data-v2-stagger]').forEach(function (el) { io.observe(el); });
+    $$('[data-sq-stagger]').forEach(function (el) { io.observe(el); });
   }
 
   /* ======================================================
@@ -373,10 +373,10 @@
   }
 
   /* ======================================================
-     THEME TOGGLE BUTTON  — wire all [data-v2-toggle-theme]
+     THEME TOGGLE BUTTON  — wire all [data-sq-toggle-theme]
      ====================================================== */
   function initThemeToggles() {
-    $$('[data-v2-toggle-theme]').forEach(function (btn) {
+    $$('[data-sq-toggle-theme]').forEach(function (btn) {
       btn.addEventListener('click', function () { toggleTheme(); });
     });
   }
@@ -427,7 +427,7 @@
 
   /* ======================================================
      CLIPBOARD  — delegated, with a fallback for insecure origins
-     Any element carrying [data-v2-copy] copies its value (or the text of its
+     Any element carrying [data-sq-copy] copies its value (or the text of its
      previous sibling when the attribute is empty). Delegation means buttons
      added or swapped in later keep working without re-initialisation.
      Feedback: .v2-copy--ok + a "Copied" tip + aria-label swap.
@@ -457,16 +457,16 @@
   }
 
   function initCopyButtons() {
-    if (document.__v2CopyBound) return;
-    document.__v2CopyBound = true;
+    if (document.__sqCopyBound) return;
+    document.__sqCopyBound = true;
 
     document.addEventListener('click', function (event) {
       var btn = event.target && event.target.closest
-        ? event.target.closest('[data-v2-copy]')
+        ? event.target.closest('[data-sq-copy]')
         : null;
       if (!btn) return;
 
-      var text = btn.getAttribute('data-v2-copy');
+      var text = btn.getAttribute('data-sq-copy');
       if (!text) {
         var prev = btn.previousElementSibling;
         text = prev ? prev.textContent : '';
@@ -474,7 +474,7 @@
       text = (text || '').trim();
       if (!text) return;
 
-      var label = btn.getAttribute('data-v2-copy-label') || 'Copied';
+      var label = btn.getAttribute('data-sq-copy-label') || 'Copied';
 
       copyToClipboard(text).then(function () {
         var orig = btn.getAttribute('aria-label') || 'Copy';
@@ -511,7 +511,7 @@
     var duration = opts.duration || 4000;
     var dismissible = opts.dismissible !== false;
 
-    var region = $('[data-v2-toast-region]') || $('.v2-toast-region');
+    var region = $('[data-sq-toast-region]') || $('.v2-toast-region');
     if (!region) {
       region = document.createElement('div');
       region.className = 'v2-toast-region';
@@ -576,12 +576,12 @@
 
   /* ======================================================
      TABS — roving tabindex + arrow keys
-     Wire with data-v2-tabs on .v2-tabs container
+     Wire with data-sq-tabs on .v2-tabs container
      ====================================================== */
   function initTabs() {
-    $$('[data-v2-tabs]').forEach(function (container) {
-      if (container.dataset.v2TabsReady === 'true') return;
-      container.dataset.v2TabsReady = 'true';
+    $$('[data-sq-tabs]').forEach(function (container) {
+      if (container.dataset.sqTabsReady === 'true') return;
+      container.dataset.sqTabsReady = 'true';
 
       var tabs = $$('[role="tab"]', container);
       var panels = $$('[role="tabpanel"]', container);
@@ -631,15 +631,15 @@
 
   /* ======================================================
      MENU — open/close, keyboard nav, escape
-     Trigger: data-v2-menu-trigger="menu-id"
+     Trigger: data-sq-menu-trigger="menu-id"
      Menu: .v2-menu#menu-id
      ====================================================== */
   function initMenus() {
-    $$('[data-v2-menu-trigger]').forEach(function (trigger) {
-      if (trigger.dataset.v2MenuReady === 'true') return;
-      trigger.dataset.v2MenuReady = 'true';
+    $$('[data-sq-menu-trigger]').forEach(function (trigger) {
+      if (trigger.dataset.sqMenuReady === 'true') return;
+      trigger.dataset.sqMenuReady = 'true';
 
-      var menuId = trigger.getAttribute('data-v2-menu-trigger');
+      var menuId = trigger.getAttribute('data-sq-menu-trigger');
       var menu = document.getElementById(menuId);
       if (!menu) return;
 
@@ -704,15 +704,15 @@
 
   /* ======================================================
      POPOVER — show/hide, positioning, escape
-     Trigger: data-v2-popover-trigger="popover-id"
+     Trigger: data-sq-popover-trigger="popover-id"
      Popover: .v2-popover#popover-id
      ====================================================== */
   function initPopovers() {
-    $$('[data-v2-popover-trigger]').forEach(function (trigger) {
-      if (trigger.dataset.v2PopoverReady === 'true') return;
-      trigger.dataset.v2PopoverReady = 'true';
+    $$('[data-sq-popover-trigger]').forEach(function (trigger) {
+      if (trigger.dataset.sqPopoverReady === 'true') return;
+      trigger.dataset.sqPopoverReady = 'true';
 
-      var popoverId = trigger.getAttribute('data-v2-popover-trigger');
+      var popoverId = trigger.getAttribute('data-sq-popover-trigger');
       var popover = document.getElementById(popoverId);
       if (!popover) return;
 
@@ -767,35 +767,35 @@
   }
 
   function initProductionControls() {
-    $$('[data-v2-toast]').forEach(function (button) {
+    $$('[data-sq-toast]').forEach(function (button) {
       button.addEventListener('click', function () {
-        // data-v2-toast-kind lets markup pick the semantic variant; without it
+        // data-sq-toast-kind lets markup pick the semantic variant; without it
         // every trigger rendered an identical, untyped toast.
-        toast(button.getAttribute('data-v2-toast') || button.textContent.trim() + ' complete', {
-          kind: button.getAttribute('data-v2-toast-kind') || ''
+        toast(button.getAttribute('data-sq-toast') || button.textContent.trim() + ' complete', {
+          kind: button.getAttribute('data-sq-toast-kind') || ''
         });
       });
     });
-    $$('[data-v2-dialog-open]').forEach(function (button) {
+    $$('[data-sq-dialog-open]').forEach(function (button) {
       button.addEventListener('click', function () {
-        var dialog = document.getElementById(button.getAttribute('data-v2-dialog-open'));
+        var dialog = document.getElementById(button.getAttribute('data-sq-dialog-open'));
         if (dialog && typeof dialog.showModal === 'function') dialog.showModal();
       });
     });
-    $$('[data-v2-dialog-close]').forEach(function (button) {
+    $$('[data-sq-dialog-close]').forEach(function (button) {
       button.addEventListener('click', function () { var dialog = button.closest('dialog'); if (dialog) dialog.close(); });
     });
-    $$('[data-v2-search-trigger]').forEach(function (button) { button.addEventListener('click', function () { var input = $('[data-v2-search-input]'); if (input) { var dialog = input.closest('dialog'); if (dialog && !dialog.open) dialog.showModal(); input.focus(); input.select && input.select(); } }); });
+    $$('[data-sq-search-trigger]').forEach(function (button) { button.addEventListener('click', function () { var input = $('[data-sq-search-input]'); if (input) { var dialog = input.closest('dialog'); if (dialog && !dialog.open) dialog.showModal(); input.focus(); input.select && input.select(); } }); });
     document.addEventListener('keydown', function (event) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        var trigger = $('[data-v2-search-trigger]');
+        var trigger = $('[data-sq-search-trigger]');
         if (trigger) { event.preventDefault(); trigger.click(); }
       }
     });
-    $$('[data-v2-search-input]').forEach(function (input) {
+    $$('[data-sq-search-input]').forEach(function (input) {
       input.addEventListener('input', function () {
         var query = input.value.trim().toLowerCase();
-        $$('.v2-command [data-v2-command]').forEach(function (item) { item.hidden = query && !item.textContent.toLowerCase().includes(query); });
+        $$('.v2-command [data-sq-command]').forEach(function (item) { item.hidden = query && !item.textContent.toLowerCase().includes(query); });
       });
       // A text input inside <form method="dialog"> triggers implicit submission
       // on Enter, which closed the palette before anything was picked. Enter now
@@ -804,7 +804,7 @@
       if (form) {
         form.addEventListener('submit', function (event) {
           event.preventDefault();
-          var first = $$('[data-v2-command]', form).filter(function (item) { return !item.hidden; })[0];
+          var first = $$('[data-sq-command]', form).filter(function (item) { return !item.hidden; })[0];
           if (first) first.click();
         });
       }
@@ -813,13 +813,13 @@
       if (dialog) {
         dialog.addEventListener('close', function () {
           input.value = '';
-          $$('.v2-command [data-v2-command]', dialog).forEach(function (item) { item.hidden = false; });
+          $$('.v2-command [data-sq-command]', dialog).forEach(function (item) { item.hidden = false; });
         });
       }
     });
-    $$('[data-v2-command]').forEach(function (item) {
+    $$('[data-sq-command]').forEach(function (item) {
       item.addEventListener('click', function () {
-        var target = item.getAttribute('data-v2-command');
+        var target = item.getAttribute('data-sq-command');
         var dialog = item.closest('dialog');
         if (dialog) dialog.close();
         if (target && target.charAt(0) === '#') {
@@ -849,12 +849,12 @@
     if (!aside) return;
     var nav = $('.v2-nav', aside);
     if (!nav) return;
-    if (nav.getAttribute('data-v2-dock-ready') === 'true') {
+    if (nav.getAttribute('data-sq-dock-ready') === 'true') {
       // Re-scan after dynamic nav changes (new destinations added/removed)
-      if (typeof nav.__v2DockRefresh === 'function') nav.__v2DockRefresh();
+      if (typeof nav.__sqDockRefresh === 'function') nav.__sqDockRefresh();
       return;
     }
-    nav.setAttribute('data-v2-dock-ready', 'true');
+    nav.setAttribute('data-sq-dock-ready', 'true');
 
     var isActive = function (el) {
       return el.classList.contains('is-active') || el.classList.contains('v2-nav__item--active');
@@ -1015,7 +1015,7 @@
     }, { passive: false });
 
     /* ---- React to scroll-spy changes ---- */
-    document.addEventListener('v2:navchange', function (e) {
+    document.addEventListener('sq:navchange', function (e) {
       var item = e.detail && e.detail.item;
       if (item) ensureVisible(item);
       updateOverflow();
@@ -1027,7 +1027,7 @@
     }
     window.addEventListener('resize', updateOverflow);
 
-    nav.__v2DockRefresh = function () {
+    nav.__sqDockRefresh = function () {
       updateOverflow();
       ensureVisible(nav.querySelector('.is-active, .v2-nav__item--active'));
     };
@@ -1088,8 +1088,8 @@
   function initNavScroll() {
     var content = $('.v2-content');
     if (!content) return;
-    if (content.dataset.v2NavReady === 'true') return;
-    content.dataset.v2NavReady = 'true';
+    if (content.dataset.sqNavReady === 'true') return;
+    content.dataset.sqNavReady = 'true';
 
     // Build map of nav items → sections via href="#id"
     var navItems = $$('.v2-nav__item[href^="#"]');
@@ -1152,7 +1152,7 @@
       // Let the dock keep the active item in view / sync the More drop-up
       if (activeItem && activeItem !== lastActiveItem) {
         lastActiveItem = activeItem;
-        document.dispatchEvent(new CustomEvent('v2:navchange', { detail: { item: activeItem } }));
+        document.dispatchEvent(new CustomEvent('sq:navchange', { detail: { item: activeItem } }));
       }
     }
 
@@ -1164,25 +1164,25 @@
   /* ======================================================
      ADVANCED TABLE  — sort, select, filter, paginate
      Markup contract:
-       <table class="v2-table" data-v2-table data-v2-page-size="8">
-         thead th > button.v2-table__sort[data-v2-sort="text|number"]
-         tbody tr > td.v2-table__check > input.v2-checkbox[data-v2-row-select]
-       Optional, inside the same scope element ([data-v2-table-scope] or
+       <table class="v2-table" data-sq-table data-sq-page-size="8">
+         thead th > button.v2-table__sort[data-sq-sort="text|number"]
+         tbody tr > td.v2-table__check > input.v2-checkbox[data-sq-row-select]
+       Optional, inside the same scope element ([data-sq-table-scope] or
        the enclosing .v2-section):
-         [data-v2-select-all] [data-v2-table-filter]
-         [data-v2-table-count] [data-v2-table-pagination]
+         [data-sq-select-all] [data-sq-table-filter]
+         [data-sq-table-count] [data-sq-table-pagination]
      Events: sq:rowselection, sq:pagechange (both bubble)
      ====================================================== */
   function tableScope(table) {
-    return table.closest('[data-v2-table-scope]') || table.closest('.v2-section') || table.parentElement;
+    return table.closest('[data-sq-table-scope]') || table.closest('.v2-section') || table.parentElement;
   }
 
   function tableRows(table) {
-    if (!table.__v2Rows) {
-      table.__v2Rows = Array.prototype.slice.call(table.tBodies[0].rows)
-        .filter(function (row) { return !row.hasAttribute('data-v2-table-skip'); });
+    if (!table.__sqRows) {
+      table.__sqRows = Array.prototype.slice.call(table.tBodies[0].rows)
+        .filter(function (row) { return !row.hasAttribute('data-sq-table-skip'); });
     }
-    return table.__v2Rows;
+    return table.__sqRows;
   }
 
   function tableCellValue(row, colIndex, type) {
@@ -1206,10 +1206,10 @@
     var dir = direction === 'descending' ? -1 : 1;
 
     var th = table.tHead && table.tHead.rows[0] ? table.tHead.rows[0].cells[colIndex] : null;
-    var btn = th ? th.querySelector('[data-v2-sort]') : null;
+    var btn = th ? th.querySelector('[data-sq-sort]') : null;
     var type = (opts && opts.type) ||
-      (th && th.getAttribute('data-v2-sort-type')) ||
-      (btn && btn.getAttribute('data-v2-sort')) || 'text';
+      (th && th.getAttribute('data-sq-sort-type')) ||
+      (btn && btn.getAttribute('data-sq-sort')) || 'text';
 
     rows.sort(function (a, b) {
       var av = tableCellValue(a, colIndex, type);
@@ -1220,8 +1220,8 @@
     });
 
     rows.forEach(function (row) { tbody.appendChild(row); });
-    table.__v2Rows = rows;
-    table.__v2Page = 1;
+    table.__sqRows = rows;
+    table.__sqPage = 1;
 
     if (table.tHead && table.tHead.rows[0]) {
       Array.prototype.forEach.call(table.tHead.rows[0].cells, function (cell, i) {
@@ -1237,7 +1237,7 @@
   function setRowSelected(table, row, on) {
     if (!row) return;
     row.classList.toggle('is-selected', !!on);
-    var box = row.querySelector('[data-v2-row-select]');
+    var box = row.querySelector('[data-sq-row-select]');
     if (box) box.checked = !!on;
   }
 
@@ -1245,14 +1245,14 @@
     var rows = tableRows(table);
     var selected = rows.filter(function (row) { return row.classList.contains('is-selected'); });
     var scope = tableScope(table);
-    var selectAll = $('[data-v2-select-all]', scope);
+    var selectAll = $('[data-sq-select-all]', scope);
 
     if (selectAll) {
       selectAll.checked = selected.length > 0 && selected.length === rows.length;
       selectAll.indeterminate = selected.length > 0 && selected.length < rows.length;
     }
 
-    var count = $('[data-v2-table-count]', scope);
+    var count = $('[data-sq-table-count]', scope);
     if (count) {
       count.textContent = selected.length
         ? selected.length + ' of ' + rows.length + ' selected'
@@ -1271,16 +1271,16 @@
     var tbody = table.tBodies[0];
     if (!tbody) return;
     var rows = tableRows(table);
-    var filter = (table.__v2Filter || '').toLowerCase();
+    var filter = (table.__sqFilter || '').toLowerCase();
 
     var visible = rows.filter(function (row) {
       return !filter || row.textContent.toLowerCase().indexOf(filter) !== -1;
     });
 
-    var size = table.__v2PageSize || 0;
+    var size = table.__sqPageSize || 0;
     var pages = size > 0 ? Math.max(1, Math.ceil(visible.length / size)) : 1;
-    table.__v2Page = Math.min(Math.max(1, table.__v2Page || 1), pages);
-    var start = size > 0 ? (table.__v2Page - 1) * size : 0;
+    table.__sqPage = Math.min(Math.max(1, table.__sqPage || 1), pages);
+    var start = size > 0 ? (table.__sqPage - 1) * size : 0;
     var end = size > 0 ? start + size : visible.length;
 
     rows.forEach(function (row) { row.hidden = true; });
@@ -1293,7 +1293,7 @@
 
   function renderTableEmpty(table, visibleCount) {
     var tbody = table.tBodies[0];
-    var empty = tbody.querySelector('[data-v2-table-generated]');
+    var empty = tbody.querySelector('[data-sq-table-generated]');
     if (visibleCount > 0) {
       if (empty) empty.remove();
       return;
@@ -1301,17 +1301,17 @@
     if (empty) return;
     var columns = table.tHead && table.tHead.rows[0] ? table.tHead.rows[0].cells.length : 1;
     var tr = document.createElement('tr');
-    tr.setAttribute('data-v2-table-generated', '');
+    tr.setAttribute('data-sq-table-generated', '');
     var td = document.createElement('td');
     td.className = 'v2-table__empty';
     td.colSpan = columns;
-    td.textContent = table.getAttribute('data-v2-empty-label') || 'No matching rows';
+    td.textContent = table.getAttribute('data-sq-empty-label') || 'No matching rows';
     tr.appendChild(td);
     tbody.appendChild(tr);
   }
 
   function renderTablePagination(table, total, pages, start, end) {
-    var nav = $('[data-v2-table-pagination]', tableScope(table));
+    var nav = $('[data-sq-table-pagination]', tableScope(table));
     if (!nav) return;
 
     nav.innerHTML = '';
@@ -1337,7 +1337,7 @@
       btn.disabled = !!disabled;
       if (!disabled && !current) {
         btn.addEventListener('click', function () {
-          table.__v2Page = target;
+          table.__sqPage = target;
           applyTable(table);
           table.dispatchEvent(new CustomEvent('sq:pagechange', {
             bubbles: true,
@@ -1357,43 +1357,43 @@
 
     if (pages <= 1) return;
 
-    list.appendChild(pageButton('\u2039', table.__v2Page - 1, false, table.__v2Page === 1, 'Previous page'));
+    list.appendChild(pageButton('\u2039', table.__sqPage - 1, false, table.__sqPage === 1, 'Previous page'));
 
     var windowSize = 5;
-    var to = Math.min(pages, Math.max(1, table.__v2Page - Math.floor(windowSize / 2)) + windowSize - 1);
+    var to = Math.min(pages, Math.max(1, table.__sqPage - Math.floor(windowSize / 2)) + windowSize - 1);
     var from = Math.max(1, to - windowSize + 1);
 
     if (from > 1) {
-      list.appendChild(pageButton('1', 1, table.__v2Page === 1, false, 'Page 1'));
+      list.appendChild(pageButton('1', 1, table.__sqPage === 1, false, 'Page 1'));
       if (from > 2) list.appendChild(gap());
     }
 
     for (var p = from; p <= to; p++) {
-      list.appendChild(pageButton(String(p), p, p === table.__v2Page, false, 'Page ' + p));
+      list.appendChild(pageButton(String(p), p, p === table.__sqPage, false, 'Page ' + p));
     }
 
     if (to < pages) {
       if (to < pages - 1) list.appendChild(gap());
-      list.appendChild(pageButton(String(pages), pages, table.__v2Page === pages, false, 'Page ' + pages));
+      list.appendChild(pageButton(String(pages), pages, table.__sqPage === pages, false, 'Page ' + pages));
     }
 
-    list.appendChild(pageButton('\u203A', table.__v2Page + 1, false, table.__v2Page === pages, 'Next page'));
+    list.appendChild(pageButton('\u203A', table.__sqPage + 1, false, table.__sqPage === pages, 'Next page'));
   }
 
   function initTables() {
-    $$('[data-v2-table]').forEach(function (table) {
+    $$('[data-sq-table]').forEach(function (table) {
       if (!table.tBodies || !table.tBodies[0]) return;
 
-      if (table.dataset.v2TableReady !== 'true') {
-        table.dataset.v2TableReady = 'true';
-        table.__v2Page = 1;
-        table.__v2PageSize = parseInt(table.getAttribute('data-v2-page-size'), 10) || 0;
-        table.__v2Filter = '';
-        table.__v2LastIndex = -1;
+      if (table.dataset.sqTableReady !== 'true') {
+        table.dataset.sqTableReady = 'true';
+        table.__sqPage = 1;
+        table.__sqPageSize = parseInt(table.getAttribute('data-sq-page-size'), 10) || 0;
+        table.__sqFilter = '';
+        table.__sqLastIndex = -1;
 
         var scope = tableScope(table);
 
-        $$('[data-v2-sort]', table).forEach(function (btn) {
+        $$('[data-sq-sort]', table).forEach(function (btn) {
           btn.addEventListener('click', function (event) {
             event.preventDefault();
             var th = btn.closest('th');
@@ -1404,7 +1404,7 @@
           });
         });
 
-        var selectAll = $('[data-v2-select-all]', scope);
+        var selectAll = $('[data-sq-select-all]', scope);
         if (selectAll) {
           selectAll.addEventListener('change', function () {
             tableRows(table).forEach(function (row) {
@@ -1416,27 +1416,27 @@
 
         table.tBodies[0].addEventListener('change', function (event) {
           var box = event.target;
-          if (!box || !box.matches || !box.matches('[data-v2-row-select]')) return;
+          if (!box || !box.matches || !box.matches('[data-sq-row-select]')) return;
           var row = box.closest('tr');
           var index = tableRows(table).indexOf(row);
 
-          if (event.shiftKey && table.__v2LastIndex > -1 && index > -1) {
-            var first = Math.min(table.__v2LastIndex, index);
-            var last = Math.max(table.__v2LastIndex, index);
+          if (event.shiftKey && table.__sqLastIndex > -1 && index > -1) {
+            var first = Math.min(table.__sqLastIndex, index);
+            var last = Math.max(table.__sqLastIndex, index);
             for (var i = first; i <= last; i++) {
               setRowSelected(table, tableRows(table)[i], box.checked);
             }
           }
 
           setRowSelected(table, row, box.checked);
-          table.__v2LastIndex = index;
+          table.__sqLastIndex = index;
           syncTableSelection(table);
         });
 
-        $$('[data-v2-table-filter]', scope).forEach(function (input) {
+        $$('[data-sq-table-filter]', scope).forEach(function (input) {
           input.addEventListener('input', function () {
-            table.__v2Filter = input.value.trim();
-            table.__v2Page = 1;
+            table.__sqFilter = input.value.trim();
+            table.__sqPage = 1;
             applyTable(table);
           });
         });
@@ -1511,7 +1511,7 @@
 
   function fillChartLegend(chartEl, series) {
     if (!chartEl) return;
-    var legend = chartEl.querySelector('[data-v2-chart-legend]');
+    var legend = chartEl.querySelector('[data-sq-chart-legend]');
     if (!legend) return;
     legend.innerHTML = '';
     series.forEach(function (item, index) {
@@ -1753,21 +1753,21 @@
     var scale = typeof opts.max === 'number' ? opts.max : peak;
 
     colsEl.innerHTML = '';
-    colsEl.style.setProperty('--v2-chart-cols', String(count));
+    colsEl.style.setProperty('--sq-chart-cols', String(count));
 
     for (var c = 0; c < count; c++) {
       var col = document.createElement('div');
       col.className = 'v2-chart__col';
-      col.setAttribute('data-v2-index', String(c));
-      col.setAttribute('data-v2-total', String(totals[c]));
+      col.setAttribute('data-sq-index', String(c));
+      col.setAttribute('data-sq-total', String(totals[c]));
 
       series.forEach(function (item, seriesIndex) {
         var value = Math.max(0, (item.values || [])[c] || 0);
         var seg = document.createElement('div');
         seg.className = 'v2-chart__seg v2-chart__seg--s' + ((seriesIndex % 4) + 1);
         seg.style.height = ((value / scale) * 100) + '%';
-        seg.setAttribute('data-v2-series', item.name || String(seriesIndex));
-        seg.setAttribute('data-v2-value', String(value));
+        seg.setAttribute('data-sq-series', item.name || String(seriesIndex));
+        seg.setAttribute('data-sq-value', String(value));
         col.appendChild(seg);
       });
 
@@ -1783,10 +1783,10 @@
 
     if (opts.labels && opts.labels.length) {
       var host = colsEl.closest('.v2-chart');
-      var labelRow = host ? host.querySelector('[data-v2-chart-labels]') : null;
+      var labelRow = host ? host.querySelector('[data-sq-chart-labels]') : null;
       if (labelRow) {
         labelRow.innerHTML = '';
-        labelRow.style.setProperty('--v2-chart-cols', String(count));
+        labelRow.style.setProperty('--sq-chart-cols', String(count));
         for (var l = 0; l < count; l++) {
           var span = document.createElement('span');
           span.className = 'v2-chart__xlabel';
@@ -1814,7 +1814,7 @@
       item.classList.toggle('is-hover', item === col);
     });
 
-    var index = parseInt(col.getAttribute('data-v2-index'), 10) || 0;
+    var index = parseInt(col.getAttribute('data-sq-index'), 10) || 0;
     var host = chartHost(colsEl);
     var tip = ensureChartTip(host);
 
@@ -1855,7 +1855,7 @@
   /* ======================================================
      TREE  — expand / collapse with keyboard support (max 3 levels)
      Markup:
-       <div class="v2-tree" data-v2-tree>
+       <div class="v2-tree" data-sq-tree>
          <div class="v2-tree__item">
            <div class="v2-tree__row">
              <button class="v2-tree__toggle" aria-expanded="true" aria-label="Toggle X">…</button>
@@ -1899,7 +1899,7 @@
 
   function onTreeKeydown(event) {
     var btn = event.currentTarget;
-    var root = btn.closest('[data-v2-tree]');
+    var root = btn.closest('[data-sq-tree]');
     if (!root) return;
 
     var toggles = treeVisibleToggles(root);
@@ -1942,9 +1942,9 @@
   }
 
   function initTree() {
-    $$('[data-v2-tree]').forEach(function (root) {
-      if (root.dataset.v2TreeReady === 'true') return;
-      root.dataset.v2TreeReady = 'true';
+    $$('[data-sq-tree]').forEach(function (root) {
+      if (root.dataset.sqTreeReady === 'true') return;
+      root.dataset.sqTreeReady = 'true';
 
       $$('.v2-tree__toggle', root).forEach(function (btn) {
         btn.addEventListener('click', function (event) {
@@ -1964,7 +1964,7 @@
         toggleTreeNode(btn, btn.getAttribute('aria-expanded') === 'true');
       });
 
-      if (root.getAttribute('data-v2-tree-depth') === null) {
+      if (root.getAttribute('data-sq-tree-depth') === null) {
         var deepest = 1;
         $$('.v2-tree__item', root).forEach(function (item) {
           var levels = 0;
@@ -1975,7 +1975,7 @@
           }
           deepest = Math.max(deepest, levels + 1);
         });
-        root.setAttribute('data-v2-tree-depth', String(deepest));
+        root.setAttribute('data-sq-tree-depth', String(deepest));
         if (deepest > TREE_MAX_DEPTH && typeof console !== 'undefined') {
           console.warn('[SynteqUI] tree depth ' + deepest + ' exceeds the supported ' + TREE_MAX_DEPTH + ' levels');
         }
@@ -2002,7 +2002,7 @@
       else item.removeAttribute('aria-current');
     });
 
-    stepperEl.setAttribute('data-v2-step', String(current));
+    stepperEl.setAttribute('data-sq-step', String(current));
     stepperEl.dispatchEvent(new CustomEvent('sq:stepchange', {
       bubbles: true,
       detail: { index: current, item: items[current] }
@@ -2011,8 +2011,8 @@
   }
 
   function initStepper() {
-    $$('[data-v2-stepper]').forEach(function (el) {
-      var declared = parseInt(el.getAttribute('data-v2-step'), 10);
+    $$('[data-sq-stepper]').forEach(function (el) {
+      var declared = parseInt(el.getAttribute('data-sq-step'), 10);
       setStep(el, isNaN(declared) ? 0 : declared);
     });
   }
@@ -2020,16 +2020,16 @@
   /* ======================================================
      CODE BLOCK  — gutter with line numbers + copy button
      Markup:
-       <div class="v2-code" data-v2-code data-v2-line-numbers>
+       <div class="v2-code" data-sq-code data-sq-line-numbers>
          <div class="v2-code__head">
            <span class="v2-code__title">terminal</span>
-           <button class="v2-code__copy" data-v2-code-copy aria-label="Copy code">Copy</button>
+           <button class="v2-code__copy" data-sq-code-copy aria-label="Copy code">Copy</button>
          </div>
          <div class="v2-code__body">
            <pre class="v2-code__pre"><code>...</code></pre>
          </div>
        </div>
-     Pass data-v2-line-numbers="false" to hide the gutter.
+     Pass data-sq-line-numbers="false" to hide the gutter.
      ====================================================== */
   function addCodeLineNumbers(block, pre) {
     var body = pre.parentElement;
@@ -2056,7 +2056,7 @@
     var text = pre.textContent.replace(/\n+$/, '');
     if (!text) return;
 
-    var label = button.getAttribute('data-v2-code-copy') || 'Copied';
+    var label = button.getAttribute('data-sq-code-copy') || 'Copied';
     var original = button.getAttribute('aria-label') || 'Copy code';
 
     copyToClipboard(text).then(function () {
@@ -2073,18 +2073,18 @@
   }
 
   function initCodeBlocks() {
-    $$('[data-v2-code]').forEach(function (block) {
-      if (block.dataset.v2CodeReady === 'true') return;
-      block.dataset.v2CodeReady = 'true';
+    $$('[data-sq-code]').forEach(function (block) {
+      if (block.dataset.sqCodeReady === 'true') return;
+      block.dataset.sqCodeReady = 'true';
 
       var pre = $('.v2-code__pre', block);
       if (!pre) return;
 
-      if (block.getAttribute('data-v2-line-numbers') !== 'false') {
+      if (block.getAttribute('data-sq-line-numbers') !== 'false') {
         addCodeLineNumbers(block, pre);
       }
 
-      var copy = $('[data-v2-code-copy]', block) || $('.v2-code__copy', block);
+      var copy = $('[data-sq-code-copy]', block) || $('.v2-code__copy', block);
       if (copy) {
         copy.addEventListener('click', function () { copyCodeBlock(block, pre, copy); });
       }

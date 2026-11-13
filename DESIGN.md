@@ -26,21 +26,21 @@ Synteq UI is a **viewport-locked, offline-first, text-first** dashboard UI frame
 
 ### Flat Surface Model
 
-V2 abandons the multi-tier tonal elevation model of V1. There is a **single canvas surface** (`--v2-canvas`). Nothing sits "above" or "below" it in a tonal sense.
+Synteq UI uses a single flat canvas instead of a multi-tier tonal elevation model. There is a **single canvas surface** (`--sq-canvas`). Nothing sits "above" or "below" it in a tonal sense.
 
 **Visual hierarchy is expressed through:**
-- Typography weight (`--v2-fw-regular` → `--v2-fw-semibold`) and size (`--v2-text-xs` → `--v2-text-3xl`)
-- Hairline `1px` separators (`--v2-line`, `--v2-line-strong`, `--v2-line-accent`)
-- Subtle hover/inset surface states (`--v2-hover`, `--v2-inset`) for interactive affordance only — never as permanent background shifts to imply depth
+- Typography weight (`--sq-fw-regular` → `--sq-fw-semibold`) and size (`--sq-text-xs` → `--sq-text-3xl`)
+- Hairline `1px` separators (`--sq-line`, `--sq-line-strong`, `--sq-line-accent`)
+- Subtle hover/inset surface states (`--sq-hover`, `--sq-inset`) for interactive affordance only — never as permanent background shifts to imply depth
 
 **Never expressed through:**
 - Card-style `background` blocks
 - `box-shadow` elevation layers
-- Tonal surface tiers (V1's raised / strong / muted hierarchy)
+- Tonal surface tiers (raised / strong / muted hierarchy)
 
-### Design Evolution (v1 → v2)
+### Design Evolution
 
-| | v1 | v2 |
+| | Legacy | Current |
 |---|---|---|
 | Surface hierarchy | 5-tier tonal elevation | Single flat canvas |
 | Visual separation | Tonal card backgrounds | `1px` hairline separators only |
@@ -50,8 +50,7 @@ V2 abandons the multi-tier tonal elevation model of V1. There is a **single canv
 | Network chart | 48-bar histogram (112px) | Dual-segment bars (72px) + axis-labelled line/area and stacked columns |
 | Tables | Static markup | Sortable, selectable, filterable, paginated module |
 | Motion | Transition-only | Fade-up mount + stagger + shimmer + IntersectionObserver |
-| JS global | `SynteqUI.*` | `SynteqUI.*` (renamed from the interim `SynteqV2` alias) |
-| Entry points | `synteq-ui-v2.css` / `synteq-ui-v2.js` | `synteq-ui.css` / `synteq-ui.js` |
+
 
 ---
 
@@ -61,30 +60,30 @@ V2 abandons the multi-tier tonal elevation model of V1. There is a **single canv
 
 | Token | Value | Notes |
 |-------|-------|-------|
-| `--v2-font-sans` | `'Google Sans Code', 'DM Sans', system-ui, -apple-system, sans-serif` | Primary UI font — self-hosted |
-| `--v2-font-mono` | `'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace` | Used for numeric values, hostnames, kbd pills |
+| `--sq-font-sans` | `'Google Sans Code', 'DM Sans', system-ui, -apple-system, sans-serif` | Primary UI font — self-hosted |
+| `--sq-font-mono` | `'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace` | Used for numeric values, hostnames, kbd pills |
 
 #### Type Scale
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--v2-text-xs` | `11px` | Section titles, labels, badges, legend |
-| `--v2-text-sm` | `12px` | Secondary metadata, button text, kbd |
-| `--v2-text-md` | `13px` | Body text, nav items, KV rows (base size) |
-| `--v2-text-lg` | `15px` | Sidebar brand name |
-| `--v2-text-xl` | `18px` | Mid-emphasis values; stat fallback at `≤520px` |
-| `--v2-text-2xl` | `clamp(22px, 2.4vw, 28px)` | Stat block primary values |
-| `--v2-text-3xl` | `clamp(26px, 3.2vw, 34px)` | Hero metrics, large stat displays |
+| `--sq-text-xs` | `11px` | Section titles, labels, badges, legend |
+| `--sq-text-sm` | `12px` | Secondary metadata, button text, kbd |
+| `--sq-text-md` | `13px` | Body text, nav items, KV rows (base size) |
+| `--sq-text-lg` | `15px` | Sidebar brand name |
+| `--sq-text-xl` | `18px` | Mid-emphasis values; stat fallback at `≤520px` |
+| `--sq-text-2xl` | `clamp(22px, 2.4vw, 28px)` | Stat block primary values |
+| `--sq-text-3xl` | `clamp(26px, 3.2vw, 34px)` | Hero metrics, large stat displays |
 
 #### Font Weights & Line Heights
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--v2-fw-regular` | `400` | Body text, subtle labels |
-| `--v2-fw-medium` | `500` | Active nav items, stat values, button text |
-| `--v2-fw-semibold` | `600` | Section titles, brand name |
-| `--v2-leading-tight` | `1.2` | Large type (`2xl`, `3xl`) |
-| `--v2-leading-base` | `1.5` | Body text |
+| `--sq-fw-regular` | `400` | Body text, subtle labels |
+| `--sq-fw-medium` | `500` | Active nav items, stat values, button text |
+| `--sq-fw-semibold` | `600` | Section titles, brand name |
+| `--sq-leading-tight` | `1.2` | Large type (`2xl`, `3xl`) |
+| `--sq-leading-base` | `1.5` | Body text |
 
 ---
 
@@ -94,26 +93,26 @@ V2 abandons the multi-tier tonal elevation model of V1. There is a **single canv
 
 | Token | Value |
 |-------|-------|
-| `--v2-space-1` | `4px` |
-| `--v2-space-2` | `8px` |
-| `--v2-space-3` | `12px` |
-| `--v2-space-4` | `16px` |
-| `--v2-space-5` | `20px` |
-| `--v2-space-6` | `24px` |
-| `--v2-space-7` | `32px` |
-| `--v2-space-8` | `40px` |
-| `--v2-space-9` | `56px` |
+| `--sq-space-1` | `4px` |
+| `--sq-space-2` | `8px` |
+| `--sq-space-3` | `12px` |
+| `--sq-space-4` | `16px` |
+| `--sq-space-5` | `20px` |
+| `--sq-space-6` | `24px` |
+| `--sq-space-7` | `32px` |
+| `--sq-space-8` | `40px` |
+| `--sq-space-9` | `56px` |
 
 ---
 
 ### 3.3 Radius
 
-Two tiers only — V2 favors near-flat surfaces.
+Two tiers only — Synteq UI favors near-flat surfaces.
 
 | Token | Value | Applied To |
 |-------|-------|-----------|
-| `--v2-radius-micro` | `2px` | Badges, status dots, chart bar caps, avatar, kbd pills |
-| `--v2-radius-control` | `5px` | Buttons, inputs, segmented bar, nav items, sidebar toggle |
+| `--sq-radius-micro` | `2px` | Badges, status dots, chart bar caps, avatar, kbd pills |
+| `--sq-radius-control` | `5px` | Buttons, inputs, segmented bar, nav items, sidebar toggle |
 
 ---
 
@@ -123,11 +122,11 @@ Single easing curve. Four duration steps.
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--v2-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | All transitions and animations |
-| `--v2-dur-instant` | `120ms` | Hover color/bg swaps, base element transitions |
-| `--v2-dur-fast` | `180ms` | Topbar scroll shadow, icon swaps, scrim fade |
-| `--v2-dur-normal` | `280ms` | Mount animations, sidebar grid transition, theme switch |
-| `--v2-dur-slow` | `420ms` | Gauge fill bar, data-driving transitions |
+| `--sq-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | All transitions and animations |
+| `--sq-dur-instant` | `120ms` | Hover color/bg swaps, base element transitions |
+| `--sq-dur-fast` | `180ms` | Topbar scroll shadow, icon swaps, scrim fade |
+| `--sq-dur-normal` | `280ms` | Mount animations, sidebar grid transition, theme switch |
+| `--sq-dur-slow` | `420ms` | Gauge fill bar, data-driving transitions |
 
 ---
 
@@ -135,13 +134,13 @@ Single easing curve. Four duration steps.
 
 | Token | Value | Controls |
 |-------|-------|---------|
-| `--v2-aside-w` | `clamp(204px, 17vw, 240px)` | Legacy sizing token; current dock uses full available width |
-| `--v2-topbar-h` | `52px` | Topbar row height; reduces to `48px` at `≤420px` and in short landscape |
-| `--v2-bottomnav-h` | `60px` | Sticky bottom dock height; compresses to `52px` in short landscape |
-| `--v2-content-max` | `1200px` | Max width of the centred content column (every `.v2-section`) |
-| `--v2-nav-item-w` | `80px` | Minimum dock item width — drives the drag/More overflow threshold |
-| `--v2-line-h` | `1px` | Standard hairline separator weight |
-| `--v2-line-h-strong` | `1px` | Emphasized separator (same physical weight, different color) |
+| `--sq-aside-w` | `clamp(204px, 17vw, 240px)` | Legacy sizing token; current dock uses full available width |
+| `--sq-topbar-h` | `52px` | Topbar row height; reduces to `48px` at `≤420px` and in short landscape |
+| `--sq-bottomnav-h` | `60px` | Sticky bottom dock height; compresses to `52px` in short landscape |
+| `--sq-content-max` | `1200px` | Max width of the centred content column (every `.v2-section`) |
+| `--sq-nav-item-w` | `80px` | Minimum dock item width — drives the drag/More overflow threshold |
+| `--sq-line-h` | `1px` | Standard hairline separator weight |
+| `--sq-line-h-strong` | `1px` | Emphasized separator (same physical weight, different color) |
 
 ---
 
@@ -155,39 +154,39 @@ Switch themes via `data-theme="dark"` or `data-theme="light"` on `<html>`.
 
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
-| `--v2-canvas` | `#0a0b0b` | `#f4f6f6` | Main app background |
-| `--v2-sidebar` | `#070808` | `#ffffff` | Sidebar / nav background |
-| `--v2-hover` | `#161919` | `#e8ecec` | Interactive hover / active surface state |
-| `--v2-inset` | `#101212` | `#eef1f1` | Inset rows, text inputs, gauge track background |
-| `--v2-text` | `#d6dada` | `#2f3434` | Body text, labels |
-| `--v2-text-strong` | `#f4f6f6` | `#0d1010` | High-emphasis: values, hostnames, active state |
-| `--v2-text-subtle` | `#7a8080` | `#6a7272` | Metadata, units, timestamps, muted labels |
-| `--v2-text-on-accent` | `#06120f` | `#ffffff` | Text placed on brand/accent surfaces |
-| `--v2-text-on-solid` | `#08110e` | `#08110e` | Ink for **solid** accent/status fills (tip pills, brand button, brand mark, checked controls). Dark in both themes because the fills are light-to-mid tone |
+| `--sq-canvas` | `#0a0b0b` | `#f4f6f6` | Main app background |
+| `--sq-sidebar` | `#070808` | `#ffffff` | Sidebar / nav background |
+| `--sq-hover` | `#161919` | `#e8ecec` | Interactive hover / active surface state |
+| `--sq-inset` | `#101212` | `#eef1f1` | Inset rows, text inputs, gauge track background |
+| `--sq-text` | `#d6dada` | `#2f3434` | Body text, labels |
+| `--sq-text-strong` | `#f4f6f6` | `#0d1010` | High-emphasis: values, hostnames, active state |
+| `--sq-text-subtle` | `#7a8080` | `#6a7272` | Metadata, units, timestamps, muted labels |
+| `--sq-text-on-accent` | `#06120f` | `#ffffff` | Text placed on brand/accent surfaces |
+| `--sq-text-on-solid` | `#08110e` | `#08110e` | Ink for **solid** accent/status fills (tip pills, brand button, brand mark, checked controls). Dark in both themes because the fills are light-to-mid tone |
 
 #### Line Separators
 
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
-| `--v2-line` | `#1c2020` | `#e1e5e5` | Default hairline (section borders, KV rows, sidebar edge) |
-| `--v2-line-strong` | `#2b3030` | `#cfd4d4` | Emphasized separator (`.v2-rule--strong`, scrollbar thumb) |
-| `--v2-line-accent` | `#1f3a30` | `#b9d9cf` | Brand-tinted separator (accent-edge rules) |
+| `--sq-line` | `#1c2020` | `#e1e5e5` | Default hairline (section borders, KV rows, sidebar edge) |
+| `--sq-line-strong` | `#2b3030` | `#cfd4d4` | Emphasized separator (`.v2-rule--strong`, scrollbar thumb) |
+| `--sq-line-accent` | `#1f3a30` | `#b9d9cf` | Brand-tinted separator (accent-edge rules) |
 
 #### Brand & Status
 
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
-| `--v2-brand` | `#00e599` | `#059669` | Primary accent — active icons, brand button, sparkline |
-| `--v2-status-info` | `#38bdf8` | `#0284c7` | Informational / pending / neutral notice |
-| `--v2-status-running` | `#34d399` | `#16a34a` | Running / healthy / delta up |
-| `--v2-status-warning` | `#fbbf24` | `#d97706` | Degraded / warning |
-| `--v2-status-error` | `#f87171` | `#dc2626` | Error / stopped / delta down |
+| `--sq-brand` | `#00e599` | `#059669` | Primary accent — active icons, brand button, sparkline |
+| `--sq-status-info` | `#38bdf8` | `#0284c7` | Informational / pending / neutral notice |
+| `--sq-status-running` | `#34d399` | `#16a34a` | Running / healthy / delta up |
+| `--sq-status-warning` | `#fbbf24` | `#d97706` | Degraded / warning |
+| `--sq-status-error` | `#f87171` | `#dc2626` | Error / stopped / delta down |
 
 #### Status Ink
 
 | Token | Value | Role |
 |-------|-------|------|
-| `--v2-status-ink-mix` | `60%` | Share of the status hue blended into `--v2-text-strong` when a status colour is used as **text** on a tinted surface (tonal buttons, badges, tags, log levels). 100% (raw hue) only clears WCAG AA on the dark theme; 60% clears it on both. |
+| `--sq-status-ink-mix` | `60%` | Share of the status hue blended into `--sq-text-strong` when a status colour is used as **text** on a tinted surface (tonal buttons, badges, tags, log levels). 100% (raw hue) only clears WCAG AA on the dark theme; 60% clears it on both. |
 
 Tonal variant backgrounds stay at `14–16%` of the status colour, so the fill is
 never loud enough to compete with the primary/brand button.
@@ -196,10 +195,10 @@ never loud enough to compete with the primary/brand button.
 
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
-| `--v2-tel-in` | `#34d399` | `#16a34a` | Inbound traffic / receive series |
-| `--v2-tel-out` | `#fb7185` | `#e11d48` | Outbound traffic / transmit series |
-| `--v2-track` | `#1a1d1d` | `#e2e6e6` | Gauge empty track background |
-| `--v2-glyph` | `#9aa0a0` | `#5a6363` | Theme-toggle icon color |
+| `--sq-tel-in` | `#34d399` | `#16a34a` | Inbound traffic / receive series |
+| `--sq-tel-out` | `#fb7185` | `#e11d48` | Outbound traffic / transmit series |
+| `--sq-track` | `#1a1d1d` | `#e2e6e6` | Gauge empty track background |
+| `--sq-glyph` | `#9aa0a0` | `#5a6363` | Theme-toggle icon color |
 
 ---
 
@@ -267,7 +266,7 @@ The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 | `.v2-aside` | Sticky bottom dock. `min-width: 0`, `overflow: visible` so the More drop-up can escape upward. |
 | `.v2-topbar` | Header row. Hairline `border-bottom`. Gains `.is-scrolled` box-shadow when content scrolls past 4px. |
 | `.v2-main` | Remaining canvas. `overflow: hidden`, `display: flex`. Never scrolls itself. |
-| `.v2-content` | **The only default vertical scroll region**. Padded, flex column with `gap: --v2-space-7` between sections. |
+| `.v2-content` | **The only default vertical scroll region**. Padded, flex column with `gap: --sq-space-7` between sections. |
 
 ---
 
@@ -276,15 +275,15 @@ The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 | Class | Purpose |
 |-------|---------|
 | `.v2-aside__brand` | Top bar — aligns to topbar height. Contains brand mark and product name. |
-| `.v2-aside__brand-mark` | 20×20 brand icon square (brand color background, `--v2-radius-micro`). |
+| `.v2-aside__brand-mark` | 20×20 brand icon square (brand color background, `--sq-radius-micro`). |
 | `.v2-nav` | Horizontal dock navigation. `flex: 1`, safe-centred while items fit, drag-scrollable / wheel-scrollable once they overflow. |
 | `.v2-nav__group-label` | **Not rendered in the dock** (`display: none`). Use icon + label items only. |
-| `.v2-nav__item` | Navigation link. `min-width: var(--v2-nav-item-w)`, min height 44px. `border-radius: --v2-radius-control`. |
-| `.v2-nav__item--active` | Active page state. Brand-tinted background (`brand 12%`), `--v2-fw-semibold`, 3px inset brand bar, icon shifts to `--v2-brand`. |
-| `.v2-nav__badge` | Absolute counter badge in the item's top-right corner, tabular nums, `--v2-text-subtle`. |
+| `.v2-nav__item` | Navigation link. `min-width: var(--sq-nav-item-w)`, min height 44px. `border-radius: --sq-radius-control`. |
+| `.v2-nav__item--active` | Active page state. Brand-tinted background (`brand 12%`), `--sq-fw-semibold`, 3px inset brand bar, icon shifts to `--sq-brand`. |
+| `.v2-nav__badge` | Absolute counter badge in the item's top-right corner, tabular nums, `--sq-text-subtle`. |
 | `.v2-nav__more` | Injected by the runtime when items overflow. Opens the drop-up. Hidden (and removed from the tab order) otherwise. |
 | `.v2-nav__menu` | Drop-up panel anchored above the dock, listing every off-screen destination. `.v2-nav__menu-item` mirrors the item styling. |
-| `.v2-aside__footer` | Trailing user row. `border-left: 1px solid --v2-line`. Contains `.v2-avatar`, username, status dot. |
+| `.v2-aside__footer` | Trailing user row. `border-left: 1px solid --sq-line`. Contains `.v2-avatar`, username, status dot. |
 
 ---
 
@@ -292,38 +291,38 @@ The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-sidebar-toggle` | **The one and only sidebar toggle button** — lives in `.v2-topbar`. Wire with `data-v2-sidebar-toggle`. Contains `.icon-menu` and `.icon-close` (CSS swaps them). |
+| `.v2-sidebar-toggle` | **The one and only sidebar toggle button** — lives in `.v2-topbar`. Wire with `data-sq-sidebar-toggle`. Contains `.icon-menu` and `.icon-close` (CSS swaps them). |
 | `.v2-topbar__left` | Left cluster: toggle + breadcrumb + page title. `flex: 1`, `min-width: 0`. |
-| `.v2-topbar__crumb` | Breadcrumb link. `--v2-text-sm`, `--v2-text-subtle`. Hidden at `≤380px`. |
+| `.v2-topbar__crumb` | Breadcrumb link. `--sq-text-sm`, `--sq-text-subtle`. Hidden at `≤380px`. |
 | `.v2-topbar__sep` | Breadcrumb separator glyph (e.g. `/`). `opacity: 0.35`. Hidden at `≤380px`. |
-| `.v2-topbar__title` | Current page name. `--v2-text-md`, `--v2-fw-medium`, `--v2-text-strong`. Ellipsis overflow. |
+| `.v2-topbar__title` | Current page name. `--sq-text-md`, `--sq-fw-medium`, `--sq-text-strong`. Ellipsis overflow. |
 | `.v2-topbar__right` | Right cluster: search trigger, icon buttons. `flex-shrink: 0`. |
-| `.v2-search` | Command palette / search trigger button. `--v2-inset` background, `--v2-radius-control`, `height: 32px`. |
-| `.v2-iconbtn` | Generic icon-only button (32×32). `--v2-radius-control`. **Always requires `aria-label`**. |
-| `.v2-theme-toggle` | Theme toggle variant of `.v2-iconbtn`. Wire with `data-v2-toggle-theme`. CSS swaps `.v2-icon--sun` and `.v2-icon--moon` by `data-theme` attribute. |
+| `.v2-search` | Command palette / search trigger button. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
+| `.v2-iconbtn` | Generic icon-only button (32×32). `--sq-radius-control`. **Always requires `aria-label`**. |
+| `.v2-theme-toggle` | Theme toggle variant of `.v2-iconbtn`. Wire with `data-sq-toggle-theme`. CSS swaps `.v2-icon--sun` and `.v2-icon--moon` by `data-theme` attribute. |
 
 ---
 
 ### 5.4 Sections & Separators
 
-The **only** structural separator in V2 is the `border-top` on `.v2-section`.
+The **only** structural separator in Synteq UI is the `border-top` on `.v2-section`.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-section` | Content block. `border-top: 1px solid --v2-line`. `padding-top: --v2-space-6`. |
+| `.v2-section` | Content block. `border-top: 1px solid --sq-line`. `padding-top: --sq-space-6`. |
 | `.v2-section:first-child` | Removes `border-top` and `padding-top` — no separator before the first block. |
 | `.v2-section__head` | Flex row: section title (left) + meta/action (right). **No `border-bottom`** — intentional. |
-| `.v2-section__title` | Label text. `--v2-text-xs`, `--v2-fw-semibold`, uppercase, `--v2-text-subtle`. |
-| `.v2-section__meta` | Trailing info (e.g. "updated 5s ago"). `--v2-text-xs`, `--v2-text-subtle`, tabular nums. |
+| `.v2-section__title` | Label text. `--sq-text-xs`, `--sq-fw-semibold`, uppercase, `--sq-text-subtle`. |
+| `.v2-section__meta` | Trailing info (e.g. "updated 5s ago"). `--sq-text-xs`, `--sq-text-subtle`, tabular nums. |
 | `.v2-rule` | Explicit opt-in `<hr>` separator. Not auto-applied anywhere. |
-| `.v2-rule--strong` | `.v2-rule` with `--v2-line-strong` color. |
+| `.v2-rule--strong` | `.v2-rule` with `--sq-line-strong` color. |
 | `.v2-rule--dashed` | `.v2-rule` with `border-top-style: dashed`. |
 
 Layout helpers inside sections:
 
 | Class | Columns |
 |-------|---------|
-| `.v2-grid` | Base grid with `gap: --v2-space-5` |
+| `.v2-grid` | Base grid with `gap: --sq-space-5` |
 | `.v2-grid--2` | `repeat(2, 1fr)` → collapses to `1fr` at `≤720px` |
 | `.v2-grid--3` | `repeat(3, 1fr)` → collapses to `1fr` at `≤720px` |
 | `.v2-grid--auto` | `1.4fr 1fr` (content + sidebar panel) → collapses at `≤720px` |
@@ -339,10 +338,10 @@ All data components are text-first. No canvas, no third-party charting library.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-stat` | Flex column wrapper. `gap: --v2-space-1`. |
-| `.v2-stat__label` | Metric name. `--v2-text-xs`, uppercase, `--v2-text-subtle`. |
-| `.v2-stat__value` | Primary number. `--v2-text-2xl`, `--v2-fw-medium`, `--v2-text-strong`, tabular nums. |
-| `.v2-unit` | Unit suffix inside `.v2-stat__value`. `--v2-text-md`, `--v2-text-subtle`, `--v2-fw-regular`. |
+| `.v2-stat` | Flex column wrapper. `gap: --sq-space-1`. |
+| `.v2-stat__label` | Metric name. `--sq-text-xs`, uppercase, `--sq-text-subtle`. |
+| `.v2-stat__value` | Primary number. `--sq-text-2xl`, `--sq-fw-medium`, `--sq-text-strong`, tabular nums. |
+| `.v2-unit` | Unit suffix inside `.v2-stat__value`. `--sq-text-md`, `--sq-text-subtle`, `--sq-fw-regular`. |
 | `.v2-stat__delta` | Change indicator. `.v2-stat__delta--up` → green. `.v2-stat__delta--down` → red. |
 
 #### Key-Value Rows
@@ -350,58 +349,58 @@ All data components are text-first. No canvas, no third-party charting library.
 | Class | Purpose |
 |-------|---------|
 | `.v2-kv` | Flex column container. No outer border. |
-| `.v2-kv__row` | One property row. `border-top: 1px solid --v2-line`. First child gets no border. |
-| `.v2-kv__label` | Property name. `--v2-text-subtle`. |
-| `.v2-kv__value` | Property value. `--v2-text-strong`, tabular nums, right-aligned. |
+| `.v2-kv__row` | One property row. `border-top: 1px solid --sq-line`. First child gets no border. |
+| `.v2-kv__label` | Property name. `--sq-text-subtle`. |
+| `.v2-kv__value` | Property value. `--sq-text-strong`, tabular nums, right-aligned. |
 
 #### Slim Gauge
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-gauge` | Flex column container. Pair with `data-v2-gauge="0–100"` for auto-init. Add `role="progressbar"` with ARIA attrs. |
-| `.v2-gauge__track` | `6px` tall track bar. Background: `--v2-track`. `overflow: hidden`. |
-| `.v2-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqUI.renderGauge`). Transitions via `--v2-dur-slow`. |
+| `.v2-gauge` | Flex column container. Pair with `data-sq-gauge="0–100"` for auto-init. Add `role="progressbar"` with ARIA attrs. |
+| `.v2-gauge__track` | `6px` tall track bar. Background: `--sq-track`. `overflow: hidden`. |
+| `.v2-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqUI.renderGauge`). Transitions via `--sq-dur-slow`. |
 | `.v2-gauge__fill--ok` | Green fill (`< 75%`, auto-applied by JS). |
 | `.v2-gauge__fill--warn` | Amber fill (`75–89%`). |
 | `.v2-gauge__fill--err` | Red fill (`≥ 90%`). |
 | `.v2-gauge__fill--brand` | Brand-color fill — request it explicitly: `renderGauge(fill, 100, { kind: 'brand' })`. |
-| `.v2-gauge__fill` + `{ kind: 'neutral' }` | No state colour (inherits `--v2-text-strong`). |
+| `.v2-gauge__fill` + `{ kind: 'neutral' }` | No state colour (inherits `--sq-text-strong`). |
 
 #### Bar Chart
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-bars` | Grid container. Column count driven by `--v2-bars-cols` CSS var. Height 72px. |
+| `.v2-bars` | Grid container. Column count driven by `--sq-bars-cols` CSS var. Height 72px. |
 | `.v2-bars__col` | One time-sample column. `flex-direction: column-reverse`. |
-| `.v2-bars__seg` | One data segment within a column. `border-radius: --v2-radius-micro`. |
-| `.v2-bars__seg--in` | Inbound segment. Color: `--v2-tel-in`. |
-| `.v2-bars__seg--out` | Outbound segment. Color: `--v2-tel-out`, `opacity: 0.55` (full on hover). |
+| `.v2-bars__seg` | One data segment within a column. `border-radius: --sq-radius-micro`. |
+| `.v2-bars__seg--in` | Inbound segment. Color: `--sq-tel-in`. |
+| `.v2-bars__seg--out` | Outbound segment. Color: `--sq-tel-out`, `opacity: 0.55` (full on hover). |
 | `.v2-bars__col--pad` | Empty leading column injected by `renderBars({ minCols })`; holds the geometry, carries no data. |
-| `.v2-bars[data-v2-bars-empty]` | Set when the series is empty (styled at 35 % opacity) so the caller can show a hint. |
+| `.v2-bars[data-sq-bars-empty]` | Set when the series is empty (styled at 35 % opacity) so the caller can show a hint. |
 
 #### Sparkline
 
 | Class | Purpose |
 |-------|---------|
 | `.v2-spark` | SVG element wrapper. `display: block`, `height: 40px`. |
-| `.v2-spark__line` | `<polyline>` path. `stroke: --v2-brand`, `stroke-width: 1.5`. |
-| `.v2-spark__area` | `<polygon>` fill. `fill: --v2-brand`, `opacity: 0.12`. |
+| `.v2-spark__line` | `<polyline>` path. `stroke: --sq-brand`, `stroke-width: 1.5`. |
+| `.v2-spark__area` | `<polygon>` fill. `fill: --sq-brand`, `opacity: 0.12`. |
 | `.v2-spark__dot` | `<circle>` at latest data point. |
-| `.v2-spark--tall` | `--v2-spark-h: 56px` (default 40px). Override the height on any instance with `style="--v2-spark-h:64px"`. |
-| `.v2-spark[data-v2-spark-empty]` | Set by `renderSparkline()` when fewer than 2 samples exist; the path is cleared so stale data never lingers. |
-| `.v2-spark--out` | Modifier: switches all colors to `--v2-tel-out` palette. |
+| `.v2-spark--tall` | `--sq-spark-h: 56px` (default 40px). Override the height on any instance with `style="--sq-spark-h:64px"`. |
+| `.v2-spark[data-sq-spark-empty]` | Set by `renderSparkline()` when fewer than 2 samples exist; the path is cleared so stale data never lingers. |
+| `.v2-spark--out` | Modifier: switches all colors to `--sq-tel-out` palette. |
 
 #### Status Dot
 
 | Class | Colour | Use for |
 |---|---|---|
-| `.v2-dot` | `--v2-status-running` (default) | online / healthy |
-| `.v2-dot--ok` | `--v2-status-running` | explicit healthy alias |
-| `.v2-dot--warn` | `--v2-status-warning` | degraded, syncing |
-| `.v2-dot--err` | `--v2-status-error` | down, failing |
-| `.v2-dot--idle` | `--v2-text-subtle` | unknown, connecting |
-| `.v2-dot--stopped` | `--v2-status-error` | legacy alias for `--err` |
-| `.v2-dot--reboot` | `--v2-status-warning` + pulse | restarting |
+| `.v2-dot` | `--sq-status-running` (default) | online / healthy |
+| `.v2-dot--ok` | `--sq-status-running` | explicit healthy alias |
+| `.v2-dot--warn` | `--sq-status-warning` | degraded, syncing |
+| `.v2-dot--err` | `--sq-status-error` | down, failing |
+| `.v2-dot--idle` | `--sq-text-subtle` | unknown, connecting |
+| `.v2-dot--stopped` | `--sq-status-error` | legacy alias for `--err` |
+| `.v2-dot--reboot` | `--sq-status-warning` + pulse | restarting |
 
 **One signal per state - dot + text OR badge + text, never both.** A state is
 rendered either as a dot with a label (`.v2-status` = `.v2-dot*` + text) or as a
@@ -415,7 +414,7 @@ inside a `.v2-badge`: the dot and the badge tint say the same thing twice and th
 | Class | Purpose |
 |---|---|
 | `.v2-table-wrap` | Horizontal scroll wrapper with a thin scrollbar. Use it whenever rows can exceed the content width. |
-| `.v2-table` | `border-collapse`, `--v2-text-sm`, tabular numbers. `th` = uppercase micro label with a bottom hairline; `td` = hairline top border; rows hover with `--v2-hover`. |
+| `.v2-table` | `border-collapse`, `--sq-text-sm`, tabular numbers. `th` = uppercase micro label with a bottom hairline; `td` = hairline top border; rows hover with `--sq-hover`. |
 | `.v2-table__num` | Right-aligned mono cell (counts, epochs, byte values). |
 | `.v2-table__mono` | Mono cell, default alignment (addresses, hashes). |
 | `.v2-table__mute` | Quiet metadata cell. |
@@ -430,15 +429,15 @@ only the hairlines the framework already uses.
 | Class | Purpose |
 |---|---|
 | `.v2-log` | Flex column, mono 11 px / 1.55. |
-| `.v2-log--scroll` | `max-height: var(--v2-log-h, 420px)`, thin scrollbar, `overscroll-behavior: contain`. |
+| `.v2-log--scroll` | `max-height: var(--sq-log-h, 420px)`, thin scrollbar, `overscroll-behavior: contain`. |
 | `.v2-log--bordered` | Hairline top and bottom separators. |
 | `.v2-log__row` | One line: timestamp · level · component · message, with a 2 px transparent left rail. |
 | `.v2-log__row--warn` / `--error` | Amber / red left rail; the error row also tints the background. |
-| `.v2-log__ts` | Mono timestamp, `--v2-text-subtle`, tabular nums. |
+| `.v2-log__ts` | Mono timestamp, `--sq-text-subtle`, tabular nums. |
 | `.v2-log__level` + `--warn` / `--error` / `--fatal` | Fixed-width level label; colour follows severity. |
 | `.v2-log__comp` | Brand-coloured component tag, truncated with ellipsis. |
 | `.v2-log__msg` | Message body, `overflow-wrap: anywhere` so long frames never overflow. |
-| `.v2-log__empty` | Centered "waiting for stream" placeholder (sans-serif, `--v2-text-xs`). |
+| `.v2-log__empty` | Centered "waiting for stream" placeholder (sans-serif, `--sq-text-xs`). |
 
 Responsive: component tag hidden at `≤720px`, timestamp hidden at `≤420px`.
 
@@ -446,24 +445,24 @@ Responsive: component tag hidden at `≤720px`, timestamp hidden at `≤420px`.
 
 ### 5.6 Form Controls
 
-V2 restyls native HTML form elements to match the flat-surface model. All controls use `--v2-inset` background, `--v2-radius-control` (or `--v2-radius-micro` for checkboxes), and transparent borders that turn brand-colored on focus.
+Synteq UI restyles native HTML form elements to match the flat-surface model. All controls use `--sq-inset` background, `--sq-radius-control` (or `--sq-radius-micro` for checkboxes), and transparent borders that turn brand-colored on focus.
 
 #### Field Wrapper
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-field` | Flex column container. `gap: var(--v2-field-gap)`. Groups label + input + hint/error. |
-| `.v2-field__label` | Label text. `--v2-text-sm`, `--v2-fw-medium`, `--v2-text-strong`. |
+| `.v2-field` | Flex column container. `gap: var(--sq-field-gap)`. Groups label + input + hint/error. |
+| `.v2-field__label` | Label text. `--sq-text-sm`, `--sq-fw-medium`, `--sq-text-strong`. |
 | `.v2-field__label--required` | Adds red asterisk via `::after`. |
-| `.v2-field__hint` | Helper text below input. `--v2-text-xs`, `--v2-text-subtle`. Always visible unless field is invalid. |
-| `.v2-field__error` | Error message. `--v2-text-xs`, `--v2-status-error`. Hidden by default, shown when `.v2-field--invalid` applied. |
+| `.v2-field__hint` | Helper text below input. `--sq-text-xs`, `--sq-text-subtle`. Always visible unless field is invalid. |
+| `.v2-field__error` | Error message. `--sq-text-xs`, `--sq-status-error`. Hidden by default, shown when `.v2-field--invalid` applied. |
 | `.v2-field--invalid` | State class. Shows error, adds red border to input. Wire with `[aria-invalid="true"]` on the input. |
 
 #### Text Inputs
 
 | Class | Element | Notes |
 |-------|---------|-------|
-| `.v2-input` | `<input type="text|email|password|number|tel|url">` | Height `--v2-input-h` (32px). Transparent border → brand on focus. Red border when `[aria-invalid="true"]`. |
+| `.v2-input` | `<input type="text|email|password|number|tel|url">` | Height `--sq-input-h` (32px). Transparent border → brand on focus. Red border when `[aria-invalid="true"]`. |
 | `.v2-textarea` | `<textarea>` | Min-height 2.5× input height. Vertical resize allowed. Same focus/invalid states as input. |
 | `.v2-select` | `<select>` | Native dropdown with custom SVG arrow (data-uri). Arrow color switches per theme. Same states as input. |
 
@@ -488,7 +487,7 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-input-group` | Flex row wrapper. Single outer border + `--v2-inset` background. Focus-within → brand border. |
+| `.v2-input-group` | Flex row wrapper. Single outer border + `--sq-inset` background. Focus-within → brand border. |
 | `.v2-input-group .v2-input` | Input inside group. No border, transparent bg, flex:1. |
 | `.v2-input-group__affix` | Prefix or suffix text/icon. Hairline separator between segments. First-child gets right border, others get left border. |
 
@@ -496,18 +495,18 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-range` | `<input type="range">`. Track height 6px, `--v2-track` bg, pill radius. Custom thumb: 16×16 circle, `--v2-brand`, hover scale 1.15×. Vendor prefixes for `::-webkit-slider-thumb` and `::-moz-range-thumb`. |
+| `.v2-range` | `<input type="range">`. Track height 6px, `--sq-track` bg, pill radius. Custom thumb: 16×16 circle, `--sq-brand`, hover scale 1.15×. Vendor prefixes for `::-webkit-slider-thumb` and `::-moz-range-thumb`. |
 | `.v2-range-label` | Wrapper with label + value display above slider. |
 | `.v2-range-label__head` | Flex row, space-between. Label left, value right. |
-| `.v2-range-label__value` | Tabular nums, `--v2-text-strong`, medium weight. |
+| `.v2-range-label__value` | Tabular nums, `--sq-text-strong`, medium weight. |
 
 **States (all controls):**
 - `:disabled` → 40-50% opacity, `cursor: not-allowed`
 - `:focus-visible` → **one** indicator only:
-  - text input / textarea / select → `2px solid var(--v2-brand)` outline, `outline-offset: 1px`; the 1px field border stays transparent
-  - checkbox / radio / switch → `2px solid var(--v2-brand)` outline, `outline-offset: 2px` (the border keeps carrying checked / invalid state)
+  - text input / textarea / select → `2px solid var(--sq-brand)` outline, `outline-offset: 1px`; the 1px field border stays transparent
+  - checkbox / radio / switch → `2px solid var(--sq-brand)` outline, `outline-offset: 2px` (the border keeps carrying checked / invalid state)
   - input group → the group border turns brand via `:focus-within`; the inner input draws no ring
-- `[aria-invalid="true"]` → `--v2-status-error` border; when focused, the ring turns error-red instead of adding a second red border
+- `[aria-invalid="true"]` → `--sq-status-error` border; when focused, the ring turns error-red instead of adding a second red border
 - `[readonly]` → dimmed, no interaction
 
 **Touch targets:** `@media (pointer: coarse)` increases checkbox/radio to 20×20, switch to 44×24 to meet WCAG 2.2 AA minimum (44×44 effective tap area with label).
@@ -520,52 +519,52 @@ V2 restyls native HTML form elements to match the flat-surface model. All contro
 
 | Class | Appearance |
 |-------|-----------|
-| `.v2-btn` | Base: `--v2-inset` background, `--v2-text`, `height: 32px`, `--v2-radius-control`. |
-| `.v2-btn--ghost` | Transparent background, `--v2-text-subtle`. |
-| `.v2-btn--primary` | `--v2-text-strong` background, inverted text. High-emphasis action. |
-| `.v2-btn--brand` | `--v2-brand` background, `--v2-text-on-solid` ink. |
+| `.v2-btn` | Base: `--sq-inset` background, `--sq-text`, `height: 32px`, `--sq-radius-control`. |
+| `.v2-btn--ghost` | Transparent background, `--sq-text-subtle`. |
+| `.v2-btn--primary` | `--sq-text-strong` background, inverted text. High-emphasis action. |
+| `.v2-btn--brand` | `--sq-brand` background, `--sq-text-on-solid` ink. |
 | `.v2-btn--info` | Tonal blue background (`16%`), status-ink label. Informational action. |
 | `.v2-btn--warn` (alias `.v2-btn--warning`) | Tonal amber background (`16%`), status-ink label. "Proceed with care". |
 | `.v2-btn--danger` | Tonal red background (`16%`), status-ink label. Destructive action. |
 | `.v2-btn--icon` | Square variant: `width: 32px`, `padding: 0`. **Requires `aria-label`**. |
 | `.v2-btn--block` | `width: 100%`. Use inside `.v2-btn__stack` for a vertical action group. |
 | `.v2-copy--ok` | Clipboard confirmation state added by the runtime for 1.8 s (green tint). |
-| `.v2-tip` | Transient anchored label (`SynteqUI.tip(el, msg)`): inverted surface, `--v2-radius-micro`, `--v2-text-xs`, `pointer-events: none`, `z-index: 60`. |
-| `.v2-tip--info` / `--ok` / `--warn` / `--err` | Tinted variants of the tip (solid status fill + `--v2-text-on-solid` ink). |
+| `.v2-tip` | Transient anchored label (`SynteqUI.tip(el, msg)`): inverted surface, `--sq-radius-micro`, `--sq-text-xs`, `pointer-events: none`, `z-index: 60`. |
+| `.v2-tip--info` / `--ok` / `--warn` / `--err` | Tinted variants of the tip (solid status fill + `--sq-text-on-solid` ink). |
 | `.v2-tip.is-out` | Fade-out state applied before the runtime removes the node. |
 
 #### Segmented Bar
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-seg` | Flex container. `--v2-inset` background, `--v2-radius-control`. Add `role="group"` + `aria-label`. |
+| `.v2-seg` | Flex container. `--sq-inset` background, `--sq-radius-control`. Add `role="group"` + `aria-label`. |
 | `.v2-seg__btn` | One segment. Hairline right border between siblings. |
-| `.v2-seg__btn--active` | Active segment. `--v2-hover` background, `--v2-fw-medium`. |
+| `.v2-seg__btn--active` | Active segment. `--sq-hover` background, `--sq-fw-medium`. |
 | `.v2-seg__btn--icon` | Icon-only segment variant: narrower padding. |
 
 #### Other Controls
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-input` | Text input. `--v2-inset` background, `--v2-radius-control`, `height: 32px`. |
-| `.v2-badge` | Status chip. `--v2-radius-micro`. Modifiers: `--brand`, `--info`, `--ok`, `--warn`, `--err`. |
-| `.v2-kbd` | Keyboard shortcut pill. Mono font, `--v2-radius-micro`, `height: 18px`. |
-| `.v2-avatar` | User monogram square. `26×26px`, `--v2-radius-micro`, brand tint background. |
+| `.v2-input` | Text input. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
+| `.v2-badge` | Status chip. `--sq-radius-micro`. Modifiers: `--brand`, `--info`, `--ok`, `--warn`, `--err`. |
+| `.v2-kbd` | Keyboard shortcut pill. Mono font, `--sq-radius-micro`, `height: 18px`. |
+| `.v2-avatar` | User monogram square. `26×26px`, `--sq-radius-micro`, brand tint background. |
 
 ---
 
 ### 5.7 Motion
 
-All animations use `--v2-ease` and are globally suppressed by `prefers-reduced-motion` in `base.css`.
+All animations use `--sq-ease` and are globally suppressed by `prefers-reduced-motion` in `base.css`.
 
 | Class / Attribute | Behavior |
 |-------------------|---------|
-| `.v2-fade-up` | Single element mount: fade in + `6px` upward drift over `--v2-dur-normal`. |
+| `.v2-fade-up` | Single element mount: fade in + `6px` upward drift over `--sq-dur-normal`. |
 | `.v2-stagger` | Parent: each child gets `v2-fade-up` with 60ms incremental delays (up to child 6+). |
-| `data-v2-stagger` | Triggers `.v2-stagger` via IntersectionObserver when element enters the viewport (JS-managed). |
+| `data-sq-stagger` | Triggers `.v2-stagger` via IntersectionObserver when element enters the viewport (JS-managed). |
 | `.v2-live` | Soft pulse (opacity `1→0.5→1`) on a `2s` loop. Used for live data indicators. |
 | `.v2-skeleton` | Shimmer placeholder for async content. Linear gradient sweep animation. |
-| `.v2-row-hover` | Hover lift utility. Transitions `background-color` at `--v2-dur-fast`. |
+| `.v2-row-hover` | Hover lift utility. Transitions `background-color` at `--sq-dur-fast`. |
 | `SynteqUI.replayAnimation(el, opts)` | On-demand replay of a mount animation. Uses WAAPI (`preset`: `fade-up` \| `fade` \| `zoom-in`, default 280ms), cancels any running animation first, and honours `opts.force`. |
 
 **Reduced motion and replays.** `base.css` shortens every CSS animation to
@@ -601,11 +600,11 @@ Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must 
 
 | Class | Color Token |
 |-------|------------|
-| `.v2-icon--mute` | `--v2-text-subtle` |
-| `.v2-icon--brand` | `--v2-brand` |
-| `.v2-icon--ok` | `--v2-status-running` |
-| `.v2-icon--warn` | `--v2-status-warning` |
-| `.v2-icon--err` | `--v2-status-error` |
+| `.v2-icon--mute` | `--sq-text-subtle` |
+| `.v2-icon--brand` | `--sq-brand` |
+| `.v2-icon--ok` | `--sq-status-running` |
+| `.v2-icon--warn` | `--sq-status-warning` |
+| `.v2-icon--err` | `--sq-status-error` |
 
 All icons inherit `stroke: currentColor` — tint is set by parent element color or a modifier class. `.v2-ico-label` is a flex wrapper for icon + text pairs.
 
@@ -618,14 +617,14 @@ toolbar and pagination rails around the existing `.v2-table`, never a frame.
 
 ```
 .v2-table-toolbar
- ├── .v2-table-toolbar__start → __title + __meta[data-v2-table-count]
+ ├── .v2-table-toolbar__start → __title + __meta[data-sq-table-count]
  └── .v2-table-toolbar__end   → __filter + actions
 .v2-table-wrap
  └── table.v2-table.v2-table--sticky
       ├── thead th[aria-sort] > button.v2-table__sort
-      ├── th.v2-table__check > [data-v2-select-all]
+      ├── th.v2-table__check > [data-sq-select-all]
       └── tbody tr.is-selected
-           └── td.v2-table__check > [data-v2-row-select]
+           └── td.v2-table__check > [data-sq-row-select]
 nav.v2-pagination
  ├── .v2-pagination__info
  └── .v2-pagination__pages > button.v2-pagination__btn[aria-current]
@@ -637,7 +636,7 @@ nav.v2-pagination
 | Selection | `tr.is-selected` tints the row with `color-mix(brand 7%)`; the select-all checkbox uses the native `indeterminate` state. |
 | Pagination | Page buttons are windowed to 5 with `…` gaps; the current page uses a brand border, never a filled background. |
 | Filtering | Case-insensitive substring match over the row text; an empty result renders one generated row with `.v2-table__empty`. |
-| Separation | Toolbar `border-bottom` + pagination `border-top`, both `--v2-line`. No shadows, no tonal fills. |
+| Separation | Toolbar `border-bottom` + pagination `border-top`, both `--sq-line`. No shadows, no tonal fills. |
 | Density | `--compact` trims vertical padding, `--dense` also drops the type one step. |
 
 ### 5.10 Chart Extensions
@@ -646,14 +645,14 @@ Two modules share one frame (`.v2-chart`) and one tooltip (`.v2-chart__tip`).
 
 | Layer | Element | Notes |
 |---|---|---|
-| Frame | `.v2-chart` → `__head`, `__body`, `__legend` | Column flex; head uses `--v2-text-md` title + `--v2-text-xs` meta |
+| Frame | `.v2-chart` → `__head`, `__body`, `__legend` | Column flex; head uses `--sq-text-md` title + `--sq-text-xs` meta |
 | Line/area | `svg.v2-chart__svg` | `viewBox` equals the element's pixel box, so 1 unit = 1 px and tick text never scales |
-| Grid | `.v2-chart__grid` (lines), `__axis` (value axis), `__tick` (labels) | Grid uses `--v2-line`, axis `--v2-line-strong` |
+| Grid | `.v2-chart__grid` (lines), `__axis` (value axis), `__tick` (labels) | Grid uses `--sq-line`, axis `--sq-line-strong` |
 | Series | `.v2-chart__area`, `__line`, `__dot` + `__s1…s4` | Tints: brand → tel-out → warning → subtle |
-| Hover | `.v2-chart__cursor` + `.v2-chart__tip` | Crosshair is a dashed 1px line; the tooltip is `canvas` + `--v2-line-strong` border |
-| Stacked | `.v2-chart__cols` → `.v2-chart__col` → `.v2-chart__seg` | `column-reverse` keeps series 1 on the baseline; the grid template comes from `--v2-chart-cols` |
+| Hover | `.v2-chart__cursor` + `.v2-chart__tip` | Crosshair is a dashed 1px line; the tooltip is `canvas` + `--sq-line-strong` border |
+| Stacked | `.v2-chart__cols` → `.v2-chart__col` → `.v2-chart__seg` | `column-reverse` keeps series 1 on the baseline; the grid template comes from `--sq-chart-cols` |
 
-Height is a single variable (`--v2-chart-h`, `168px`; `--v2-chart-h-sm`, `128px`
+Height is a single variable (`--sq-chart-h`, `168px`; `--sq-chart-h-sm`, `128px`
 below 520px) so a chart and a stacked column block line up on the same row.
 
 ### 5.11 Tree
@@ -666,18 +665,18 @@ below 520px) so a chart and a stacked column block line up on the same row.
 ```
 
 - Indentation comes from nesting; each `.v2-tree__group` owns a `border-left` rail
-  (`--v2-line`, `--v2-line-strong` from the second level down) plus
-  `margin-left: --v2-space-5`.
+  (`--sq-line`, `--sq-line-strong` from the second level down) plus
+  `margin-left: --sq-space-5`.
 - The caret is a 14px chevron rotated 90° while `aria-expanded="true"`; leaf rows
   reuse the same slot with `.v2-tree__spacer` to keep labels aligned.
-- Third-level labels drop to `--v2-text-sm` / `--v2-text-subtle`. Three levels is
+- Third-level labels drop to `--sq-text-sm` / `--sq-text-subtle`. Three levels is
   the supported maximum; `initTree()` warns beyond that.
 - `.v2-tree__meta` is pushed right with `margin-left: auto` and hides below 520px.
 
 ### 5.12 Stepper / Timeline
 
 ```
-.v2-stepper[data-v2-step]
+.v2-stepper[data-sq-step]
  └── .v2-stepper__item (grid: 24px marker column + body)
       ├── .v2-stepper__marker        → number, check glyph or icon
       ├── ::after                    → connecting rail (hidden on last item)
@@ -686,10 +685,10 @@ below 520px) so a chart and a stacked column block line up on the same row.
 
 | State | Marker | Rail |
 |---|---|---|
-| `is-complete` | `--v2-status-running` border + glyph | green (`--v2-status-running`) |
-| `is-active` | 2px `--v2-brand` border, `aria-current="step"` | `--v2-line` |
-| `is-pending` | dashed `--v2-line-strong` border | `--v2-line` |
-| `is-error` | `--v2-status-error` border | neutral |
+| `is-complete` | `--sq-status-running` border + glyph | green (`--sq-status-running`) |
+| `is-active` | 2px `--sq-brand` border, `aria-current="step"` | `--sq-line` |
+| `is-pending` | dashed `--sq-line-strong` border | `--sq-line` |
+| `is-error` | `--sq-status-error` border | neutral |
 
 `.v2-stepper--horizontal` turns the items into equal-width columns with a
 horizontal rail between markers, and folds back to the vertical layout below
@@ -698,7 +697,7 @@ horizontal rail between markers, and folds back to the vertical layout below
 ### 5.13 Code Block
 
 ```
-.v2-code[data-v2-code]
+.v2-code[data-sq-code]
  ├── .v2-code__head → __title + __actions > button.v2-code__copy
  └── .v2-code__body
       ├── .v2-code__lines   (generated, aria-hidden)
@@ -706,14 +705,14 @@ horizontal rail between markers, and folds back to the vertical layout below
 ```
 
 - Gutter and code share `font-family`, `font-size` and `line-height`
-  (`--v2-code-leading`, default `1.65`), which is what keeps numbers aligned.
+  (`--sq-code-leading`, default `1.65`), which is what keeps numbers aligned.
   Both use the same vertical padding.
 - `white-space: pre` on the `<pre>` guarantees one text line per number; the
   block scrolls horizontally instead of wrapping.
-- The gutter sits on `--v2-inset` with a trailing hairline and is hidden below
+- The gutter sits on `--sq-inset` with a trailing hairline and is hidden below
   520px, where width is more valuable than numbering.
-- `.v2-code--plain` swaps the surface to `--v2-canvas`; `.v2-code--scroll` bounds
-  the height through `--v2-code-h` (default `320px`).
+- `.v2-code--plain` swaps the surface to `--sq-canvas`; `.v2-code--scroll` bounds
+  the height through `--sq-code-h` (default `320px`).
 
 ---
 
@@ -721,15 +720,15 @@ horizontal rail between markers, and folds back to the vertical layout below
 
 | Breakpoint | What changes |
 |------------|-------------|
-| `> 1080px` | Full-width content column (centred, max `--v2-content-max`) with the sticky bottom dock; all destinations fit. |
+| `> 1080px` | Full-width content column (centred, max `--sq-content-max`) with the sticky bottom dock; all destinations fit. |
 | `≤ 1080px` | Dock items narrow to `78px`; overflow activates drag-scroll + the `More` drop-up. |
 | `≤ 860px` | Compact brand/account affordances, 72px nav items, 44px+ touch targets, wider drop-up trigger. |
 | `≤ 720px` | `.v2-grid--2`, `.v2-grid--3` collapse to a single column; `.v2-grid--auto` already collapsed at `900px`; **`.v2-stat-strip` becomes a 2-column grid** (values wrap instead of overflowing); explorer previews tighten. |
 | `≤ 600px` | Topbar search text (`.v2-search__text`) and `.v2-kbd` pill are hidden — search becomes icon-only. Topbar padding reduces. |
-| `≤ 520px` | `.v2-stat__value` reduces to `--v2-text-xl`. `.v2-stat-strip` gap tightens. Dock brand/items compress (48px brand, 64px items). |
-| `≤ 420px` | `--v2-topbar-h` reduces to `48px`. Content padding and section gap compress. |
+| `≤ 520px` | `.v2-stat__value` reduces to `--sq-text-xl`. `.v2-stat-strip` gap tightens. Dock brand/items compress (48px brand, 64px items). |
+| `≤ 420px` | `--sq-topbar-h` reduces to `48px`. Content padding and section gap compress. |
 | `≤ 380px` | Topbar breadcrumb (`.v2-topbar__crumb`) and separator (`.v2-topbar__sep`) are hidden; dock brand 42px, items 58px. |
-| `height ≤ 480px` + landscape | `--v2-bottomnav-h` compresses to `52px`, dock items become icon+label rows, and sections stop forcing a full-screen height. |
+| `height ≤ 480px` + landscape | `--sq-bottomnav-h` compresses to `52px`, dock items become icon+label rows, and sections stop forcing a full-screen height. |
 
 ---
 
@@ -737,7 +736,7 @@ horizontal rail between markers, and folds back to the vertical layout below
 
 There is **one toggle button** in the entire UI: `.v2-sidebar-toggle` inside `.v2-topbar`. It controls the bottom dock and updates `aria-expanded`.
 
-Wire it with the attribute `data-v2-sidebar-toggle`. The JS runtime attaches the click handler automatically on `DOMContentLoaded`.
+Wire it with the attribute `data-sq-sidebar-toggle`. The JS runtime attaches the click handler automatically on `DOMContentLoaded`.
 
 ### All Viewports — Hide/Show Mode
 
@@ -752,7 +751,7 @@ Wire it with the attribute `data-v2-sidebar-toggle`. The JS runtime attaches the
 The toggle button contains two icon elements:
 
 ```html
-<button class="v2-sidebar-toggle" data-v2-sidebar-toggle aria-label="Toggle sidebar">
+<button class="v2-sidebar-toggle" data-sq-sidebar-toggle aria-label="Toggle sidebar">
   <svg class="v2-icon v2-icon--18 icon-menu" ...></svg>
   <svg class="v2-icon v2-icon--18 icon-close" ...></svg>
 </button>
@@ -764,7 +763,7 @@ CSS rules swap their `display` based on `.nav-collapsed`. The open state shows t
 
 ## 8. Theme Extension Guide
 
-Synteq UI ships with two themes: dark (default) and light. Both are defined entirely through CSS custom properties (`--v2-*` tokens). You can extend or override these themes without modifying framework files.
+Synteq UI ships with two themes: dark (default) and light. Both are defined entirely through CSS custom properties (`--sq-*` tokens). You can extend or override these themes without modifying framework files.
 
 ### Overriding Theme Tokens
 
@@ -780,20 +779,20 @@ In `custom-theme.css`, override tokens at the `:root` level or scope them to `[d
 ```css
 /* Override for all themes */
 :root {
-  --v2-brand: #3b82f6;       /* Change brand color globally */
-  --v2-radius-control: 8px;  /* Increase border radius */
+  --sq-brand: #3b82f6;       /* Change brand color globally */
+  --sq-radius-control: 8px;  /* Increase border radius */
 }
 
 /* Dark theme overrides */
 [data-theme="dark"] {
-  --v2-canvas: #0a0a0a;
-  --v2-text-strong: #f5f5f5;
+  --sq-canvas: #0a0a0a;
+  --sq-text-strong: #f5f5f5;
 }
 
 /* Light theme overrides */
 [data-theme="light"] {
-  --v2-brand: #2563eb;
-  --v2-canvas: #fafafa;
+  --sq-brand: #2563eb;
+  --sq-canvas: #fafafa;
 }
 ```
 
@@ -804,24 +803,24 @@ Add a new `[data-theme="mytheme"]` block:
 ```css
 [data-theme="mytheme"] {
   /* Color tokens */
-  --v2-canvas: #1a1a2e;
-  --v2-sidebar: #16213e;
-  --v2-text-strong: #eef1ff;
-  --v2-text: #c5cae9;
-  --v2-text-subtle: #9fa8da;
-  --v2-text-on-accent: #ffffff;
-  --v2-brand: #5c6bc0;
-  --v2-line: rgba(255, 255, 255, 0.08);
-  --v2-line-strong: rgba(255, 255, 255, 0.14);
-  --v2-hover: rgba(255, 255, 255, 0.06);
-  --v2-inset: rgba(255, 255, 255, 0.04);
-  --v2-track: rgba(255, 255, 255, 0.08);
+  --sq-canvas: #1a1a2e;
+  --sq-sidebar: #16213e;
+  --sq-text-strong: #eef1ff;
+  --sq-text: #c5cae9;
+  --sq-text-subtle: #9fa8da;
+  --sq-text-on-accent: #ffffff;
+  --sq-brand: #5c6bc0;
+  --sq-line: rgba(255, 255, 255, 0.08);
+  --sq-line-strong: rgba(255, 255, 255, 0.14);
+  --sq-hover: rgba(255, 255, 255, 0.06);
+  --sq-inset: rgba(255, 255, 255, 0.04);
+  --sq-track: rgba(255, 255, 255, 0.08);
   
   /* Status colors */
-  --v2-status-running: #66bb6a;
-  --v2-status-warning: #ffa726;
-  --v2-status-error: #ef5350;
-  --v2-status-stopped: #78909c;
+  --sq-status-running: #66bb6a;
+  --sq-status-warning: #ffa726;
+  --sq-status-error: #ef5350;
+  --sq-status-stopped: #78909c;
 }
 ```
 
@@ -850,7 +849,7 @@ Reference them in component styles:
 ```css
 .app-custom-panel {
   height: var(--app-header-h);
-  background: var(--v2-canvas);
+  background: var(--sq-canvas);
   border-left: 3px solid var(--app-accent-blue);
 }
 ```
@@ -861,14 +860,14 @@ Core token groups you can override:
 
 | Group | Example Tokens | Notes |
 |-------|---------------|-------|
-| **Typography** | `--v2-font-sans`, `--v2-text-md`, `--v2-fw-medium` | Type scale, weights, line heights |
-| **Spacing** | `--v2-space-4`, `--v2-space-8` | 4px base grid, 9 steps |
-| **Radius** | `--v2-radius-micro`, `--v2-radius-control`, `--v2-radius-pill` | 3 border radius values |
-| **Color (Surface)** | `--v2-canvas`, `--v2-sidebar`, `--v2-hover`, `--v2-inset` | Background surfaces |
-| **Color (Text)** | `--v2-text-strong`, `--v2-text`, `--v2-text-subtle` | Text hierarchy |
-| **Color (Line)** | `--v2-line`, `--v2-line-strong` | Borders and separators |
-| **Color (Status)** | `--v2-status-running`, `--v2-status-warning`, `--v2-status-error` | Semantic colors |
-| **Motion** | `--v2-dur-instant`, `--v2-dur-fast`, `--v2-ease` | Timing and easing |
+| **Typography** | `--sq-font-sans`, `--sq-text-md`, `--sq-fw-medium` | Type scale, weights, line heights |
+| **Spacing** | `--sq-space-4`, `--sq-space-8` | 4px base grid, 9 steps |
+| **Radius** | `--sq-radius-micro`, `--sq-radius-control`, `--sq-radius-pill` | 3 border radius values |
+| **Color (Surface)** | `--sq-canvas`, `--sq-sidebar`, `--sq-hover`, `--sq-inset` | Background surfaces |
+| **Color (Text)** | `--sq-text-strong`, `--sq-text`, `--sq-text-subtle` | Text hierarchy |
+| **Color (Line)** | `--sq-line`, `--sq-line-strong` | Borders and separators |
+| **Color (Status)** | `--sq-status-running`, `--sq-status-warning`, `--sq-status-error` | Semantic colors |
+| **Motion** | `--sq-dur-instant`, `--sq-dur-fast`, `--sq-ease` | Timing and easing |
 
 ### Forced Colors Mode (High Contrast)
 
@@ -888,19 +887,19 @@ The framework includes automatic support for Windows High Contrast Mode via `@me
 
 | | Rule |
 |---|------|
-| ✅ DO | Use `--v2-*` tokens for every color, size, spacing, and timing value. Never write raw hex, `px`, or `ms` values directly in component styles. |
+| ✅ DO | Use `--sq-*` tokens for every color, size, spacing, and timing value. Never write raw hex, `px`, or `ms` values directly in component styles. |
 | ✅ DO | Use `.v2-section` `border-top` as the only separator between content blocks. One rule, one place. |
 | ✅ DO | Apply `v2-scroll` and `overflow-y: auto` exclusively on `.v2-content` (or other explicitly designated scroll regions). Never on `body`, `html`, `.v2-main`, or `.v2-app`. |
 | ✅ DO | Add `aria-label` to every icon-only button (`.v2-iconbtn`, `.v2-btn--icon`, `.v2-sidebar-toggle`). |
 | ✅ DO | Load fonts from `fonts/` only — they are self-hosted. Reference them via `fonts.css` which is already imported by `synteq-ui.css`. |
 | ✅ DO | Add `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` on every `.v2-gauge` track element. |
-| ✅ DO | Use `data-v2-stagger` on containers whose children should animate in on scroll entry. Let JS handle the IntersectionObserver — do not manually add `.v2-stagger` in HTML. |
+| ✅ DO | Use `data-sq-stagger` on containers whose children should animate in on scroll entry. Let JS handle the IntersectionObserver — do not manually add `.v2-stagger` in HTML. |
 | ✅ DO | Set `data-theme` on `<html>` — not on `<body>` or inner elements — to apply theme tokens to the full document. |
 | ❌ DO NOT | Add a second sidebar toggle button inside `.v2-aside`. There is exactly one toggle, in the topbar. |
 | ❌ DO NOT | Add `border`, `box-shadow`, or a distinct `background-color` to create card-like wrappers around content. Use `.v2-section` separators instead. |
 | ❌ DO NOT | Add `border-bottom` to `.v2-section__head`. The separator above the section is sufficient — a second rule directly below the header creates a double-line artifact. |
 | ❌ DO NOT | Use external font CDNs (Google Fonts, Bunny Fonts, etc.). The Google Sans Code files are included under SIL OFL in `fonts/`. |
-| ❌ DO NOT | Override `--v2-aside-w` to create a wider sidebar — it is already at its maximum (`240px`). If you need more navigation space, rely on the dock overflow behaviour (drag-scroll + More drop-up) instead of adding group labels. |
+| ❌ DO NOT | Override `--sq-aside-w` to create a wider sidebar — it is already at its maximum (`240px`). If you need more navigation space, rely on the dock overflow behaviour (drag-scroll + More drop-up) instead of adding group labels. |
 | ❌ DO NOT | Directly set `body.style.overflow = 'hidden'` in your own JS except through the sidebar API — the base CSS already locks `overflow: hidden` on `html` and `body`. The sidebar runtime does set this transiently on mobile to prevent scroll bleed during drawer-open; do not fight it. |
 
 ---
@@ -911,10 +910,10 @@ Synteq UI targets **WCAG 2.2 Level AA**. Full validation requires manual testing
 
 ### Focus Management
 
-- `:focus-visible` is applied globally in `base.css` with a `2px solid --v2-text-strong` outline and `outline-offset: 2px`.
+- `:focus-visible` is applied globally in `base.css` with a `2px solid --sq-text-strong` outline and `outline-offset: 2px`.
 - `:focus` (mouse click) is suppressed — outline only appears on keyboard navigation.
-- Focus `border-radius` matches `--v2-radius-micro` to avoid sharp clipping artifacts.
-- **Form controls replace that global ring with their own**, so a field never shows two coloured edges: `2px solid --v2-brand` (offset `1px` for fields/selects, `2px` for checkbox/radio/switch). An input group uses `:focus-within` on the wrapper and its inner input suppresses the ring. Invalid + focused fields turn the ring red instead of stacking a red border under a brand ring.
+- Focus `border-radius` matches `--sq-radius-micro` to avoid sharp clipping artifacts.
+- **Form controls replace that global ring with their own**, so a field never shows two coloured edges: `2px solid --sq-brand` (offset `1px` for fields/selects, `2px` for checkbox/radio/switch). An input group uses `:focus-within` on the wrapper and its inner input suppresses the ring. Invalid + focused fields turn the ring red instead of stacking a red border under a brand ring.
 - Modal centring relies on `margin: auto` on `.v2-dialog`; the reset zeroes the UA value, and `margin: 0` would pin dialogs to the top-left corner.
 
 ### Color Contrast
@@ -923,14 +922,14 @@ All theme color pairs are verified at ≥ 4.5:1 against their respective backgro
 
 | Pair | Theme | Target Ratio |
 |------|-------|-------------|
-| `--v2-text` on `--v2-canvas` | Both | ≥ 4.5:1 (AA) |
-| `--v2-text-strong` on `--v2-canvas` | Both | ≥ 7:1 (AAA) |
-| `--v2-text-subtle` on `--v2-canvas` | Both | ≥ 4.5:1 (dark `#7a8080`, light `#666e6e`) |
-| `--v2-brand` on `--v2-canvas` | Dark | ≥ 4.5:1 |
-| `--v2-brand` on `--v2-canvas` | Light | ≥ 4.5:1 (tuned to `#059669`) |
-| Tonal status labels (button / badge / tag / log level) | Both | ≥ 4.5:1 — resolved through `--v2-status-ink-mix` (`60%`), see §3.6 |
-| `--v2-text-on-solid` on status fills (tips) | Both | ≥ 4.68:1 (`--err` uses `--v2-text-on-accent`, 4.83:1 in light) |
-| `--v2-text-on-solid` on `--v2-brand` (brand button / mark) | Both | 5.08:1 (light) / 11.55:1 (dark) |
+| `--sq-text` on `--sq-canvas` | Both | ≥ 4.5:1 (AA) |
+| `--sq-text-strong` on `--sq-canvas` | Both | ≥ 7:1 (AAA) |
+| `--sq-text-subtle` on `--sq-canvas` | Both | ≥ 4.5:1 (dark `#7a8080`, light `#666e6e`) |
+| `--sq-brand` on `--sq-canvas` | Dark | ≥ 4.5:1 |
+| `--sq-brand` on `--sq-canvas` | Light | ≥ 4.5:1 (tuned to `#059669`) |
+| Tonal status labels (button / badge / tag / log level) | Both | ≥ 4.5:1 — resolved through `--sq-status-ink-mix` (`60%`), see §3.6 |
+| `--sq-text-on-solid` on status fills (tips) | Both | ≥ 4.68:1 (`--err` uses `--sq-text-on-accent`, 4.83:1 in light) |
+| `--sq-text-on-solid` on `--sq-brand` (brand button / mark) | Both | 5.08:1 (light) / 11.55:1 (dark) |
 
 ### Interactive Element Roles
 
@@ -939,7 +938,7 @@ All theme color pairs are verified at ≥ 4.5:1 against their respective backgro
 - Sparkline SVGs: `role="img"`, `aria-label="[metric] trend"`.
 - Line/area chart SVGs and stacked-column containers: `role="img"` with an `aria-label` that names the series and the window they cover.
 - Sortable table headers: `aria-sort="ascending|descending"` is written by `sortTable()`; only one header carries it at a time.
-- Row selection: `aria-label="Select <row name>"` on every `[data-v2-row-select]` checkbox, plus an `aria-label` on the select-all box. Shift-click selects a range and fires `sq:rowselection`.
+- Row selection: `aria-label="Select <row name>"` on every `[data-sq-row-select]` checkbox, plus an `aria-label` on the select-all box. Shift-click selects a range and fires `sq:rowselection`.
 - Tree toggles: `aria-expanded` is the single source of truth; every toggle needs an `aria-label` ("Collapse us-east-1"). Leaf rows use an `aria-hidden` spacer instead of an inert button.
 - Stepper: the current item receives `aria-current="step"`; markers hold a glyph or number and are `aria-hidden` because the title carries the meaning.
 - Code block gutter: `.v2-code__lines` is `aria-hidden="true"` so the copy reads as plain text.

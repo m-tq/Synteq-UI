@@ -15,15 +15,15 @@
   flex-direction: column;
   flex: 0 0 auto;                 /* never shrink inside the scroll column */
   justify-content: center;
-  gap: var(--v2-space-4);
+  gap: var(--sq-space-4);
   width: 100%;
-  max-width: var(--v2-content-max, 1200px);
+  max-width: var(--sq-content-max, 1200px);
   min-width: 0;
   margin-inline: auto;
-  padding-block: var(--v2-space-6);
-  border-top: var(--v2-line-h) solid var(--v2-line);
-  scroll-margin-top: var(--v2-space-4);   /* cleared below the topbar by the shell grid */
-  min-height: calc(100dvh - var(--v2-topbar-h) - var(--v2-nav-current, var(--v2-bottomnav-h)));
+  padding-block: var(--sq-space-6);
+  border-top: var(--sq-line-h) solid var(--sq-line);
+  scroll-margin-top: var(--sq-space-4);   /* cleared below the topbar by the shell grid */
+  min-height: calc(100dvh - var(--sq-topbar-h) - var(--sq-nav-current, var(--sq-bottomnav-h)));
 }
 .v2-section:first-child { border-top: none; }
 
@@ -33,8 +33,8 @@
   min-height: 0;
   max-width: none;
   justify-content: flex-start;
-  gap: var(--v2-space-3);
-  padding-block: var(--v2-space-4);
+  gap: var(--sq-space-3);
+  padding-block: var(--sq-space-4);
 }
 .v2-section--top { justify-content: flex-start; }
 .v2-section--compact { min-height: 0; }
@@ -45,23 +45,23 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--v2-space-2) var(--v2-space-3);
+  gap: var(--sq-space-2) var(--sq-space-3);
   min-width: 0;
   /* Intentionally no border-bottom — avoid double-rule appearance */
 }
 .v2-section__meta {
   margin-left: auto;
-  font-size: var(--v2-text-xs);
-  color: var(--v2-text-subtle);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-subtle);
   font-variant-numeric: tabular-nums;
 }
 .v2-section__title {
   display: inline-flex;
   align-items: center;
-  gap: var(--v2-space-2);
-  font-size: var(--v2-text-xs);
-  font-weight: var(--v2-fw-semibold);
-  color: var(--v2-text-subtle);
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-fw-semibold);
+  color: var(--sq-text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.07em;
 }
@@ -69,15 +69,15 @@
 /* Explicit rule helpers (opt-in, not auto-applied) */
 .v2-rule {
   border: 0;
-  border-top: var(--v2-line-h) solid var(--v2-line);
+  border-top: var(--sq-line-h) solid var(--sq-line);
   width: 100%;
   margin: 0;
 }
-.v2-rule--strong { border-top-color: var(--v2-line-strong); }
+.v2-rule--strong { border-top-color: var(--sq-line-strong); }
 .v2-rule--dashed { border-top-style: dashed; }
 
 /* Layout grids — equal-height tracks, safe minmax(0) to avoid overflow */
-.v2-grid { display: grid; gap: var(--v2-space-5); align-items: start; min-width: 0; }
+.v2-grid { display: grid; gap: var(--sq-space-5); align-items: start; min-width: 0; }
 .v2-grid > * { min-width: 0; }
 .v2-grid--2    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .v2-grid--3    { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -90,7 +90,7 @@
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: var(--v2-space-5) var(--v2-space-6);
+  gap: var(--sq-space-5) var(--sq-space-6);
   min-width: 0;
 }
 .v2-stat-strip .v2-stat { min-width: 80px; flex: 1 1 80px; }
@@ -104,7 +104,7 @@
 }
 @media (max-width: 720px) {
   .v2-grid--2, .v2-grid--3 { grid-template-columns: minmax(0, 1fr); }
-  .v2-grid { gap: var(--v2-space-4); }
+  .v2-grid { gap: var(--sq-space-4); }
 
   /* Stat strips: a flex wrap squeezes six items into ~80px columns, so long
      values (epochs, byte counts, percentages) used to overflow their box.
@@ -112,7 +112,7 @@
   .v2-stat-strip {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--v2-space-4) var(--v2-space-5);
+    gap: var(--sq-space-4) var(--sq-space-5);
     align-items: start;
   }
   .v2-stat-strip .v2-stat { min-width: 0; flex: none; }
@@ -120,14 +120,14 @@
   .v2-stat__label { overflow-wrap: anywhere; }
 }
 @media (max-width: 520px) {
-  .v2-stat-strip { gap: var(--v2-space-3) var(--v2-space-4); }
-  .v2-section { gap: var(--v2-space-3); padding-block: var(--v2-space-5); }
+  .v2-stat-strip { gap: var(--sq-space-3) var(--sq-space-4); }
+  .v2-section { gap: var(--sq-space-3); padding-block: var(--sq-space-5); }
 }
 @media (max-height: 480px) and (orientation: landscape) {
   /* Short landscape phones: never force a full-screen row per section */
   .v2-section {
     min-height: 0;
     justify-content: flex-start;
-    padding-block: var(--v2-space-4);
+    padding-block: var(--sq-space-4);
   }
 }
