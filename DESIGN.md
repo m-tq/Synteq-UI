@@ -17,7 +17,7 @@ Synteq UI is a **viewport-locked, offline-first, text-first** dashboard UI frame
 | 2 | **Responsive on any screen** | Fluid type scale (`clamp`), adaptive content grid, and a sticky hideable bottom dock work from phone to ultra-wide. |
 | 3 | **Simple & lightweight** | Minimal token set, flat surfaces, zero external runtime dependencies. |
 | 4 | **No cards** | Visual separation comes from `1px` hairline separators only — never from background color shifts or box shadows that create card-like wrappers. |
-| 5 | **Lightweight motion** | Subtle fade-up mounts, smooth gauge fills, pulse indicators. All motion is auto-disabled via `prefers-reduced-motion`. |
+| 5 | **Lightweight motion** | Subtle fade-up mounts, smooth gauge fills, pulse indicators. Ambient motion is auto-disabled via `prefers-reduced-motion`; essential loading indicators keep moving. |
 | 6 | **Inline icons** | Every interactive label carries an inline SVG icon for instant context recognition. No icon fonts, no external icon CDNs. |
 
 ---
@@ -45,7 +45,7 @@ Synteq UI uses a single flat canvas instead of a multi-tier tonal elevation mode
 | Surface hierarchy | 5-tier tonal elevation | Single flat canvas |
 | Visual separation | Tonal card backgrounds | `1px` hairline separators only |
 | Navigation | Fixed left sidebar | Sticky bottom dock with icon labels and hide/show motion |
-| Page scroll | `min-height: 100%` | `height: 100dvh; overflow: hidden` — only `.v2-content` scrolls |
+| Page scroll | `min-height: 100%` | `height: 100dvh; overflow: hidden` — only `.sq-content` scrolls |
 | Gauge | 86-tick discrete bar | Continuous smooth fill bar |
 | Network chart | 48-bar histogram (112px) | Dual-segment bars (72px) + axis-labelled line/area and stacked columns |
 | Tables | Static markup | Sortable, selectable, filterable, paginated module |
@@ -80,7 +80,7 @@ Synteq UI uses a single flat canvas instead of a multi-tier tonal elevation mode
 | Token | Value | Usage |
 |-------|-------|-------|
 | `--sq-fw-regular` | `400` | Body text, subtle labels |
-| `--sq-fw-medium` | `500` | Active nav items, stat values, button text |
+| `--sq-fw-medium` | `500` | Stat values, button text, active menu items |
 | `--sq-fw-semibold` | `600` | Section titles, brand name |
 | `--sq-leading-tight` | `1.2` | Large type (`2xl`, `3xl`) |
 | `--sq-leading-base` | `1.5` | Body text |
@@ -137,7 +137,7 @@ Single easing curve. Four duration steps.
 | `--sq-aside-w` | `clamp(204px, 17vw, 240px)` | Legacy sizing token; current dock uses full available width |
 | `--sq-topbar-h` | `52px` | Topbar row height; reduces to `48px` at `≤420px` and in short landscape |
 | `--sq-bottomnav-h` | `60px` | Sticky bottom dock height; compresses to `52px` in short landscape |
-| `--sq-content-max` | `1200px` | Max width of the centred content column (every `.v2-section`) |
+| `--sq-content-max` | `1200px` | Max width of the centred content column (every `.sq-section`) |
 | `--sq-nav-item-w` | `80px` | Minimum dock item width — drives the drag/More overflow threshold |
 | `--sq-line-h` | `1px` | Standard hairline separator weight |
 | `--sq-line-h-strong` | `1px` | Emphasized separator (same physical weight, different color) |
@@ -169,7 +169,7 @@ Switch themes via `data-theme="dark"` or `data-theme="light"` on `<html>`.
 | Token | Dark | Light | Role |
 |-------|------|-------|------|
 | `--sq-line` | `#1c2020` | `#e1e5e5` | Default hairline (section borders, KV rows, sidebar edge) |
-| `--sq-line-strong` | `#2b3030` | `#cfd4d4` | Emphasized separator (`.v2-rule--strong`, scrollbar thumb) |
+| `--sq-line-strong` | `#2b3030` | `#cfd4d4` | Emphasized separator (`.sq-rule--strong`, scrollbar thumb) |
 | `--sq-line-accent` | `#1f3a30` | `#b9d9cf` | Brand-tinted separator (accent-edge rules) |
 
 #### Brand & Status
@@ -214,11 +214,11 @@ synteq-ui/
 │   ├── base.css                  — viewport lock, scroll reset, focus ring, element reset, typography utils
 │   ├── synteq-ui.css             — master @import bundle (single <link> for consumers)
 │   └── components/
-│       ├── icons.css             — inline SVG icon sizing (.v2-icon, 12–20px) and tint modifiers
-│       ├── shell.css             — viewport-locked grid (.v2-app), dock collapse, content scroll region
+│       ├── icons.css             — inline SVG icon sizing (.sq-icon, 12–20px) and tint modifiers
+│       ├── shell.css             — viewport-locked grid (.sq-app), dock collapse, content scroll region
 │       ├── sidebar.css           — sticky bottom dock, nav items, brand and account controls
 │       ├── topbar.css            — topbar layout, sidebar toggle button, breadcrumb, search, icon buttons
-│       ├── content.css           — section separators, section head, layout grids (.v2-grid), stat strip
+│       ├── content.css           — section separators, section head, layout grids (.sq-grid), stat strip
 │       ├── data.css              — stat blocks, KV rows, slim gauges, sparklines, bar chart, legend, status dots
 │       ├── controls.css          — buttons (all variants incl. info/warn), segmented bar, badges, kbd pill, avatar
 │       ├── forms.css             — field wrapper, inputs, textarea, select, checkbox, radio, switch, range
@@ -230,7 +230,7 @@ synteq-ui/
 │       ├── stepper.css           — vertical progress indicator / timeline
 │       ├── code.css              — syntax-free code surface with gutter and copy button
 │       ├── framework.css         — density control, forced-colors, touch targets
-│       └── motion.css            — fade-up animation, stagger children, skeleton shimmer, soft pulse, hover lift
+│       └── motion.css            — fade-up animation, stagger children, soft pulse, hover lift
 ├── js/
 │   └── synteq-ui.js              — zero-dependency runtime: theme, dock, scroll-spy, toast, command palette,
 │                                   tables, tree, stepper, code blocks, data helpers
@@ -252,21 +252,21 @@ synteq-ui/
 The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 
 ```
-.v2-app
-├── .v2-aside          ← grid-area: aside
-├── .v2-topbar         ← grid-area: topbar
-└── .v2-main           ← grid-area: main
-    └── .v2-content    ← the only scrollable surface
+.sq-app
+├── .sq-aside          ← grid-area: aside
+├── .sq-topbar         ← grid-area: topbar
+└── .sq-main           ← grid-area: main
+    └── .sq-content    ← the only scrollable surface
 ```
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-app` | Root grid container. `height: 100dvh; overflow: hidden`. Dock and content occupy dedicated grid rows. |
-| `.v2-app.nav-collapsed` | Sets dock row to zero and slides navigation away with a CSS grid transition. |
-| `.v2-aside` | Sticky bottom dock. `min-width: 0`, `overflow: visible` so the More drop-up can escape upward. |
-| `.v2-topbar` | Header row. Hairline `border-bottom`. Gains `.is-scrolled` box-shadow when content scrolls past 4px. |
-| `.v2-main` | Remaining canvas. `overflow: hidden`, `display: flex`. Never scrolls itself. |
-| `.v2-content` | **The only default vertical scroll region**. Padded, flex column with `gap: --sq-space-7` between sections. |
+| `.sq-app` | Root grid container. `height: 100dvh; overflow: hidden`. Dock and content occupy dedicated grid rows. |
+| `.sq-app.nav-collapsed` | Sets dock row to zero and slides navigation away with a CSS grid transition. |
+| `.sq-aside` | Sticky bottom dock. `min-width: 0`, `overflow: visible` so the More drop-up can escape upward. |
+| `.sq-topbar` | Header row. Hairline `border-bottom`. Gains `.is-scrolled` box-shadow when content scrolls past 4px. |
+| `.sq-main` | Remaining canvas. `overflow: hidden`, `display: flex`. Never scrolls itself. |
+| `.sq-content` | **The only default vertical scroll region**. Padded, flex column with `gap: --sq-space-7` between sections. |
 
 ---
 
@@ -274,16 +274,16 @@ The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-aside__brand` | Top bar — aligns to topbar height. Contains brand mark and product name. |
-| `.v2-aside__brand-mark` | 20×20 brand icon square (brand color background, `--sq-radius-micro`). |
-| `.v2-nav` | Horizontal dock navigation. `flex: 1`, safe-centred while items fit, drag-scrollable / wheel-scrollable once they overflow. |
-| `.v2-nav__group-label` | **Not rendered in the dock** (`display: none`). Use icon + label items only. |
-| `.v2-nav__item` | Navigation link. `min-width: var(--sq-nav-item-w)`, min height 44px. `border-radius: --sq-radius-control`. |
-| `.v2-nav__item--active` | Active page state. Brand-tinted background (`brand 12%`), `--sq-fw-semibold`, 3px inset brand bar, icon shifts to `--sq-brand`. |
-| `.v2-nav__badge` | Absolute counter badge in the item's top-right corner, tabular nums, `--sq-text-subtle`. |
-| `.v2-nav__more` | Injected by the runtime when items overflow. Opens the drop-up. Hidden (and removed from the tab order) otherwise. |
-| `.v2-nav__menu` | Drop-up panel anchored above the dock, listing every off-screen destination. `.v2-nav__menu-item` mirrors the item styling. |
-| `.v2-aside__footer` | Trailing user row. `border-left: 1px solid --sq-line`. Contains `.v2-avatar`, username, status dot. |
+| `.sq-aside__brand` | Top bar — aligns to topbar height. Contains brand mark and product name. |
+| `.sq-aside__brand-mark` | 20×20 brand icon square (brand color background, `--sq-radius-micro`). |
+| `.sq-nav` | Horizontal dock navigation. `flex: 1`, safe-centred while items fit, drag-scrollable / wheel-scrollable once they overflow. |
+| `.sq-nav__group-label` | **Not rendered in the dock** (`display: none`). Use icon + label items only. |
+| `.sq-nav__item` | Navigation link. `min-width: var(--sq-nav-item-w)`, min height 44px. `border-radius: --sq-radius-control`. |
+| `.sq-nav__item--active` | Active page state. Colour-only treatment: `--sq-brand` text and icon, `--sq-fw-semibold`, no pill, underline or inset bar. |
+| `.sq-nav__badge` | Absolute counter badge in the item's top-right corner, tabular nums, `--sq-text-subtle`. |
+| `.sq-nav__more` | Injected by the runtime when items overflow. Opens the drop-up. Hidden (and removed from the tab order) otherwise. |
+| `.sq-nav__menu` | Drop-up panel anchored above the dock, listing every off-screen destination. `.sq-nav__menu-item` mirrors the item styling. |
+| `.sq-aside__footer` | Trailing user row. `border-left: 1px solid --sq-line`. Contains `.sq-avatar`, username, status dot. |
 
 ---
 
@@ -291,42 +291,42 @@ The shell is a CSS Grid that locks to the viewport. It never allows body scroll.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-sidebar-toggle` | **The one and only sidebar toggle button** — lives in `.v2-topbar`. Wire with `data-sq-sidebar-toggle`. Contains `.icon-menu` and `.icon-close` (CSS swaps them). |
-| `.v2-topbar__left` | Left cluster: toggle + breadcrumb + page title. `flex: 1`, `min-width: 0`. |
-| `.v2-topbar__crumb` | Breadcrumb link. `--sq-text-sm`, `--sq-text-subtle`. Hidden at `≤380px`. |
-| `.v2-topbar__sep` | Breadcrumb separator glyph (e.g. `/`). `opacity: 0.35`. Hidden at `≤380px`. |
-| `.v2-topbar__title` | Current page name. `--sq-text-md`, `--sq-fw-medium`, `--sq-text-strong`. Ellipsis overflow. |
-| `.v2-topbar__right` | Right cluster: search trigger, icon buttons. `flex-shrink: 0`. |
-| `.v2-search` | Command palette / search trigger button. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
-| `.v2-iconbtn` | Generic icon-only button (32×32). `--sq-radius-control`. **Always requires `aria-label`**. |
-| `.v2-theme-toggle` | Theme toggle variant of `.v2-iconbtn`. Wire with `data-sq-toggle-theme`. CSS swaps `.v2-icon--sun` and `.v2-icon--moon` by `data-theme` attribute. |
+| `.sq-sidebar-toggle` | **The one and only sidebar toggle button** — lives in `.sq-topbar`. Wire with `data-sq-sidebar-toggle`. Contains `.icon-menu` and `.icon-close` (CSS swaps them). |
+| `.sq-topbar__left` | Left cluster: toggle + breadcrumb + page title. `flex: 1`, `min-width: 0`. |
+| `.sq-topbar__crumb` | Breadcrumb link. `--sq-text-sm`, `--sq-text-subtle`. Hidden at `≤380px`. |
+| `.sq-topbar__sep` | Breadcrumb separator glyph (e.g. `/`). `opacity: 0.35`. Hidden at `≤380px`. |
+| `.sq-topbar__title` | Current page name. `--sq-text-md`, `--sq-fw-medium`, `--sq-text-strong`. Ellipsis overflow. |
+| `.sq-topbar__right` | Right cluster: search trigger, icon buttons. `flex-shrink: 0`. |
+| `.sq-search` | Command palette / search trigger button. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
+| `.sq-iconbtn` | Generic icon-only button (32×32). `--sq-radius-control`. **Always requires `aria-label`**. |
+| `.sq-theme-toggle` | Theme toggle variant of `.sq-iconbtn`. Wire with `data-sq-toggle-theme`. CSS swaps `.sq-icon--sun` and `.sq-icon--moon` by `data-theme` attribute. |
 
 ---
 
 ### 5.4 Sections & Separators
 
-The **only** structural separator in Synteq UI is the `border-top` on `.v2-section`.
+The **only** structural separator in Synteq UI is the `border-top` on `.sq-section`.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-section` | Content block. `border-top: 1px solid --sq-line`. `padding-top: --sq-space-6`. |
-| `.v2-section:first-child` | Removes `border-top` and `padding-top` — no separator before the first block. |
-| `.v2-section__head` | Flex row: section title (left) + meta/action (right). **No `border-bottom`** — intentional. |
-| `.v2-section__title` | Label text. `--sq-text-xs`, `--sq-fw-semibold`, uppercase, `--sq-text-subtle`. |
-| `.v2-section__meta` | Trailing info (e.g. "updated 5s ago"). `--sq-text-xs`, `--sq-text-subtle`, tabular nums. |
-| `.v2-rule` | Explicit opt-in `<hr>` separator. Not auto-applied anywhere. |
-| `.v2-rule--strong` | `.v2-rule` with `--sq-line-strong` color. |
-| `.v2-rule--dashed` | `.v2-rule` with `border-top-style: dashed`. |
+| `.sq-section` | Content block. `border-top: 1px solid --sq-line`. `padding-top: --sq-space-6`. |
+| `.sq-section:first-child` | Removes `border-top` and `padding-top` — no separator before the first block. |
+| `.sq-section__head` | Flex row: section title (left) + meta/action (right). **No `border-bottom`** — intentional. |
+| `.sq-section__title` | Label text. `--sq-text-xs`, `--sq-fw-semibold`, uppercase, `--sq-text-subtle`. |
+| `.sq-section__meta` | Trailing info (e.g. "updated 5s ago"). `--sq-text-xs`, `--sq-text-subtle`, tabular nums. |
+| `.sq-rule` | Explicit opt-in `<hr>` separator. Not auto-applied anywhere. |
+| `.sq-rule--strong` | `.sq-rule` with `--sq-line-strong` color. |
+| `.sq-rule--dashed` | `.sq-rule` with `border-top-style: dashed`. |
 
 Layout helpers inside sections:
 
 | Class | Columns |
 |-------|---------|
-| `.v2-grid` | Base grid with `gap: --sq-space-5` |
-| `.v2-grid--2` | `repeat(2, 1fr)` → collapses to `1fr` at `≤720px` |
-| `.v2-grid--3` | `repeat(3, 1fr)` → collapses to `1fr` at `≤720px` |
-| `.v2-grid--auto` | `1.4fr 1fr` (content + sidebar panel) → collapses at `≤720px` |
-| `.v2-stat-strip` | Flex-wrap row of stat blocks. Gap only — no vertical dividers. |
+| `.sq-grid` | Base grid with `gap: --sq-space-5` |
+| `.sq-grid--2` | `repeat(2, 1fr)` → collapses to `1fr` at `≤720px` |
+| `.sq-grid--3` | `repeat(3, 1fr)` → collapses to `1fr` at `≤720px` |
+| `.sq-grid--auto` | `1.4fr 1fr` (content + sidebar panel) → collapses at `≤720px` |
+| `.sq-stat-strip` | Flex-wrap row of stat blocks. Gap only — no vertical dividers. |
 
 ---
 
@@ -338,88 +338,88 @@ All data components are text-first. No canvas, no third-party charting library.
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-stat` | Flex column wrapper. `gap: --sq-space-1`. |
-| `.v2-stat__label` | Metric name. `--sq-text-xs`, uppercase, `--sq-text-subtle`. |
-| `.v2-stat__value` | Primary number. `--sq-text-2xl`, `--sq-fw-medium`, `--sq-text-strong`, tabular nums. |
-| `.v2-unit` | Unit suffix inside `.v2-stat__value`. `--sq-text-md`, `--sq-text-subtle`, `--sq-fw-regular`. |
-| `.v2-stat__delta` | Change indicator. `.v2-stat__delta--up` → green. `.v2-stat__delta--down` → red. |
+| `.sq-stat` | Flex column wrapper. `gap: --sq-space-1`. |
+| `.sq-stat__label` | Metric name. `--sq-text-xs`, uppercase, `--sq-text-subtle`. |
+| `.sq-stat__value` | Primary number. `--sq-text-2xl`, `--sq-fw-medium`, `--sq-text-strong`, tabular nums. |
+| `.sq-unit` | Unit suffix inside `.sq-stat__value`. `--sq-text-md`, `--sq-text-subtle`, `--sq-fw-regular`. |
+| `.sq-stat__delta` | Change indicator. `.sq-stat__delta--up` → green. `.sq-stat__delta--down` → red. |
 
 #### Key-Value Rows
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-kv` | Flex column container. No outer border. |
-| `.v2-kv__row` | One property row. `border-top: 1px solid --sq-line`. First child gets no border. |
-| `.v2-kv__label` | Property name. `--sq-text-subtle`. |
-| `.v2-kv__value` | Property value. `--sq-text-strong`, tabular nums, right-aligned. |
+| `.sq-kv` | Flex column container. No outer border. |
+| `.sq-kv__row` | One property row. `border-top: 1px solid --sq-line`. First child gets no border. |
+| `.sq-kv__label` | Property name. `--sq-text-subtle`. |
+| `.sq-kv__value` | Property value. `--sq-text-strong`, tabular nums, right-aligned. |
 
 #### Slim Gauge
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-gauge` | Flex column container. Pair with `data-sq-gauge="0–100"` for auto-init. Add `role="progressbar"` with ARIA attrs. |
-| `.v2-gauge__track` | `6px` tall track bar. Background: `--sq-track`. `overflow: hidden`. |
-| `.v2-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqUI.renderGauge`). Transitions via `--sq-dur-slow`. |
-| `.v2-gauge__fill--ok` | Green fill (`< 75%`, auto-applied by JS). |
-| `.v2-gauge__fill--warn` | Amber fill (`75–89%`). |
-| `.v2-gauge__fill--err` | Red fill (`≥ 90%`). |
-| `.v2-gauge__fill--brand` | Brand-color fill — request it explicitly: `renderGauge(fill, 100, { kind: 'brand' })`. |
-| `.v2-gauge__fill` + `{ kind: 'neutral' }` | No state colour (inherits `--sq-text-strong`). |
+| `.sq-gauge` | Flex column container. Pair with `data-sq-gauge="0–100"` for auto-init. Add `role="progressbar"` with ARIA attrs. |
+| `.sq-gauge__track` | `6px` tall track bar. Background: `--sq-track`. `overflow: hidden`. |
+| `.sq-gauge__fill` | Absolute fill bar. Width driven by JS (`SynteqUI.renderGauge`). Transitions via `--sq-dur-slow`. |
+| `.sq-gauge__fill--ok` | Green fill (`< 75%`, auto-applied by JS). |
+| `.sq-gauge__fill--warn` | Amber fill (`75–89%`). |
+| `.sq-gauge__fill--err` | Red fill (`≥ 90%`). |
+| `.sq-gauge__fill--brand` | Brand-color fill — request it explicitly: `renderGauge(fill, 100, { kind: 'brand' })`. |
+| `.sq-gauge__fill` + `{ kind: 'neutral' }` | No state colour (inherits `--sq-text-strong`). |
 
 #### Bar Chart
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-bars` | Grid container. Column count driven by `--sq-bars-cols` CSS var. Height 72px. |
-| `.v2-bars__col` | One time-sample column. `flex-direction: column-reverse`. |
-| `.v2-bars__seg` | One data segment within a column. `border-radius: --sq-radius-micro`. |
-| `.v2-bars__seg--in` | Inbound segment. Color: `--sq-tel-in`. |
-| `.v2-bars__seg--out` | Outbound segment. Color: `--sq-tel-out`, `opacity: 0.55` (full on hover). |
-| `.v2-bars__col--pad` | Empty leading column injected by `renderBars({ minCols })`; holds the geometry, carries no data. |
-| `.v2-bars[data-sq-bars-empty]` | Set when the series is empty (styled at 35 % opacity) so the caller can show a hint. |
+| `.sq-bars` | Grid container. Column count driven by `--sq-bars-cols` CSS var. Height 72px. |
+| `.sq-bars__col` | One time-sample column. `flex-direction: column-reverse`, top radius, clipped so both series touch seamlessly. |
+| `.sq-bars__seg` | One data segment within a column. No radius of its own, so series join without a seam. |
+| `.sq-bars__seg--in` | Inbound segment. Color: `--sq-tel-in`. |
+| `.sq-bars__seg--out` | Outbound segment. Color: `--sq-tel-out`, `opacity: 0.55` (full on hover). |
+| `.sq-bars__col--pad` | Empty leading column injected by `renderBars({ minCols })`; holds the geometry, carries no data. |
+| `.sq-bars[data-sq-bars-empty]` | Set when the series is empty (styled at 35 % opacity) so the caller can show a hint. |
 
 #### Sparkline
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-spark` | SVG element wrapper. `display: block`, `height: 40px`. |
-| `.v2-spark__line` | `<polyline>` path. `stroke: --sq-brand`, `stroke-width: 1.5`. |
-| `.v2-spark__area` | `<polygon>` fill. `fill: --sq-brand`, `opacity: 0.12`. |
-| `.v2-spark__dot` | `<circle>` at latest data point. |
-| `.v2-spark--tall` | `--sq-spark-h: 56px` (default 40px). Override the height on any instance with `style="--sq-spark-h:64px"`. |
-| `.v2-spark[data-sq-spark-empty]` | Set by `renderSparkline()` when fewer than 2 samples exist; the path is cleared so stale data never lingers. |
-| `.v2-spark--out` | Modifier: switches all colors to `--sq-tel-out` palette. |
+| `.sq-spark` | SVG element wrapper. `display: block`, `height: 40px`. |
+| `.sq-spark__line` | `<polyline>` path. `stroke: --sq-brand`, `stroke-width: 1.5`. |
+| `.sq-spark__area` | `<polygon>` fill. `fill: --sq-brand`, `opacity: 0.12`. |
+| `.sq-spark__dot` | `<circle>` at latest data point. |
+| `.sq-spark--tall` | `--sq-spark-h: 56px` (default 40px). Override the height on any instance with `style="--sq-spark-h:64px"`. |
+| `.sq-spark[data-sq-spark-empty]` | Set by `renderSparkline()` when fewer than 2 samples exist; the path is cleared so stale data never lingers. |
+| `.sq-spark--out` | Modifier: switches all colors to `--sq-tel-out` palette. |
 
 #### Status Dot
 
 | Class | Colour | Use for |
 |---|---|---|
-| `.v2-dot` | `--sq-status-running` (default) | online / healthy |
-| `.v2-dot--ok` | `--sq-status-running` | explicit healthy alias |
-| `.v2-dot--warn` | `--sq-status-warning` | degraded, syncing |
-| `.v2-dot--err` | `--sq-status-error` | down, failing |
-| `.v2-dot--idle` | `--sq-text-subtle` | unknown, connecting |
-| `.v2-dot--stopped` | `--sq-status-error` | legacy alias for `--err` |
-| `.v2-dot--reboot` | `--sq-status-warning` + pulse | restarting |
+| `.sq-dot` | `--sq-status-running` (default) | online / healthy |
+| `.sq-dot--ok` | `--sq-status-running` | explicit healthy alias |
+| `.sq-dot--warn` | `--sq-status-warning` | degraded, syncing |
+| `.sq-dot--err` | `--sq-status-error` | down, failing |
+| `.sq-dot--idle` | `--sq-text-subtle` | unknown, connecting |
+| `.sq-dot--stopped` | `--sq-status-error` | legacy alias for `--err` |
+| `.sq-dot--reboot` | `--sq-status-warning` + pulse | restarting |
 
 **One signal per state - dot + text OR badge + text, never both.** A state is
-rendered either as a dot with a label (`.v2-status` = `.v2-dot*` + text) or as a
-coloured badge with the label (`.v2-badge--ok|warn|err`). Do not nest a `.v2-dot`
-inside a `.v2-badge`: the dot and the badge tint say the same thing twice and the
+rendered either as a dot with a label (`.sq-status` = `.sq-dot*` + text) or as a
+coloured badge with the label (`.sq-badge--ok|warn|err`). Do not nest a `.sq-dot`
+inside a `.sq-badge`: the dot and the badge tint say the same thing twice and the
 5 px dot reads as a stray pixel. Existing markup that did this still renders
-(`.v2-badge .v2-dot` shrinks to 5 px), but it is deprecated.
+(`.sq-badge .sq-dot` shrinks to 5 px), but it is deprecated.
 
 #### Data Table
 
 | Class | Purpose |
 |---|---|
-| `.v2-table-wrap` | Horizontal scroll wrapper with a thin scrollbar. Use it whenever rows can exceed the content width. |
-| `.v2-table` | `border-collapse`, `--sq-text-sm`, tabular numbers. `th` = uppercase micro label with a bottom hairline; `td` = hairline top border; rows hover with `--sq-hover`. |
-| `.v2-table__num` | Right-aligned mono cell (counts, epochs, byte values). |
-| `.v2-table__mono` | Mono cell, default alignment (addresses, hashes). |
-| `.v2-table__mute` | Quiet metadata cell. |
-| `.v2-table tr.is-stale` / `td.is-stale` | Dim a cached/stale row without hiding it. |
-| `.v2-table--fixed` | `table-layout: fixed` for equal-width columns. |
+| `.sq-table-wrap` | Horizontal scroll wrapper with a thin scrollbar. Use it whenever rows can exceed the content width. |
+| `.sq-table` | `border-collapse`, `--sq-text-sm`, tabular numbers. `th` = uppercase micro label with a bottom hairline; `td` = hairline top border; rows hover with `--sq-hover`. |
+| `.sq-table__num` | Right-aligned mono cell (counts, epochs, byte values). |
+| `.sq-table__mono` | Mono cell, default alignment (addresses, hashes). |
+| `.sq-table__mute` | Quiet metadata cell. |
+| `.sq-table tr.is-stale` / `td.is-stale` | Dim a cached/stale row without hiding it. |
+| `.sq-table--fixed` | `table-layout: fixed` for equal-width columns. |
 
 Tables are text-first: no zebra striping, no header background, no outer border —
 only the hairlines the framework already uses.
@@ -428,16 +428,16 @@ only the hairlines the framework already uses.
 
 | Class | Purpose |
 |---|---|
-| `.v2-log` | Flex column, mono 11 px / 1.55. |
-| `.v2-log--scroll` | `max-height: var(--sq-log-h, 420px)`, thin scrollbar, `overscroll-behavior: contain`. |
-| `.v2-log--bordered` | Hairline top and bottom separators. |
-| `.v2-log__row` | One line: timestamp · level · component · message, with a 2 px transparent left rail. |
-| `.v2-log__row--warn` / `--error` | Amber / red left rail; the error row also tints the background. |
-| `.v2-log__ts` | Mono timestamp, `--sq-text-subtle`, tabular nums. |
-| `.v2-log__level` + `--warn` / `--error` / `--fatal` | Fixed-width level label; colour follows severity. |
-| `.v2-log__comp` | Brand-coloured component tag, truncated with ellipsis. |
-| `.v2-log__msg` | Message body, `overflow-wrap: anywhere` so long frames never overflow. |
-| `.v2-log__empty` | Centered "waiting for stream" placeholder (sans-serif, `--sq-text-xs`). |
+| `.sq-log` | Flex column, mono 11 px / 1.55. |
+| `.sq-log--scroll` | `max-height: var(--sq-log-h, 420px)`, thin scrollbar, `overscroll-behavior: contain`. |
+| `.sq-log--bordered` | Hairline top and bottom separators. |
+| `.sq-log__row` | One line: timestamp · level · component · message, with a 2 px transparent left rail. |
+| `.sq-log__row--warn` / `--error` | Amber / red left rail; the error row also tints the background. |
+| `.sq-log__ts` | Mono timestamp, `--sq-text-subtle`, tabular nums. |
+| `.sq-log__level` + `--warn` / `--error` / `--fatal` | Fixed-width level label; colour follows severity. |
+| `.sq-log__comp` | Brand-coloured component tag, truncated with ellipsis. |
+| `.sq-log__msg` | Message body, `overflow-wrap: anywhere` so long frames never overflow. |
+| `.sq-log__empty` | Centered "waiting for stream" placeholder (sans-serif, `--sq-text-xs`). |
 
 Responsive: component tag hidden at `≤720px`, timestamp hidden at `≤420px`.
 
@@ -451,54 +451,54 @@ Synteq UI restyles native HTML form elements to match the flat-surface model. Al
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-field` | Flex column container. `gap: var(--sq-field-gap)`. Groups label + input + hint/error. |
-| `.v2-field__label` | Label text. `--sq-text-sm`, `--sq-fw-medium`, `--sq-text-strong`. |
-| `.v2-field__label--required` | Adds red asterisk via `::after`. |
-| `.v2-field__hint` | Helper text below input. `--sq-text-xs`, `--sq-text-subtle`. Always visible unless field is invalid. |
-| `.v2-field__error` | Error message. `--sq-text-xs`, `--sq-status-error`. Hidden by default, shown when `.v2-field--invalid` applied. |
-| `.v2-field--invalid` | State class. Shows error, adds red border to input. Wire with `[aria-invalid="true"]` on the input. |
+| `.sq-field` | Flex column container. `gap: var(--sq-field-gap)`. Groups label + input + hint/error. |
+| `.sq-field__label` | Label text. `--sq-text-sm`, `--sq-fw-medium`, `--sq-text-strong`. |
+| `.sq-field__label--required` | Adds red asterisk via `::after`. |
+| `.sq-field__hint` | Helper text below input. `--sq-text-xs`, `--sq-text-subtle`. Always visible unless field is invalid. |
+| `.sq-field__error` | Error message. `--sq-text-xs`, `--sq-status-error`. Hidden by default, shown when `.sq-field--invalid` applied. |
+| `.sq-field--invalid` | State class. Shows error, adds red border to input. Wire with `[aria-invalid="true"]` on the input. |
 
 #### Text Inputs
 
 | Class | Element | Notes |
 |-------|---------|-------|
-| `.v2-input` | `<input type="text|email|password|number|tel|url">` | Height `--sq-input-h` (32px). Transparent border → brand on focus. Red border when `[aria-invalid="true"]`. |
-| `.v2-textarea` | `<textarea>` | Min-height 2.5× input height. Vertical resize allowed. Same focus/invalid states as input. |
-| `.v2-select` | `<select>` | Native dropdown with custom SVG arrow (data-uri). Arrow color switches per theme. Same states as input. |
+| `.sq-input` | `<input type="text|email|password|number|tel|url">` | Height `--sq-input-h` (32px). Transparent border → brand on focus. Red border when `[aria-invalid="true"]`. |
+| `.sq-textarea` | `<textarea>` | Min-height 2.5× input height. Vertical resize allowed. Same focus/invalid states as input. |
+| `.sq-select` | `<select>` | Native dropdown with custom SVG arrow (data-uri). Arrow color switches per theme. Same states as input. |
 
 #### Checkbox & Radio
 
 | Class | Element | Notes |
 |-------|---------|-------|
-| `.v2-checkbox` | `<input type="checkbox">` | 16×16 px (20×20 on touch). `appearance: none`, custom checkmark via `::after` when `:checked`. Background → brand when checked. |
-| `.v2-checkbox-label` | `<label>` wrapper | Flex row, gap, cursor pointer. Dims when checkbox disabled. |
-| `.v2-radio` | `<input type="radio">` | Circular variant. 6×6 px inner dot via `::after` when `:checked`. |
-| `.v2-radio-label` | `<label>` wrapper | Same pattern as checkbox-label. |
-| `.v2-radio-group` | Container for radio set | Flex column, gap. Add `role="radiogroup"` + `aria-label`. |
+| `.sq-checkbox` | `<input type="checkbox">` | 16×16 px (20×20 on touch). `appearance: none`, custom checkmark via `::after` when `:checked`. Background → brand when checked. |
+| `.sq-checkbox-label` | `<label>` wrapper | Flex row, gap, cursor pointer. Dims when checkbox disabled. |
+| `.sq-radio` | `<input type="radio">` | Circular variant. 6×6 px inner dot via `::after` when `:checked`. |
+| `.sq-radio-label` | `<label>` wrapper | Same pattern as checkbox-label. |
+| `.sq-radio-group` | Container for radio set | Flex column, gap. Add `role="radiogroup"` + `aria-label`. |
 
 #### Switch
 
 | Class | Element | Notes |
 |-------|---------|-------|
-| `.v2-switch` | `<input type="checkbox">` styled as toggle | 36×20 px track (44×24 on touch). Sliding dot via `::after`, translateX(16px) when checked. Brand bg when checked. Add `role="switch"` + `aria-checked`. |
-| `.v2-switch-label` | `<label>` wrapper | Flex row, gap, pointer. |
+| `.sq-switch` | `<input type="checkbox">` styled as toggle | 36×20 px track (44×24 on touch). Sliding dot via `::after`, translateX(16px) when checked. Brand bg when checked. Add `role="switch"` + `aria-checked`. |
+| `.sq-switch-label` | `<label>` wrapper | Flex row, gap, pointer. |
 
 #### Input Group
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-input-group` | Flex row wrapper. Single outer border + `--sq-inset` background. Focus-within → brand border. |
-| `.v2-input-group .v2-input` | Input inside group. No border, transparent bg, flex:1. |
-| `.v2-input-group__affix` | Prefix or suffix text/icon. Hairline separator between segments. First-child gets right border, others get left border. |
+| `.sq-input-group` | Flex row wrapper. Single outer border + `--sq-inset` background. Focus-within → brand border. |
+| `.sq-input-group .sq-input` | Input inside group. No border, transparent bg, flex:1. |
+| `.sq-input-group__affix` | Prefix or suffix text/icon. Hairline separator between segments. First-child gets right border, others get left border. |
 
 #### Range Slider
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-range` | `<input type="range">`. Track height 6px, `--sq-track` bg, pill radius. Custom thumb: 16×16 circle, `--sq-brand`, hover scale 1.15×. Vendor prefixes for `::-webkit-slider-thumb` and `::-moz-range-thumb`. |
-| `.v2-range-label` | Wrapper with label + value display above slider. |
-| `.v2-range-label__head` | Flex row, space-between. Label left, value right. |
-| `.v2-range-label__value` | Tabular nums, `--sq-text-strong`, medium weight. |
+| `.sq-range` | `<input type="range">`. Track height 6px, `--sq-track` bg, pill radius. Custom thumb: 16×16 circle, `--sq-brand`, hover scale 1.15×. Vendor prefixes for `::-webkit-slider-thumb` and `::-moz-range-thumb`. |
+| `.sq-range-label` | Wrapper with label + value display above slider. |
+| `.sq-range-label__head` | Flex row, space-between. Label left, value right. |
+| `.sq-range-label__value` | Tabular nums, `--sq-text-strong`, medium weight. |
 
 **States (all controls):**
 - `:disabled` → 40-50% opacity, `cursor: not-allowed`
@@ -519,52 +519,52 @@ Synteq UI restyles native HTML form elements to match the flat-surface model. Al
 
 | Class | Appearance |
 |-------|-----------|
-| `.v2-btn` | Base: `--sq-inset` background, `--sq-text`, `height: 32px`, `--sq-radius-control`. |
-| `.v2-btn--ghost` | Transparent background, `--sq-text-subtle`. |
-| `.v2-btn--primary` | `--sq-text-strong` background, inverted text. High-emphasis action. |
-| `.v2-btn--brand` | `--sq-brand` background, `--sq-text-on-solid` ink. |
-| `.v2-btn--info` | Tonal blue background (`16%`), status-ink label. Informational action. |
-| `.v2-btn--warn` (alias `.v2-btn--warning`) | Tonal amber background (`16%`), status-ink label. "Proceed with care". |
-| `.v2-btn--danger` | Tonal red background (`16%`), status-ink label. Destructive action. |
-| `.v2-btn--icon` | Square variant: `width: 32px`, `padding: 0`. **Requires `aria-label`**. |
-| `.v2-btn--block` | `width: 100%`. Use inside `.v2-btn__stack` for a vertical action group. |
-| `.v2-copy--ok` | Clipboard confirmation state added by the runtime for 1.8 s (green tint). |
-| `.v2-tip` | Transient anchored label (`SynteqUI.tip(el, msg)`): inverted surface, `--sq-radius-micro`, `--sq-text-xs`, `pointer-events: none`, `z-index: 60`. |
-| `.v2-tip--info` / `--ok` / `--warn` / `--err` | Tinted variants of the tip (solid status fill + `--sq-text-on-solid` ink). |
-| `.v2-tip.is-out` | Fade-out state applied before the runtime removes the node. |
+| `.sq-btn` | Base: `--sq-inset` background, `--sq-text`, `height: 32px`, `--sq-radius-control`. |
+| `.sq-btn--ghost` | Transparent background, `--sq-text-subtle`. |
+| `.sq-btn--primary` | `--sq-text-strong` background, inverted text. High-emphasis action. |
+| `.sq-btn--brand` | `--sq-brand` background, `--sq-text-on-solid` ink. |
+| `.sq-btn--info` | Tonal blue background (`16%`), status-ink label. Informational action. |
+| `.sq-btn--warn` (alias `.sq-btn--warning`) | Tonal amber background (`16%`), status-ink label. "Proceed with care". |
+| `.sq-btn--danger` | Tonal red background (`16%`), status-ink label. Destructive action. |
+| `.sq-btn--icon` | Square variant: `width: 32px`, `padding: 0`. **Requires `aria-label`**. |
+| `.sq-btn--block` | `width: 100%`. Use inside `.sq-btn__stack` for a vertical action group. |
+| `.sq-copy--ok` | Clipboard confirmation state added by the runtime for 1.8 s (green tint). |
+| `.sq-tip` | Transient anchored label (`SynteqUI.tip(el, msg)`): inverted surface, `--sq-radius-micro`, `--sq-text-xs`, `pointer-events: none`, `z-index: 60`. |
+| `.sq-tip--info` / `--ok` / `--warn` / `--err` | Tinted variants of the tip (solid status fill + `--sq-text-on-solid` ink). |
+| `.sq-tip.is-out` | Fade-out state applied before the runtime removes the node. |
 
 #### Segmented Bar
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-seg` | Flex container. `--sq-inset` background, `--sq-radius-control`. Add `role="group"` + `aria-label`. |
-| `.v2-seg__btn` | One segment. Hairline right border between siblings. |
-| `.v2-seg__btn--active` | Active segment. `--sq-hover` background, `--sq-fw-medium`. |
-| `.v2-seg__btn--icon` | Icon-only segment variant: narrower padding. |
+| `.sq-seg` | Flex container. `--sq-inset` background, `--sq-radius-control`. Add `role="group"` + `aria-label`. |
+| `.sq-seg__btn` | One segment. Hairline right border between siblings. |
+| `.sq-seg__btn--active` | Active segment. `--sq-hover` background, `--sq-fw-medium`. |
+| `.sq-seg__btn--icon` | Icon-only segment variant: narrower padding. |
 
 #### Other Controls
 
 | Class | Purpose |
 |-------|---------|
-| `.v2-input` | Text input. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
-| `.v2-badge` | Status chip. `--sq-radius-micro`. Modifiers: `--brand`, `--info`, `--ok`, `--warn`, `--err`. |
-| `.v2-kbd` | Keyboard shortcut pill. Mono font, `--sq-radius-micro`, `height: 18px`. |
-| `.v2-avatar` | User monogram square. `26×26px`, `--sq-radius-micro`, brand tint background. |
+| `.sq-input` | Text input. `--sq-inset` background, `--sq-radius-control`, `height: 32px`. |
+| `.sq-badge` | Status chip. `--sq-radius-micro`. Modifiers: `--brand`, `--info`, `--ok`, `--warn`, `--err`. |
+| `.sq-kbd` | Keyboard shortcut pill. Mono font, `--sq-radius-micro`, `height: 18px`. |
+| `.sq-avatar` | User monogram square. `26×26px`, `--sq-radius-micro`, brand tint background. |
 
 ---
 
 ### 5.7 Motion
 
-All animations use `--sq-ease` and are globally suppressed by `prefers-reduced-motion` in `base.css`.
+Ambient animations use `--sq-ease`; spinners use `linear` and indeterminate progress uses a standard cubic curve. Ambient motion is suppressed by `prefers-reduced-motion` in `base.css`; spinners and indeterminate progress stay animated at a slower rate because they are essential state indicators.
 
 | Class / Attribute | Behavior |
 |-------------------|---------|
-| `.v2-fade-up` | Single element mount: fade in + `6px` upward drift over `--sq-dur-normal`. |
-| `.v2-stagger` | Parent: each child gets `v2-fade-up` with 60ms incremental delays (up to child 6+). |
-| `data-sq-stagger` | Triggers `.v2-stagger` via IntersectionObserver when element enters the viewport (JS-managed). |
-| `.v2-live` | Soft pulse (opacity `1→0.5→1`) on a `2s` loop. Used for live data indicators. |
-| `.v2-skeleton` | Shimmer placeholder for async content. Linear gradient sweep animation. |
-| `.v2-row-hover` | Hover lift utility. Transitions `background-color` at `--sq-dur-fast`. |
+| `.sq-fade-up` | Single element mount: fade in + `6px` upward drift over `--sq-dur-normal`. |
+| `.sq-stagger` | Parent: each child gets `sq-fade-up` with 60ms incremental delays (up to child 6+). |
+| `data-sq-stagger` | Triggers `.sq-stagger` via IntersectionObserver when element enters the viewport (JS-managed). |
+| `.sq-live` | Soft pulse (opacity `1→0.5→1`) on a `2s` loop. Used for live data indicators. |
+| `.sq-skeleton` | Shimmer placeholder for async content. Linear gradient sweep animation. |
+| `.sq-row-hover` | Hover lift utility. Transitions `background-color` at `--sq-dur-fast`. |
 | `SynteqUI.replayAnimation(el, opts)` | On-demand replay of a mount animation. Uses WAAPI (`preset`: `fade-up` \| `fade` \| `zoom-in`, default 280ms), cancels any running animation first, and honours `opts.force`. |
 
 **Reduced motion and replays.** `base.css` shortens every CSS animation to
@@ -581,7 +581,7 @@ Ambient motion stays suppressed.
 Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must use `aria-hidden="true"` (the parent button/label provides the accessible name).
 
 ```html
-<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+<svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true">
   <!-- 24×24 stroke icon path (Lucide-compatible) -->
 </svg>
 ```
@@ -590,44 +590,44 @@ Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must 
 
 | Class | Size |
 |-------|------|
-| `.v2-icon--12` | `12 × 12px` |
-| `.v2-icon--14` | `14 × 14px` |
-| `.v2-icon--16` | `16 × 16px` |
-| `.v2-icon--18` | `18 × 18px` |
-| `.v2-icon--20` | `20 × 20px` |
+| `.sq-icon--12` | `12 × 12px` |
+| `.sq-icon--14` | `14 × 14px` |
+| `.sq-icon--16` | `16 × 16px` |
+| `.sq-icon--18` | `18 × 18px` |
+| `.sq-icon--20` | `20 × 20px` |
 
 #### Tint Modifiers
 
 | Class | Color Token |
 |-------|------------|
-| `.v2-icon--mute` | `--sq-text-subtle` |
-| `.v2-icon--brand` | `--sq-brand` |
-| `.v2-icon--ok` | `--sq-status-running` |
-| `.v2-icon--warn` | `--sq-status-warning` |
-| `.v2-icon--err` | `--sq-status-error` |
+| `.sq-icon--mute` | `--sq-text-subtle` |
+| `.sq-icon--brand` | `--sq-brand` |
+| `.sq-icon--ok` | `--sq-status-running` |
+| `.sq-icon--warn` | `--sq-status-warning` |
+| `.sq-icon--err` | `--sq-status-error` |
 
-All icons inherit `stroke: currentColor` — tint is set by parent element color or a modifier class. `.v2-ico-label` is a flex wrapper for icon + text pairs.
+All icons inherit `stroke: currentColor` — tint is set by parent element color or a modifier class. `.sq-ico-label` is a flex wrapper for icon + text pairs.
 
 ---
 
 ### 5.9 Advanced Table
 
 The table module is behaviour, not chrome: `tables.css` adds hairline-separated
-toolbar and pagination rails around the existing `.v2-table`, never a frame.
+toolbar and pagination rails around the existing `.sq-table`, never a frame.
 
 ```
-.v2-table-toolbar
- ├── .v2-table-toolbar__start → __title + __meta[data-sq-table-count]
- └── .v2-table-toolbar__end   → __filter + actions
-.v2-table-wrap
- └── table.v2-table.v2-table--sticky
-      ├── thead th[aria-sort] > button.v2-table__sort
-      ├── th.v2-table__check > [data-sq-select-all]
+.sq-table-toolbar
+ ├── .sq-table-toolbar__start → __title + __meta[data-sq-table-count]
+ └── .sq-table-toolbar__end   → __filter + actions
+.sq-table-wrap
+ └── table.sq-table.sq-table--sticky
+      ├── thead th[aria-sort] > button.sq-table__sort
+      ├── th.sq-table__check > [data-sq-select-all]
       └── tbody tr.is-selected
-           └── td.v2-table__check > [data-sq-row-select]
-nav.v2-pagination
- ├── .v2-pagination__info
- └── .v2-pagination__pages > button.v2-pagination__btn[aria-current]
+           └── td.sq-table__check > [data-sq-row-select]
+nav.sq-pagination
+ ├── .sq-pagination__info
+ └── .sq-pagination__pages > button.sq-pagination__btn[aria-current]
 ```
 
 | Concern | Rule |
@@ -635,22 +635,22 @@ nav.v2-pagination
 | Sorting | Header cells carry `aria-sort`; the caret rotates 180° on `descending`. Only one column is sorted at a time. |
 | Selection | `tr.is-selected` tints the row with `color-mix(brand 7%)`; the select-all checkbox uses the native `indeterminate` state. |
 | Pagination | Page buttons are windowed to 5 with `…` gaps; the current page uses a brand border, never a filled background. |
-| Filtering | Case-insensitive substring match over the row text; an empty result renders one generated row with `.v2-table__empty`. |
+| Filtering | Case-insensitive substring match over the row text; an empty result renders one generated row with `.sq-table__empty`. |
 | Separation | Toolbar `border-bottom` + pagination `border-top`, both `--sq-line`. No shadows, no tonal fills. |
 | Density | `--compact` trims vertical padding, `--dense` also drops the type one step. |
 
 ### 5.10 Chart Extensions
 
-Two modules share one frame (`.v2-chart`) and one tooltip (`.v2-chart__tip`).
+Two modules share one frame (`.sq-chart`) and one tooltip (`.sq-chart__tip`).
 
 | Layer | Element | Notes |
 |---|---|---|
-| Frame | `.v2-chart` → `__head`, `__body`, `__legend` | Column flex; head uses `--sq-text-md` title + `--sq-text-xs` meta |
-| Line/area | `svg.v2-chart__svg` | `viewBox` equals the element's pixel box, so 1 unit = 1 px and tick text never scales |
-| Grid | `.v2-chart__grid` (lines), `__axis` (value axis), `__tick` (labels) | Grid uses `--sq-line`, axis `--sq-line-strong` |
-| Series | `.v2-chart__area`, `__line`, `__dot` + `__s1…s4` | Tints: brand → tel-out → warning → subtle |
-| Hover | `.v2-chart__cursor` + `.v2-chart__tip` | Crosshair is a dashed 1px line; the tooltip is `canvas` + `--sq-line-strong` border |
-| Stacked | `.v2-chart__cols` → `.v2-chart__col` → `.v2-chart__seg` | `column-reverse` keeps series 1 on the baseline; the grid template comes from `--sq-chart-cols` |
+| Frame | `.sq-chart` → `__head`, `__body`, `__legend` | Column flex; head uses `--sq-text-md` title + `--sq-text-xs` meta |
+| Line/area | `svg.sq-chart__svg` | `viewBox` equals the element's pixel box, so 1 unit = 1 px and tick text never scales |
+| Grid | `.sq-chart__grid` (lines), `__axis` (value axis), `__tick` (labels) | Grid uses `--sq-line`, axis `--sq-line-strong` |
+| Series | `.sq-chart__area`, `__line`, `__dot` + `__s1…s4` | Tints: brand → tel-out → warning → subtle |
+| Hover | `.sq-chart__cursor` + `.sq-chart__tip` | Crosshair is a dashed 1px line; the tooltip is `canvas` + `--sq-line-strong` border |
+| Stacked | `.sq-chart__cols` → `.sq-chart__col` → `.sq-chart__seg` | `column-reverse` keeps series 1 on the baseline; the grid template comes from `--sq-chart-cols` |
 
 Height is a single variable (`--sq-chart-h`, `168px`; `--sq-chart-h-sm`, `128px`
 below 520px) so a chart and a stacked column block line up on the same row.
@@ -658,29 +658,29 @@ below 520px) so a chart and a stacked column block line up on the same row.
 ### 5.11 Tree
 
 ```
-.v2-tree
- └── .v2-tree__item
-      ├── .v2-tree__row  → .v2-tree__toggle | __spacer + __label + __meta
-      └── .v2-tree__group (nested .v2-tree__item …)
+.sq-tree
+ └── .sq-tree__item
+      ├── .sq-tree__row  → .sq-tree__toggle | __spacer + __label + __meta
+      └── .sq-tree__group (nested .sq-tree__item …)
 ```
 
-- Indentation comes from nesting; each `.v2-tree__group` owns a `border-left` rail
+- Indentation comes from nesting; each `.sq-tree__group` owns a `border-left` rail
   (`--sq-line`, `--sq-line-strong` from the second level down) plus
   `margin-left: --sq-space-5`.
 - The caret is a 14px chevron rotated 90° while `aria-expanded="true"`; leaf rows
-  reuse the same slot with `.v2-tree__spacer` to keep labels aligned.
+  reuse the same slot with `.sq-tree__spacer` to keep labels aligned.
 - Third-level labels drop to `--sq-text-sm` / `--sq-text-subtle`. Three levels is
   the supported maximum; `initTree()` warns beyond that.
-- `.v2-tree__meta` is pushed right with `margin-left: auto` and hides below 520px.
+- `.sq-tree__meta` is pushed right with `margin-left: auto` and hides below 520px.
 
 ### 5.12 Stepper / Timeline
 
 ```
-.v2-stepper[data-sq-step]
- └── .v2-stepper__item (grid: 24px marker column + body)
-      ├── .v2-stepper__marker        → number, check glyph or icon
+.sq-stepper[data-sq-step]
+ └── .sq-stepper__item (grid: 24px marker column + body)
+      ├── .sq-stepper__marker        → number, check glyph or icon
       ├── ::after                    → connecting rail (hidden on last item)
-      └── .v2-stepper__body → __title, __desc, __meta
+      └── .sq-stepper__body → __title, __desc, __meta
 ```
 
 | State | Marker | Rail |
@@ -690,18 +690,18 @@ below 520px) so a chart and a stacked column block line up on the same row.
 | `is-pending` | dashed `--sq-line-strong` border | `--sq-line` |
 | `is-error` | `--sq-status-error` border | neutral |
 
-`.v2-stepper--horizontal` turns the items into equal-width columns with a
+`.sq-stepper--horizontal` turns the items into equal-width columns with a
 horizontal rail between markers, and folds back to the vertical layout below
 720px — the rail is repositioned, not duplicated.
 
 ### 5.13 Code Block
 
 ```
-.v2-code[data-sq-code]
- ├── .v2-code__head → __title + __actions > button.v2-code__copy
- └── .v2-code__body
-      ├── .v2-code__lines   (generated, aria-hidden)
-      └── pre.v2-code__pre > code
+.sq-code[data-sq-code]
+ ├── .sq-code__head → __title + __actions > button.sq-code__copy
+ └── .sq-code__body
+      ├── .sq-code__lines   (generated, aria-hidden)
+      └── pre.sq-code__pre > code
 ```
 
 - Gutter and code share `font-family`, `font-size` and `line-height`
@@ -711,7 +711,7 @@ horizontal rail between markers, and folds back to the vertical layout below
   block scrolls horizontally instead of wrapping.
 - The gutter sits on `--sq-inset` with a trailing hairline and is hidden below
   520px, where width is more valuable than numbering.
-- `.v2-code--plain` swaps the surface to `--sq-canvas`; `.v2-code--scroll` bounds
+- `.sq-code--plain` swaps the surface to `--sq-canvas`; `.sq-code--scroll` bounds
   the height through `--sq-code-h` (default `320px`).
 
 ---
@@ -723,27 +723,27 @@ horizontal rail between markers, and folds back to the vertical layout below
 | `> 1080px` | Full-width content column (centred, max `--sq-content-max`) with the sticky bottom dock; all destinations fit. |
 | `≤ 1080px` | Dock items narrow to `78px`; overflow activates drag-scroll + the `More` drop-up. |
 | `≤ 860px` | Compact brand/account affordances, 72px nav items, 44px+ touch targets, wider drop-up trigger. |
-| `≤ 720px` | `.v2-grid--2`, `.v2-grid--3` collapse to a single column; `.v2-grid--auto` already collapsed at `900px`; **`.v2-stat-strip` becomes a 2-column grid** (values wrap instead of overflowing); explorer previews tighten. |
-| `≤ 600px` | Topbar search text (`.v2-search__text`) and `.v2-kbd` pill are hidden — search becomes icon-only. Topbar padding reduces. |
-| `≤ 520px` | `.v2-stat__value` reduces to `--sq-text-xl`. `.v2-stat-strip` gap tightens. Dock brand/items compress (48px brand, 64px items). |
+| `≤ 720px` | `.sq-grid--2`, `.sq-grid--3` collapse to a single column; `.sq-grid--auto` already collapsed at `900px`; **`.sq-stat-strip` becomes a 2-column grid** (values wrap instead of overflowing); explorer previews tighten. |
+| `≤ 600px` | Topbar search text (`.sq-search__text`) and `.sq-kbd` pill are hidden — search becomes icon-only. Topbar padding reduces. |
+| `≤ 520px` | `.sq-stat__value` reduces to `--sq-text-xl`. `.sq-stat-strip` gap tightens. Dock brand/items compress (48px brand, 64px items). |
 | `≤ 420px` | `--sq-topbar-h` reduces to `48px`. Content padding and section gap compress. |
-| `≤ 380px` | Topbar breadcrumb (`.v2-topbar__crumb`) and separator (`.v2-topbar__sep`) are hidden; dock brand 42px, items 58px. |
+| `≤ 380px` | Topbar breadcrumb (`.sq-topbar__crumb`) and separator (`.sq-topbar__sep`) are hidden; dock brand 42px, items 58px. |
 | `height ≤ 480px` + landscape | `--sq-bottomnav-h` compresses to `52px`, dock items become icon+label rows, and sections stop forcing a full-screen height. |
 
 ---
 
 ## 7. Navigation Dock Toggle Behavior
 
-There is **one toggle button** in the entire UI: `.v2-sidebar-toggle` inside `.v2-topbar`. It controls the bottom dock and updates `aria-expanded`.
+There is **one toggle button** in the entire UI: `.sq-sidebar-toggle` inside `.sq-topbar`. It controls the bottom dock and updates `aria-expanded`.
 
 Wire it with the attribute `data-sq-sidebar-toggle`. The JS runtime attaches the click handler automatically on `DOMContentLoaded`.
 
 ### All Viewports — Hide/Show Mode
 
-- Toggling sets/removes `.nav-collapsed` on `.v2-app` and updates `aria-expanded`.
+- Toggling sets/removes `.nav-collapsed` on `.sq-app` and updates `aria-expanded`.
 - The bottom dock row transitions to zero; the dock slides down with opacity transition.
 - State is persisted under `sq-sidebar` (`"open"` / `"closed"`) and restored on load.
-- Navigation anchors smooth-scroll inside `.v2-content`; scroll-spy keeps `aria-current` and active state synchronized.
+- Navigation anchors smooth-scroll inside `.sq-content`; scroll-spy keeps `aria-current` and active state synchronized.
 - When the dock overflows, the strip is drag-scrollable and a `More` drop-up lists off-screen destinations. `Escape` closes the drop-up (it does not hide the dock).
 
 ### Icon Swap
@@ -751,9 +751,9 @@ Wire it with the attribute `data-sq-sidebar-toggle`. The JS runtime attaches the
 The toggle button contains two icon elements:
 
 ```html
-<button class="v2-sidebar-toggle" data-sq-sidebar-toggle aria-label="Toggle sidebar">
-  <svg class="v2-icon v2-icon--18 icon-menu" ...></svg>
-  <svg class="v2-icon v2-icon--18 icon-close" ...></svg>
+<button class="sq-sidebar-toggle" data-sq-sidebar-toggle aria-label="Toggle sidebar">
+  <svg class="sq-icon sq-icon--18 icon-menu" ...></svg>
+  <svg class="sq-icon sq-icon--18 icon-close" ...></svg>
 </button>
 ```
 
@@ -888,16 +888,16 @@ The framework includes automatic support for Windows High Contrast Mode via `@me
 | | Rule |
 |---|------|
 | ✅ DO | Use `--sq-*` tokens for every color, size, spacing, and timing value. Never write raw hex, `px`, or `ms` values directly in component styles. |
-| ✅ DO | Use `.v2-section` `border-top` as the only separator between content blocks. One rule, one place. |
-| ✅ DO | Apply `v2-scroll` and `overflow-y: auto` exclusively on `.v2-content` (or other explicitly designated scroll regions). Never on `body`, `html`, `.v2-main`, or `.v2-app`. |
-| ✅ DO | Add `aria-label` to every icon-only button (`.v2-iconbtn`, `.v2-btn--icon`, `.v2-sidebar-toggle`). |
+| ✅ DO | Use `.sq-section` `border-top` as the only separator between content blocks. One rule, one place. |
+| ✅ DO | Apply `sq-scroll` and `overflow-y: auto` exclusively on `.sq-content` (or other explicitly designated scroll regions). Never on `body`, `html`, `.sq-main`, or `.sq-app`. |
+| ✅ DO | Add `aria-label` to every icon-only button (`.sq-iconbtn`, `.sq-btn--icon`, `.sq-sidebar-toggle`). |
 | ✅ DO | Load fonts from `fonts/` only — they are self-hosted. Reference them via `fonts.css` which is already imported by `synteq-ui.css`. |
-| ✅ DO | Add `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` on every `.v2-gauge` track element. |
-| ✅ DO | Use `data-sq-stagger` on containers whose children should animate in on scroll entry. Let JS handle the IntersectionObserver — do not manually add `.v2-stagger` in HTML. |
+| ✅ DO | Add `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` on every `.sq-gauge` track element. |
+| ✅ DO | Use `data-sq-stagger` on containers whose children should animate in on scroll entry. Let JS handle the IntersectionObserver — do not manually add `.sq-stagger` in HTML. |
 | ✅ DO | Set `data-theme` on `<html>` — not on `<body>` or inner elements — to apply theme tokens to the full document. |
-| ❌ DO NOT | Add a second sidebar toggle button inside `.v2-aside`. There is exactly one toggle, in the topbar. |
-| ❌ DO NOT | Add `border`, `box-shadow`, or a distinct `background-color` to create card-like wrappers around content. Use `.v2-section` separators instead. |
-| ❌ DO NOT | Add `border-bottom` to `.v2-section__head`. The separator above the section is sufficient — a second rule directly below the header creates a double-line artifact. |
+| ❌ DO NOT | Add a second sidebar toggle button inside `.sq-aside`. There is exactly one toggle, in the topbar. |
+| ❌ DO NOT | Add `border`, `box-shadow`, or a distinct `background-color` to create card-like wrappers around content. Use `.sq-section` separators instead. |
+| ❌ DO NOT | Add `border-bottom` to `.sq-section__head`. The separator above the section is sufficient — a second rule directly below the header creates a double-line artifact. |
 | ❌ DO NOT | Use external font CDNs (Google Fonts, Bunny Fonts, etc.). The Google Sans Code files are included under SIL OFL in `fonts/`. |
 | ❌ DO NOT | Override `--sq-aside-w` to create a wider sidebar — it is already at its maximum (`240px`). If you need more navigation space, rely on the dock overflow behaviour (drag-scroll + More drop-up) instead of adding group labels. |
 | ❌ DO NOT | Directly set `body.style.overflow = 'hidden'` in your own JS except through the sidebar API — the base CSS already locks `overflow: hidden` on `html` and `body`. The sidebar runtime does set this transiently on mobile to prevent scroll bleed during drawer-open; do not fight it. |
@@ -914,7 +914,7 @@ Synteq UI targets **WCAG 2.2 Level AA**. Full validation requires manual testing
 - `:focus` (mouse click) is suppressed — outline only appears on keyboard navigation.
 - Focus `border-radius` matches `--sq-radius-micro` to avoid sharp clipping artifacts.
 - **Form controls replace that global ring with their own**, so a field never shows two coloured edges: `2px solid --sq-brand` (offset `1px` for fields/selects, `2px` for checkbox/radio/switch). An input group uses `:focus-within` on the wrapper and its inner input suppresses the ring. Invalid + focused fields turn the ring red instead of stacking a red border under a brand ring.
-- Modal centring relies on `margin: auto` on `.v2-dialog`; the reset zeroes the UA value, and `margin: 0` would pin dialogs to the top-left corner.
+- Modal centring relies on `margin: auto` on `.sq-dialog`; the reset zeroes the UA value, and `margin: 0` would pin dialogs to the top-left corner.
 
 ### Color Contrast
 
@@ -941,9 +941,9 @@ All theme color pairs are verified at ≥ 4.5:1 against their respective backgro
 - Row selection: `aria-label="Select <row name>"` on every `[data-sq-row-select]` checkbox, plus an `aria-label` on the select-all box. Shift-click selects a range and fires `sq:rowselection`.
 - Tree toggles: `aria-expanded` is the single source of truth; every toggle needs an `aria-label` ("Collapse us-east-1"). Leaf rows use an `aria-hidden` spacer instead of an inert button.
 - Stepper: the current item receives `aria-current="step"`; markers hold a glyph or number and are `aria-hidden` because the title carries the meaning.
-- Code block gutter: `.v2-code__lines` is `aria-hidden="true"` so the copy reads as plain text.
-- Segmented bars: `role="group"`, `aria-label="[group name]"` on the `.v2-seg` wrapper.
-- All icon-only interactive elements (`.v2-iconbtn`, `.v2-btn--icon`, `.v2-sidebar-toggle`): explicit `aria-label`.
+- Code block gutter: `.sq-code__lines` is `aria-hidden="true"` so the copy reads as plain text.
+- Segmented bars: `role="group"`, `aria-label="[group name]"` on the `.sq-seg` wrapper.
+- All icon-only interactive elements (`.sq-iconbtn`, `.sq-btn--icon`, `.sq-sidebar-toggle`): explicit `aria-label`.
 - Decorative icons: `aria-hidden="true"` on every `<svg>`.
 
 ### Reduced Motion
@@ -957,9 +957,9 @@ transition-duration: 0.001ms !important;
 scroll-behavior: auto !important;
 ```
 
-This applies to all elements, including gauge fills, sparklines, skeleton shimmers, and stagger animations. No additional per-component reduced-motion handling is needed.
+This applies to all elements, including gauge fills, sparklines, skeleton shimmers, and stagger animations. Essential loading indicators are exempt: `.sq-spinner` and `.sq-progress__fill--indeterminate` keep an `infinite` animation at a slower duration in `feedback.css`, because a frozen spinner communicates a broken state rather than calm.
 
-The JS runtime also checks `prefersReduced()` before attaching the IntersectionObserver for `.v2-stagger` — if reduced motion is active, the observer is never created and no mount animations fire.
+The JS runtime also checks `prefersReduced()` before attaching the IntersectionObserver for `.sq-stagger` — if reduced motion is active, the observer is never created and no mount animations fire.
 
 **Exception — explicit replays.** Because that rule also shortens a
 *user-requested* replay to `0.001ms` (it looks like the button is broken),
@@ -970,12 +970,12 @@ for still produces a visible response.
 
 ### Screen Reader Utilities
 
-`.v2-sr-only` provides a standards-compliant visually-hidden class for supplemental screen-reader text:
+`.sq-sr-only` provides a standards-compliant visually-hidden class for supplemental screen-reader text:
 
 ```html
-<button class="v2-btn v2-btn--icon" aria-label="Copy IP">
-  <svg class="v2-icon v2-icon--16" aria-hidden="true">...</svg>
+<button class="sq-btn sq-btn--icon" aria-label="Copy IP">
+  <svg class="sq-icon sq-icon--16" aria-hidden="true">...</svg>
 </button>
 ```
 
-Use `aria-label` on the button directly (preferred) or `.v2-sr-only` text inside it as an alternative.
+Use `aria-label` on the button directly (preferred) or `.sq-sr-only` text inside it as an alternative.

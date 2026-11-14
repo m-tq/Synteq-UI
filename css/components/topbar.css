@@ -2,7 +2,7 @@
    SYNTEQ UI — 08. TOPBAR (components/topbar.css)
    Single hairline below. Sidebar toggle button always visible in topbar.
    ========================================================================== */
-.v2-topbar {
+.sq-topbar {
   display: flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -12,11 +12,12 @@
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+  transition: border-color var(--sq-dur-fast) var(--sq-ease);
 }
-.v2-topbar.is-scrolled { border-bottom-color: var(--sq-line-strong); }
+.sq-topbar.is-scrolled { border-bottom-color: var(--sq-line-strong); }
 
 /* Sidebar toggle button — always in the topbar */
-.v2-sidebar-toggle {
+.sq-sidebar-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -25,26 +26,25 @@
   color: var(--sq-text-subtle);
   flex-shrink: 0;
 }
-.v2-sidebar-toggle:hover { background: var(--sq-hover); color: var(--sq-text-strong); }
-.v2-sidebar-toggle:active { transform: scale(0.94); }
+.sq-sidebar-toggle:hover { background: var(--sq-hover); color: var(--sq-text-strong); }
 
 /* Hamburger → X swap */
-.v2-sidebar-toggle .icon-menu  { display: block; }
-.v2-sidebar-toggle .icon-close { display: none; }
-.v2-app.nav-collapsed .v2-sidebar-toggle .icon-menu  { display: block; }
-.v2-app.nav-collapsed .v2-sidebar-toggle .icon-close { display: none; }
+.sq-sidebar-toggle .icon-menu  { display: block; }
+.sq-sidebar-toggle .icon-close { display: none; }
+.sq-app.nav-collapsed .sq-sidebar-toggle .icon-menu  { display: block; }
+.sq-app.nav-collapsed .sq-sidebar-toggle .icon-close { display: none; }
 /* On mobile, open = show X */
-.v2-app:not(.nav-collapsed) .v2-sidebar-toggle .icon-menu  { display: none; }
-.v2-app:not(.nav-collapsed) .v2-sidebar-toggle .icon-close { display: block; }
+.sq-app:not(.nav-collapsed) .sq-sidebar-toggle .icon-menu  { display: none; }
+.sq-app:not(.nav-collapsed) .sq-sidebar-toggle .icon-close { display: block; }
 
-.v2-topbar__left {
+.sq-topbar__left {
   display: flex;
   align-items: center;
   gap: var(--sq-space-2);
   min-width: 0;
   flex: 1;
 }
-.v2-topbar__crumb {
+.sq-topbar__crumb {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -53,13 +53,13 @@
   white-space: nowrap;
   text-decoration: none;
 }
-.v2-topbar__crumb:hover { color: var(--sq-text); }
-.v2-topbar__sep {
+.sq-topbar__crumb:hover { color: var(--sq-text); }
+.sq-topbar__sep {
   color: var(--sq-text-subtle);
   opacity: 0.35;
   font-size: var(--sq-text-sm);
 }
-.v2-topbar__title {
+.sq-topbar__title {
   font-size: var(--sq-text-md);
   color: var(--sq-text-strong);
   font-weight: var(--sq-fw-medium);
@@ -69,7 +69,7 @@
   min-width: 0;
 }
 
-.v2-topbar__right {
+.sq-topbar__right {
   display: flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -77,7 +77,7 @@
 }
 
 /* Search/command trigger */
-.v2-search {
+.sq-search {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -90,10 +90,10 @@
   white-space: nowrap;
   min-width: 0;
 }
-.v2-search:hover { background: var(--sq-hover); color: var(--sq-text); }
+.sq-search:hover { background: var(--sq-hover); color: var(--sq-text); }
 
 /* Icon-only button */
-.v2-iconbtn {
+.sq-iconbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -102,35 +102,33 @@
   color: var(--sq-text-subtle);
   flex-shrink: 0;
 }
-.v2-iconbtn:hover { background: var(--sq-hover); color: var(--sq-text-strong); }
-.v2-iconbtn:active { transform: scale(0.94); }
+.sq-iconbtn:hover { background: var(--sq-hover); color: var(--sq-text-strong); }
 
 /* Theme toggle icon swap */
-.v2-theme-toggle .v2-icon--moon { display: none; }
-.v2-theme-toggle .v2-icon--sun  { display: inline-block; }
-[data-theme="dark"] .v2-theme-toggle .v2-icon--moon { display: inline-block; }
-[data-theme="dark"] .v2-theme-toggle .v2-icon--sun  { display: none; }
+.sq-theme-toggle .sq-icon--moon { display: none; }
+.sq-theme-toggle .sq-icon--sun  { display: inline-block; }
+[data-theme="dark"] .sq-theme-toggle .sq-icon--moon { display: inline-block; }
+[data-theme="dark"] .sq-theme-toggle .sq-icon--sun  { display: none; }
 
 /* Mobile: collapse search text and kbd pill */
 @media (max-width: 600px) {
-  .v2-search__text { display: none; }
-  .v2-kbd { display: none; }
-  .v2-topbar { padding: 0 var(--sq-space-3); }
+  .sq-search__text { display: none; }
+  .sq-kbd { display: none; }
+  .sq-topbar { padding: 0 var(--sq-space-3); }
 }
 @media (max-width: 420px) {
-  .v2-topbar { padding: 0 var(--sq-space-2); gap: var(--sq-space-1); }
-  .v2-topbar__left { gap: var(--sq-space-1); }
-  .v2-topbar__sep { display: none; }
-  .v2-topbar__crumb .v2-icon { display: none; }
-  .v2-topbar__title { font-size: var(--sq-text-sm); }
-  .v2-topbar__right { gap: var(--sq-space-1); }
-  .v2-search { padding: 0 var(--sq-space-2); }
-}
-@media (max-width: 360px) {
-  .v2-topbar__title { max-width: 42vw; }
-  .v2-topbar__crumb { display: none; }
+  .sq-topbar { padding: 0 var(--sq-space-2); gap: var(--sq-space-1); }
+  .sq-topbar__left { gap: var(--sq-space-1); }
+  .sq-topbar__sep { display: none; }
+  .sq-topbar__crumb .sq-icon { display: none; }
+  .sq-topbar__title { font-size: var(--sq-text-sm); }
+  .sq-topbar__right { gap: var(--sq-space-1); }
+  .sq-search { padding: 0 var(--sq-space-2); }
 }
 @media (max-width: 380px) {
-  .v2-topbar__crumb { display: none; }
-  .v2-topbar__sep   { display: none; }
+  .sq-topbar__crumb { display: none; }
+  .sq-topbar__sep   { display: none; }
+}
+@media (max-width: 360px) {
+  .sq-topbar__title { max-width: 42vw; }
 }

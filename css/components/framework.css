@@ -1,5 +1,5 @@
 /**
- * Synteq UI — Version 2.0.0
+ * Synteq UI — Version 2.2.0
  * Production-ready framework quality features:
  * - Idempotent init() for dynamic content
  * - Custom events for reactive integration
@@ -28,63 +28,68 @@
 
 /* ---- Forced Colors (Windows High Contrast) ---- */
 @media (forced-colors: active) {
-  .v2-btn,
-  .v2-input,
-  .v2-select,
-  .v2-checkbox,
-  .v2-radio,
-  .v2-switch,
-  .v2-tabs__tab,
-  .v2-menu__item,
-  .v2-dialog,
-  .v2-alert,
-  .v2-tag {
+  .sq-btn,
+  .sq-input,
+  .sq-select,
+  .sq-checkbox,
+  .sq-radio,
+  .sq-switch,
+  .sq-tabs__tab,
+  .sq-menu__item,
+  .sq-dialog,
+  .sq-alert,
+  .sq-tag {
     border: 1px solid CanvasText;
   }
 
-  .v2-btn--primary,
-  .v2-btn--brand,
-  .v2-btn--info,
-  .v2-btn--warn,
-  .v2-btn--warning,
-  .v2-btn--danger {
+  .sq-btn--primary,
+  .sq-btn--brand,
+  .sq-btn--info,
+  .sq-btn--warn,
+  .sq-btn--warning,
+  .sq-btn--danger {
     background: ButtonFace;
     color: ButtonText;
     border: 2px solid ButtonBorder;
   }
 
-  .v2-nav__item--active,
-  .v2-tabs__tab[aria-selected="true"] {
+  .sq-nav__item--active,
+  .sq-tabs__tab[aria-selected="true"] {
     border: 2px solid Highlight;
     color: Highlight;
   }
 
-  .v2-brand,
-  .v2-status-info,
-  .v2-status-running,
-  .v2-status-warning,
-  .v2-status-error {
+  .sq-brand,
+  .sq-status-info,
+  .sq-status-running,
+  .sq-status-warning,
+  .sq-status-error {
     color: CanvasText;
   }
 
-  .v2-alert__icon,
-  .v2-toast__icon {
+  .sq-alert__icon,
+  .sq-toast__icon {
     color: CanvasText;
   }
 }
 
 /* ---- Touch Targets (pointer: coarse) ---- */
 @media (pointer: coarse) {
-  .v2-btn,
-  .v2-iconbtn,
-  .v2-seg__btn,
-  .v2-tabs__tab,
-  .v2-menu__item {
+  .sq-btn,
+  .sq-iconbtn,
+  .sq-seg__btn,
+  .sq-tabs__tab,
+  .sq-menu__item {
     min-height: 44px;
   }
 
-  .v2-sidebar-toggle,
-  .v2-theme-toggle {
+  .sq-iconbtn,
+  .sq-btn--icon {
+    min-width: 44px;
+  }
+
+  .sq-sidebar-toggle,
+  .sq-theme-toggle {
     width: 44px;
     height: 44px;
   }

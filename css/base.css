@@ -34,7 +34,7 @@ html { overscroll-behavior: none; }
 body { position: fixed; inset: 0; }
 
 /* In-content scroll region — the ONLY place scrollbars appear */
-.v2-scroll {
+.sq-scroll {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -42,26 +42,25 @@ body { position: fixed; inset: 0; }
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
-.v2-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
-.v2-scroll::-webkit-scrollbar-thumb {
+.sq-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.sq-scroll::-webkit-scrollbar-thumb {
   background: var(--sq-line-strong);
   border-radius: 4px;
 }
-.v2-scroll::-webkit-scrollbar-thumb:hover { background: var(--sq-glyph); }
-.v2-scroll::-webkit-scrollbar-track { background: transparent; }
-.v2-scroll::-webkit-scrollbar-corner { background: transparent; }
+.sq-scroll::-webkit-scrollbar-thumb:hover { background: var(--sq-glyph); }
+.sq-scroll::-webkit-scrollbar-track { background: transparent; }
+.sq-scroll::-webkit-scrollbar-corner { background: transparent; }
 
 /* Keyboard-first focus ring (never on mouse click) */
 :focus { outline: none; }
 :focus-visible {
   outline: 2px solid var(--sq-text-strong);
   outline-offset: 2px;
-  border-radius: var(--sq-radius-micro);
 }
 
 /* [hidden] must always win over a component's own display rule.
    The UA `[hidden] { display: none }` rule loses to any author rule such as
-   `.v2-btn { display: inline-flex }`, so runtime filters (command palette,
+   `.sq-btn { display: inline-flex }`, so runtime filters (command palette,
    table rows, popovers) kept rendering the elements they meant to hide. */
 [hidden] { display: none !important; }
 
@@ -88,20 +87,20 @@ button:disabled, [aria-disabled="true"] {
 a { color: inherit; }
 
 /* Typography utility classes */
-.v2-mono { font-family: var(--sq-font-mono); font-variant-numeric: tabular-nums; }
-.v2-t-xs { font-size: var(--sq-text-xs); }
-.v2-t-sm { font-size: var(--sq-text-sm); }
-.v2-t-md { font-size: var(--sq-text-md); }
-.v2-t-lg { font-size: var(--sq-text-lg); }
-.v2-t-xl { font-size: var(--sq-text-xl); }
-.v2-t-2xl { font-size: var(--sq-text-2xl); line-height: var(--sq-leading-tight); }
-.v2-t-3xl { font-size: var(--sq-text-3xl); line-height: var(--sq-leading-tight); }
-.v2-mute { color: var(--sq-text-subtle); }
-.v2-strong { color: var(--sq-text-strong); font-weight: var(--sq-fw-medium); }
-.v2-semibold { font-weight: var(--sq-fw-semibold); }
+.sq-mono { font-family: var(--sq-font-mono); font-variant-numeric: tabular-nums; }
+.sq-t-xs { font-size: var(--sq-text-xs); }
+.sq-t-sm { font-size: var(--sq-text-sm); }
+.sq-t-md { font-size: var(--sq-text-md); }
+.sq-t-lg { font-size: var(--sq-text-lg); }
+.sq-t-xl { font-size: var(--sq-text-xl); }
+.sq-t-2xl { font-size: var(--sq-text-2xl); line-height: var(--sq-leading-tight); }
+.sq-t-3xl { font-size: var(--sq-text-3xl); line-height: var(--sq-leading-tight); }
+.sq-mute { color: var(--sq-text-subtle); }
+.sq-strong { color: var(--sq-text-strong); font-weight: var(--sq-fw-medium); }
+.sq-semibold { font-weight: var(--sq-fw-semibold); }
 
 /* Visually hidden (sr-only) */
-.v2-sr-only {
+.sq-sr-only {
   position: absolute;
   width: 1px; height: 1px;
   padding: 0; margin: -1px;

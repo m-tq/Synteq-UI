@@ -1,9 +1,9 @@
 /* ==========================================================================
    SYNTEQ UI — 05. ICONS (components/icons.css)
    Inline SVG icons sized via currentColor. Fast context recognition.
-   Usage: <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">...</svg>
+   Usage: <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true">...</svg>
    ========================================================================== */
-.v2-icon {
+.sq-icon {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.75;
@@ -15,22 +15,22 @@
 }
 
 /* Size scale */
-.v2-icon--12 { width: 12px; height: 12px; }
-.v2-icon--14 { width: 14px; height: 14px; }
-.v2-icon--16 { width: 16px; height: 16px; }
-.v2-icon--18 { width: 18px; height: 18px; }
-.v2-icon--20 { width: 20px; height: 20px; }
+.sq-icon--12 { width: 12px; height: 12px; }
+.sq-icon--14 { width: 14px; height: 14px; }
+.sq-icon--16 { width: 16px; height: 16px; }
+.sq-icon--18 { width: 18px; height: 18px; }
+.sq-icon--20 { width: 20px; height: 20px; }
 
 /* Glyph tint helpers */
-.v2-icon--mute { color: var(--sq-text-subtle); }
-.v2-icon--brand { color: var(--sq-brand); }
-.v2-icon--info { color: var(--sq-status-info); }
-.v2-icon--ok { color: var(--sq-status-running); }
-.v2-icon--warn { color: var(--sq-status-warning); }
-.v2-icon--err { color: var(--sq-status-error); }
+.sq-icon--mute { color: var(--sq-text-subtle); }
+.sq-icon--brand { color: var(--sq-brand); }
+.sq-icon--info { color: var(--sq-status-info); }
+.sq-icon--ok { color: var(--sq-status-running); }
+.sq-icon--warn { color: var(--sq-status-warning); }
+.sq-icon--err { color: var(--sq-status-error); }
 
 /* Icon + label pairing */
-.v2-ico-label {
+.sq-ico-label {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);

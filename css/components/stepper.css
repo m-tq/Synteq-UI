@@ -4,13 +4,13 @@
    no shadows. A horizontal variant is available for compact headers.
    ========================================================================== */
 
-.v2-stepper {
+.sq-stepper {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.v2-stepper__item {
+.sq-stepper__item {
   position: relative;
   display: grid;
   grid-template-columns: var(--sq-space-6) minmax(0, 1fr);
@@ -19,15 +19,15 @@
   min-width: 0;
 }
 
-.v2-stepper__item:last-child {
+.sq-stepper__item:last-child {
   padding-bottom: 0;
 }
 
 /* Rail - connects each marker to the next one */
-.v2-stepper__item:not(:last-child)::after {
+.sq-stepper__item:not(:last-child)::after {
   content: "";
   position: absolute;
-  left: var(--sq-space-3);
+  left: calc(var(--sq-space-6) / 2);
   top: var(--sq-space-5);
   bottom: 0;
   width: var(--sq-line-h);
@@ -35,7 +35,7 @@
   transform: translateX(-50%);
 }
 
-.v2-stepper__marker {
+.sq-stepper__marker {
   position: relative;
   z-index: 1;
   justify-self: center;
@@ -55,7 +55,7 @@
   line-height: 1;
 }
 
-.v2-stepper__body {
+.sq-stepper__body {
   display: flex;
   flex-direction: column;
   gap: var(--sq-space-1);
@@ -63,7 +63,7 @@
   min-width: 0;
 }
 
-.v2-stepper__title {
+.sq-stepper__title {
   display: flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -73,14 +73,14 @@
   min-width: 0;
 }
 
-.v2-stepper__desc {
+.sq-stepper__desc {
   font-size: var(--sq-text-sm);
   color: var(--sq-text-subtle);
   line-height: var(--sq-leading-base);
   overflow-wrap: anywhere;
 }
 
-.v2-stepper__meta {
+.sq-stepper__meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -91,51 +91,51 @@
 }
 
 /* ---- States ---- */
-.v2-stepper__item.is-complete .v2-stepper__marker {
+.sq-stepper__item.is-complete .sq-stepper__marker {
   border-color: var(--sq-status-running);
   color: var(--sq-status-running);
 }
 
-.v2-stepper__item.is-complete::after {
+.sq-stepper__item.is-complete::after {
   background: var(--sq-status-running);
 }
 
-.v2-stepper__item.is-complete .v2-stepper__title {
+.sq-stepper__item.is-complete .sq-stepper__title {
   color: var(--sq-text);
 }
 
-.v2-stepper__item.is-active .v2-stepper__marker {
+.sq-stepper__item.is-active .sq-stepper__marker {
   border-width: 2px;
   border-color: var(--sq-brand);
   color: var(--sq-brand);
   font-weight: var(--sq-fw-semibold);
 }
 
-.v2-stepper__item.is-active .v2-stepper__title {
+.sq-stepper__item.is-active .sq-stepper__title {
   color: var(--sq-text-strong);
 }
 
-.v2-stepper__item.is-pending .v2-stepper__marker {
+.sq-stepper__item.is-pending .sq-stepper__marker {
   border-style: dashed;
 }
 
-.v2-stepper__item.is-error .v2-stepper__marker {
+.sq-stepper__item.is-error .sq-stepper__marker {
   border-color: var(--sq-status-error);
   color: var(--sq-status-error);
 }
 
-.v2-stepper__item.is-error::after {
+.sq-stepper__item.is-error::after {
   background: var(--sq-line);
 }
 
 /* ---- Horizontal variant ---- */
-.v2-stepper--horizontal {
+.sq-stepper--horizontal {
   flex-direction: row;
   align-items: flex-start;
   gap: 0;
 }
 
-.v2-stepper--horizontal .v2-stepper__item {
+.sq-stepper--horizontal .sq-stepper__item {
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: var(--sq-space-6) minmax(0, 1fr);
   column-gap: 0;
@@ -145,38 +145,38 @@
   min-width: 0;
 }
 
-.v2-stepper--horizontal .v2-stepper__item:not(:last-child)::after {
+.sq-stepper--horizontal .sq-stepper__item:not(:last-child)::after {
   left: calc(var(--sq-space-3) + var(--sq-space-5));
   right: 0;
-  top: var(--sq-space-3);
+  top: calc(var(--sq-space-5) / 2);
   bottom: auto;
   width: auto;
   height: var(--sq-line-h);
   transform: none;
 }
 
-.v2-stepper--horizontal .v2-stepper__marker {
+.sq-stepper--horizontal .sq-stepper__marker {
   justify-self: start;
 }
 
-.v2-stepper--horizontal .v2-stepper__body {
+.sq-stepper--horizontal .sq-stepper__body {
   padding-top: 0;
 }
 
 @media (max-width: 720px) {
-  .v2-stepper--horizontal {
+  .sq-stepper--horizontal {
     flex-direction: column;
   }
 
-  .v2-stepper--horizontal .v2-stepper__item {
+  .sq-stepper--horizontal .sq-stepper__item {
     grid-template-columns: var(--sq-space-6) minmax(0, 1fr);
     grid-template-rows: auto;
     column-gap: var(--sq-space-3);
     padding-bottom: var(--sq-space-4);
   }
 
-  .v2-stepper--horizontal .v2-stepper__item:not(:last-child)::after {
-    left: var(--sq-space-3);
+  .sq-stepper--horizontal .sq-stepper__item:not(:last-child)::after {
+    left: calc(var(--sq-space-6) / 2);
     right: auto;
     top: var(--sq-space-5);
     bottom: 0;
@@ -185,7 +185,7 @@
     transform: translateX(-50%);
   }
 
-  .v2-stepper--horizontal .v2-stepper__marker {
+  .sq-stepper--horizontal .sq-stepper__marker {
     justify-self: center;
   }
 }

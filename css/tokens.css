@@ -44,7 +44,7 @@
   --sq-topbar-h: 52px;
   --sq-bottomnav-h: 60px;
 
-  /* Content column — every .v2-section is centred inside this measure */
+  /* Content column — every .sq-section is centred inside this measure */
   --sq-content-max: 1200px;
   /* Bottom dock item width — drives the overflow (More / drag) threshold */
   --sq-nav-item-w: 80px;

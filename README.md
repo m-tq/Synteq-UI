@@ -6,7 +6,7 @@ A clean, viewport-locked dashboard framework built on six hard rules:
 2. **Responsive on any screen** — fluid type, clamp-based layout, centred sections, sticky bottom navigation dock that centre-aligns, drag-scrolls and exposes a `More` drop-up when it overflows
 3. **Simple & lightweight** — lean token set, flat surfaces, zero dependencies
 4. **No cards or wrappers** — visual hierarchy comes from hairline line separators only
-5. **Lightweight motion** — subtle fade-up mounts, smooth gauge fills, pulse indicators; auto-disabled with `prefers-reduced-motion`
+5. **Lightweight motion** — subtle fade-up mounts, smooth gauge fills, pulse indicators; ambient motion auto-disabled with `prefers-reduced-motion`
 6. **Inline icons** — every label carries an SVG icon for instant context recognition
 
 ---
@@ -39,7 +39,7 @@ synteq-ui/
 │       ├── stepper.css       — vertical progress indicator / timeline
 │       ├── code.css          — syntax-free code surface with gutter & copy
 │       ├── framework.css     — density control, forced-colors, touch targets
-│       └── motion.css        — fade-up, stagger, shimmer skeleton, soft pulse, hover lift
+│       └── motion.css        — fade-up, stagger, soft pulse, hover lift
 ├── js/
 │   └── synteq-ui.js          — runtime: theme, dock, scroll-spy, gauges, charts, tables, tree,
 │                               stepper, code blocks, toast, command palette
@@ -63,11 +63,11 @@ synteq-ui/
 </head>
 <body>
 
-  <div class="v2-app">
-    <aside class="v2-aside">...</aside>
-    <header class="v2-topbar">...</header>
-    <main class="v2-main">
-      <div class="v2-content v2-scroll">
+  <div class="sq-app">
+    <aside class="sq-aside">...</aside>
+    <header class="sq-topbar">...</header>
+    <main class="sq-main">
+      <div class="sq-content sq-scroll">
         <!-- your sections here -->
       </div>
     </main>
@@ -78,7 +78,7 @@ synteq-ui/
 </html>
 ```
 
-The `v2-app` grid locks to the viewport. `v2-content.v2-scroll` is the only element that produces a scrollbar. Navigation is a sticky bottom dock on desktop and mobile; the topbar toggle hides it without changing document scroll.
+The `sq-app` grid locks to the viewport. `sq-content.sq-scroll` is the only element that produces a scrollbar. Navigation is a sticky bottom dock on desktop and mobile; the topbar toggle hides it without changing document scroll.
 
 ---
 
@@ -88,8 +88,8 @@ These are enforced by the framework CSS/JS, not by each app:
 
 - The shell is viewport-locked. `body` never scrolls; only an in-content
   region or a data table may scroll.
-- `.v2-content` has no vertical padding. Vertical spacing belongs to
-  `.v2-section`, which fills exactly one screen and centres its content on
+- `.sq-content` has no vertical padding. Vertical spacing belongs to
+  `.sq-section`, which fills exactly one screen and centres its content on
   both axes.
 - The dock toggle hides the dock (opacity, visibility and pointer events) and
   collapses its grid row, so the content grows into the freed space. Its icon
@@ -120,7 +120,7 @@ Synteq UI targets modern browsers with CSS custom properties, CSS Grid, and nati
 
 ### Progressive Enhancement
 
-- **`prefers-reduced-motion`** — all animations auto-disable when user prefers reduced motion
+- **`prefers-reduced-motion`** — ambient animations auto-disable when user prefers reduced motion; loading spinners and indeterminate progress stay active
 - **`prefers-color-scheme`** — detects system theme preference on first load
 - **`forced-colors`** — automatic Windows High Contrast Mode support
 - **JavaScript optional** — static content renders without JS; interactive features (tabs, menus, toasts) require `synteq-ui.js`
@@ -138,7 +138,7 @@ All examples tested on Chrome 120+, Firefox 121+, Safari 17+, and Edge 120+.
 ## Navigation Dock
 
 - Items are **icon + label only** — the dock never renders group labels such as
-  “Workspace” or “Account”. Remove `.v2-nav__group-label` from navigation markup
+  “Workspace” or “Account”. Remove `.sq-nav__group-label` from navigation markup
   (the class is hidden by CSS for backwards compatibility).
 - While destinations fit, the strip is centred with CSS `safe center` (never
   clipped on the left). As soon as they overflow:
@@ -155,7 +155,7 @@ Nav items use `href="#section-id"`, so the runtime can both scroll and keep the
 URL shareable:
 
 ```html
-<a href="#logs" class="v2-nav__item">Logs</a>
+<a href="#logs" class="sq-nav__item">Logs</a>
 ```
 
 - Clicking a nav item scrolls the section into view, updates the active state
@@ -179,7 +179,7 @@ Add `data-sq-copy` to any button or link — the runtime handles it by delegatio
 so buttons created *after* page load work too:
 
 ```html
-<button class="v2-btn v2-btn--icon" aria-label="Copy address"
+<button class="sq-btn sq-btn--icon" aria-label="Copy address"
         data-sq-copy="oct3oMBjs5Jx…">⧉</button>
 ```
 
@@ -187,7 +187,7 @@ so buttons created *after* page load work too:
   (handy for label/value pairs).
 - The attribute value is read at click time, so you can keep it in sync with
   live data without re-binding.
-- Feedback: a **"Copied" tip** appears above the button, `.v2-copy--ok` tints it
+- Feedback: a **"Copied" tip** appears above the button, `.sq-copy--ok` tints it
   green for 1.8 s and `aria-label` flips to the confirmation text. Customise the
   wording per button with `data-sq-copy-label="Address copied"`; a failed copy
   shows `Copy failed` in the error tint instead.
@@ -198,7 +198,7 @@ so buttons created *after* page load work too:
 
 ## Click feedback
 
-Every control (`.v2-btn`, `.v2-iconbtn`, `.v2-seg__btn`, `.v2-search`, the
+Every control (`.sq-btn`, `.sq-iconbtn`, `.sq-seg__btn`, `.sq-search`, the
 sidebar toggle, the dock's `More` button and anything with `data-sq-copy`) gets
 the same press treatment: a 1 px push, a 0.985 inward scale and an 8 %
 `currentColor` wash. No elevation, no ripple library.
@@ -234,31 +234,31 @@ Theme preference is persisted in `localStorage` under key `sq-theme`.
 
 ## Sections & Line Separators
 
-Synteq UI has no cards. Content is organized into `.v2-section` blocks separated by a single `1px` top border. Every section fills the space between the topbar and the dock and **centres its content vertically**, while the section column is **centred horizontally** at `--sq-content-max` (default `1200px`).
+Synteq UI has no cards. Content is organized into `.sq-section` blocks separated by a single `1px` top border. Every section fills the space between the topbar and the dock and **centres its content vertically**, while the section column is **centred horizontally** at `--sq-content-max` (default `1200px`).
 
 ```html
-<div class="v2-section">
-  <div class="v2-section__head">
-    <span class="v2-section__title">Resource Usage</span>
-    <span class="v2-section__meta">updated 5s ago</span>
+<div class="sq-section">
+  <div class="sq-section__head">
+    <span class="sq-section__title">Resource Usage</span>
+    <span class="sq-section__meta">updated 5s ago</span>
   </div>
   <!-- content -->
 </div>
 ```
 
-Add `.v2-section--top` to opt out of vertical centring, or `.v2-section--compact`
+Add `.sq-section--top` to opt out of vertical centring, or `.sq-section--compact`
 to drop the full-viewport minimum height. Nested sections (for example inside a
 live preview) never inherit the viewport height.
 
 For inline stat separation, use the stat strip (vertical hairlines between items):
 
 ```html
-<div class="v2-stat-strip">
-  <div class="v2-stat">
-    <span class="v2-stat__label">vCPU</span>
-    <div class="v2-stat__value">4 <span class="v2-unit">cores</span></div>
+<div class="sq-stat-strip">
+  <div class="sq-stat">
+    <span class="sq-stat__label">vCPU</span>
+    <div class="sq-stat__value">4 <span class="sq-unit">cores</span></div>
   </div>
-  <div class="v2-stat">...</div>
+  <div class="sq-stat">...</div>
 </div>
 ```
 
@@ -266,18 +266,18 @@ For inline stat separation, use the stat strip (vertical hairlines between items
 
 ## Gauges
 
-Add `data-sq-gauge="72"` to the track element and `.v2-gauge__fill` inside it. `initGauges()` runs automatically on DOMContentLoaded.
+Add `data-sq-gauge="72"` to the track element and `.sq-gauge__fill` inside it. `initGauges()` runs automatically on DOMContentLoaded.
 
 ```html
-<div class="v2-gauge" data-sq-gauge="72"
+<div class="sq-gauge" data-sq-gauge="72"
      role="progressbar" aria-label="CPU" aria-valuenow="72"
      aria-valuemin="0" aria-valuemax="100">
-  <div class="v2-gauge__head">
-    <span class="v2-gauge__label">CPU</span>
-    <span class="v2-gauge__value">72<span class="v2-gauge__max"> / 100%</span></span>
+  <div class="sq-gauge__head">
+    <span class="sq-gauge__label">CPU</span>
+    <span class="sq-gauge__value">72<span class="sq-gauge__max"> / 100%</span></span>
   </div>
-  <div class="v2-gauge__track">
-    <div class="v2-gauge__fill"></div>
+  <div class="sq-gauge__track">
+    <div class="sq-gauge__fill"></div>
   </div>
 </div>
 ```
@@ -285,7 +285,7 @@ Add `data-sq-gauge="72"` to the track element and `.v2-gauge__fill` inside it. `
 Update imperatively:
 
 ```js
-const fill = document.querySelector('.v2-gauge__fill');
+const fill = document.querySelector('.sq-gauge__fill');
 SynteqUI.renderGauge(fill, 88);                       // auto-colors: ok / warn / err
 SynteqUI.renderGauge(fill, 100, { kind: 'brand' });   // quorum / bandwidth gauge
 SynteqUI.renderGauge(fill, 42,  { kind: 'neutral' }); // no state colour
@@ -317,8 +317,12 @@ SynteqUI.renderBars(document.getElementById('net-bars'), [
 | `minCols` | `0` | Pad the series with empty leading columns so a short series still renders slim bars instead of a few fat ones |
 | `stepSec` | `null` | Seconds per sample; turns the tooltip into `T-30s ↓ 3.2% ↑ 1.1%` |
 
+If an `[inPct, outPct]` pair totals more than 100, the chart expands its scale
+for the whole series so the tallest column still fits; normal pairs keep their
+absolute 0–100 height.
+
 ```html
-<div class="v2-bars" id="net-bars"
+<div class="sq-bars" id="net-bars"
      role="img" aria-label="Network I/O chart"
      style="--sq-bars-cols:24;"></div>
 ```
@@ -337,20 +341,20 @@ SynteqUI.renderSparkline(
 ```
 
 ```html
-<svg class="v2-spark" id="cpu-spark"
+<svg class="sq-spark" id="cpu-spark"
      viewBox="0 0 200 40" preserveAspectRatio="none"
      role="img" aria-label="CPU trend"></svg>
 ```
 
-Add `.v2-spark--out` to use the outbound (red) color palette.
-`.v2-spark--tall` raises the chart to 56 px (or set `--sq-spark-h` on any
+Add `.sq-spark--out` to use the outbound (red) color palette.
+`.sq-spark--tall` raises the chart to 56 px (or set `--sq-spark-h` on any
 instance). When fewer than two samples are available the runtime clears the path
 and sets `data-sq-spark-empty="true"` instead of leaving stale data on screen.
 
 The sparkline is drawn in **viewBox units** (the `<svg viewBox>` above, defaulting to
 `0 0 200 40`), so the same path scales to any rendered width without overflowing.
 The series is remembered and redrawn on resize; `SynteqUI.initSparklines()` renders
-every `.v2-spark` automatically, including `<svg class="v2-spark" data-sq-spark="12,18,9,22">`.
+every `.sq-spark` automatically, including `<svg class="sq-spark" data-sq-spark="12,18,9,22">`.
 
 ---
 
@@ -360,16 +364,16 @@ Axis-labelled line/area chart drawn in element pixel units, so tick labels stay
 crisp at any width and the chart redraws (debounced) on resize.
 
 ```html
-<div class="v2-chart">
-  <div class="v2-chart__head">
-    <span class="v2-chart__title">Request rate</span>
-    <span class="v2-chart__meta">last 12 intervals</span>
+<div class="sq-chart">
+  <div class="sq-chart__head">
+    <span class="sq-chart__title">Request rate</span>
+    <span class="sq-chart__meta">last 12 intervals</span>
   </div>
-  <div class="v2-chart__body">
-    <svg class="v2-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
+  <div class="sq-chart__body">
+    <svg class="sq-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
          aria-label="Request rate and error rate"></svg>
   </div>
-  <div class="v2-chart__legend" data-sq-chart-legend></div>
+  <div class="sq-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -388,35 +392,35 @@ SynteqUI.renderLineChart(document.getElementById('chart-line'), [
 });
 ```
 
-The hover tooltip (`.v2-chart__tip`) is created on demand inside
-`.v2-chart__body`: move the pointer over the plot and it snaps to the nearest
+The hover tooltip (`.sq-chart__tip`) is created on demand inside
+`.sq-chart__body`: move the pointer over the plot and it snaps to the nearest
 sample, draws a dashed crosshair and lists every series with its swatch and
 value. Chart height is controlled by `--sq-chart-h` (default `168px`, `128px`
 under 520px).
 
 | Class | Purpose |
 |---|---|
-| `.v2-chart` | Column frame: head, body, legend |
-| `.v2-chart__svg` | Line/area canvas (`height: var(--sq-chart-h)`) |
-| `.v2-chart__grid` / `__axis` / `__tick` | Gridlines, value axis, tick labels (generated) |
-| `.v2-chart__area` / `__line` / `__dot` | Series primitives (generated) |
-| `.v2-chart__s1…s4` | Series tints: brand, tel-out, warning, subtle |
-| `.v2-chart__cursor` | Dashed hover crosshair (generated) |
-| `.v2-chart__tip` | Hover tooltip (generated) |
-| `.v2-chart__legend` | Legend row; add `data-sq-chart-legend` to auto-fill it |
+| `.sq-chart` | Column frame: head, body, legend |
+| `.sq-chart__svg` | Line/area canvas (`height: var(--sq-chart-h)`) |
+| `.sq-chart__grid` / `__axis` / `__tick` | Gridlines, value axis, tick labels (generated) |
+| `.sq-chart__area` / `__line` / `__dot` | Series primitives (generated) |
+| `.sq-chart__s1…s4` | Series tints: brand, tel-out, warning, subtle |
+| `.sq-chart__cursor` | Dashed hover crosshair (generated) |
+| `.sq-chart__tip` | Hover tooltip (generated) |
+| `.sq-chart__legend` | Legend row; add `data-sq-chart-legend` to auto-fill it |
 
 ---
 
 ## Stacked Bars
 
 ```html
-<div class="v2-chart">
-  <div class="v2-chart__head"><span class="v2-chart__title">Traffic by class</span></div>
-  <div class="v2-chart__body">
-    <div class="v2-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
+<div class="sq-chart">
+  <div class="sq-chart__head"><span class="sq-chart__title">Traffic by class</span></div>
+  <div class="sq-chart__body">
+    <div class="sq-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
   </div>
-  <div class="v2-chart__xlabels" data-sq-chart-labels></div>
-  <div class="v2-chart__legend" data-sq-chart-legend></div>
+  <div class="sq-chart__xlabels" data-sq-chart-labels></div>
+  <div class="sq-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -442,22 +446,22 @@ Slim, text-first tables for peer lists, ledger rows, log summaries — hairline 
 only, tabular numbers, no zebra striping.
 
 ```html
-<div class="v2-table-wrap">
-  <table class="v2-table">
+<div class="sq-table-wrap">
+  <table class="sq-table">
     <thead>
       <tr>
         <th scope="col">Peer</th>
-        <th scope="col" class="v2-table__num">Head epoch</th>
-        <th scope="col" class="v2-table__num">Lag</th>
+        <th scope="col" class="sq-table__num">Head epoch</th>
+        <th scope="col" class="sq-table__num">Lag</th>
         <th scope="col">Source</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="v2-table__mono">oct3SUwRsi…v2v4Bm</td>
-        <td class="v2-table__num">1,756,258</td>
-        <td class="v2-table__num">8</td>
-        <td class="v2-table__mute">epoch_root</td>
+        <td class="sq-table__mono">oct3SUwRsi…v2v4Bm</td>
+        <td class="sq-table__num">1,756,258</td>
+        <td class="sq-table__num">8</td>
+        <td class="sq-table__mute">epoch_root</td>
       </tr>
       <tr class="is-stale">…</tr>
     </tbody>
@@ -467,63 +471,63 @@ only, tabular numbers, no zebra striping.
 
 | Class | Purpose |
 |---|---|
-| `.v2-table-wrap` | Horizontal scroll container with a thin scrollbar (long addresses / wide tables) |
-| `.v2-table` | `border-collapse`, `--sq-text-sm`, tabular numbers, hover row |
-| `.v2-table__num` | Right-aligned mono cell (counts, epochs, bytes) |
-| `.v2-table__mono` | Mono cell, default alignment (hashes, addresses) |
-| `.v2-table__mute` | Quiet metadata cell |
+| `.sq-table-wrap` | Horizontal scroll container with a thin scrollbar (long addresses / wide tables) |
+| `.sq-table` | `border-collapse`, `--sq-text-sm`, tabular numbers, hover row |
+| `.sq-table__num` | Right-aligned mono cell (counts, epochs, bytes) |
+| `.sq-table__mono` | Mono cell, default alignment (hashes, addresses) |
+| `.sq-table__mute` | Quiet metadata cell |
 | `tr.is-stale` / `td.is-stale` | Dims cached/stale rows without hiding them |
-| `.v2-table--fixed` | `table-layout: fixed` for equal-width columns |
+| `.sq-table--fixed` | `table-layout: fixed` for equal-width columns |
 
 Cells never wrap (`white-space: nowrap`) — truncate long values in the cell with
-`.v2-mono` + your own `text-overflow` or keep the table inside `.v2-table-wrap`.
+`.sq-mono` + your own `text-overflow` or keep the table inside `.sq-table-wrap`.
 
 ### Advanced table features
 
 The table module layers sorting, selection, filtering and pagination on top of
-the base `.v2-table`. One runtime call (`initTables()`, already part of the
+the base `.sq-table`. One runtime call (`initTables()`, already part of the
 default `init()`) wires everything found in the enclosing
-`[data-sq-table-scope]` or `.v2-section`.
+`[data-sq-table-scope]` or `.sq-section`.
 
 ```html
-<div class="v2-table-toolbar">
-  <div class="v2-table-toolbar__start">
-    <span class="v2-table-toolbar__title">Instances</span>
-    <span class="v2-table-toolbar__meta" data-sq-table-count>0 rows</span>
+<div class="sq-table-toolbar">
+  <div class="sq-table-toolbar__start">
+    <span class="sq-table-toolbar__title">Instances</span>
+    <span class="sq-table-toolbar__meta" data-sq-table-count>0 rows</span>
   </div>
-  <div class="v2-table-toolbar__end">
-    <label class="v2-table-toolbar__filter">
-      <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- search --></svg>
+  <div class="sq-table-toolbar__end">
+    <label class="sq-table-toolbar__filter">
+      <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- search --></svg>
       <input type="search" data-sq-table-filter placeholder="Filter rows..." aria-label="Filter rows" />
     </label>
   </div>
 </div>
 
-<div class="v2-table-wrap">
-  <table class="v2-table v2-table--sticky v2-table--compact" data-sq-table data-sq-page-size="6">
+<div class="sq-table-wrap">
+  <table class="sq-table sq-table--sticky sq-table--compact" data-sq-table data-sq-page-size="6">
     <thead>
       <tr>
-        <th class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-select-all aria-label="Select all rows" /></th>
+        <th class="sq-table__check"><input type="checkbox" class="sq-checkbox" data-sq-select-all aria-label="Select all rows" /></th>
         <th>
-          <button class="v2-table__sort" data-sq-sort="text">
+          <button class="sq-table__sort" data-sq-sort="text">
             Instance
-            <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+            <svg class="sq-icon sq-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
           </button>
         </th>
-        <th class="v2-table__num"><button class="v2-table__sort" data-sq-sort="number">CPU %</button></th>
+        <th class="sq-table__num"><button class="sq-table__sort" data-sq-sort="number">CPU %</button></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-row-select aria-label="Select octra-01" /></td>
-        <td class="v2-table__mono">octra-01</td>
-        <td class="v2-table__num">42</td>
+        <td class="sq-table__check"><input type="checkbox" class="sq-checkbox" data-sq-row-select aria-label="Select octra-01" /></td>
+        <td class="sq-table__mono">octra-01</td>
+        <td class="sq-table__num">42</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<nav class="v2-pagination" data-sq-table-pagination aria-label="Table pagination"></nav>
+<nav class="sq-pagination" data-sq-table-pagination aria-label="Table pagination"></nav>
 ```
 
 | Hook | Purpose |
@@ -551,9 +555,9 @@ SynteqUI.initTables();          // re-scan after adding rows dynamically
 SynteqUI.sortTable(tableEl, 3, 'descending');   // programmatic sort
 ```
 
-Density modifiers: `.v2-table--compact` (tighter vertical padding) and
-`.v2-table--dense` (smaller type + padding). Add `.v2-table--sticky` to pin the
-header inside a scrolling `.v2-table-wrap`.
+Density modifiers: `.sq-table--compact` (tighter vertical padding) and
+`.sq-table--dense` (smaller type + padding). Add `.sq-table--sticky` to pin the
+header inside a scrolling `.sq-table-wrap`.
 
 ---
 
@@ -562,31 +566,31 @@ header inside a scrolling `.v2-table-wrap`.
 Mono rows with level accents, built for streaming tails.
 
 ```html
-<div class="v2-log v2-log--scroll v2-log--bordered" role="log" aria-label="Node log tail">
-  <div class="v2-log__row">
-    <span class="v2-log__ts">14:33:05</span>
-    <span class="v2-log__level">INFO</span>
-    <span class="v2-log__comp">consensus</span>
-    <span class="v2-log__msg">component = consensus event = post_finalize_root_verified epoch = 1756254</span>
+<div class="sq-log sq-log--scroll sq-log--bordered" role="log" aria-label="Node log tail">
+  <div class="sq-log__row">
+    <span class="sq-log__ts">14:33:05</span>
+    <span class="sq-log__level">INFO</span>
+    <span class="sq-log__comp">consensus</span>
+    <span class="sq-log__msg">component = consensus event = post_finalize_root_verified epoch = 1756254</span>
   </div>
-  <div class="v2-log__row v2-log__row--warn">
-    <span class="v2-log__ts">14:33:07</span>
-    <span class="v2-log__level v2-log__level--warn">WARN</span>
-    <span class="v2-log__comp">p2p</span>
-    <span class="v2-log__msg">event = frame_budget_rejected reason = frame_count_budget</span>
+  <div class="sq-log__row sq-log__row--warn">
+    <span class="sq-log__ts">14:33:07</span>
+    <span class="sq-log__level sq-log__level--warn">WARN</span>
+    <span class="sq-log__comp">p2p</span>
+    <span class="sq-log__msg">event = frame_budget_rejected reason = frame_count_budget</span>
   </div>
 </div>
 ```
 
 | Class | Purpose |
 |---|---|
-| `.v2-log` | Flex column, mono 11 px, 1.55 line-height |
-| `.v2-log--scroll` | `max-height: var(--sq-log-h, 420px)` + thin scrollbar + `overscroll-behavior: contain` |
-| `.v2-log--bordered` | Hairline top + bottom separators |
-| `.v2-log__row` | One line: ts · level · component · message, 2 px transparent left rail |
-| `.v2-log__row--warn` / `--error` | Amber / red left rail (error also tints the row) |
-| `.v2-log__level--warn` / `--error` / `--fatal` | Level text colour |
-| `.v2-log__empty` | Centered placeholder for "waiting for log stream…" |
+| `.sq-log` | Flex column, mono 11 px, 1.55 line-height |
+| `.sq-log--scroll` | `max-height: var(--sq-log-h, 420px)` + thin scrollbar + `overscroll-behavior: contain` |
+| `.sq-log--bordered` | Hairline top + bottom separators |
+| `.sq-log__row` | One line: ts · level · component · message, 2 px transparent left rail |
+| `.sq-log__row--warn` / `--error` | Amber / red left rail (error also tints the row) |
+| `.sq-log__level--warn` / `--error` / `--fatal` | Level text colour |
+| `.sq-log__empty` | Centered placeholder for "waiting for log stream…" |
 
 On `≤720px` the component column is hidden; on `≤420px` the timestamp is hidden as
 well, so the message keeps full width on phones.
@@ -600,22 +604,22 @@ nesting the groups — each level owns its own hairline rail, so no depth maths 
 needed. `aria-expanded` on the toggle is the single source of truth.
 
 ```html
-<div class="v2-tree" data-sq-tree>
-  <div class="v2-tree__item">
-    <div class="v2-tree__row">
-      <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
-        <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+<div class="sq-tree" data-sq-tree>
+  <div class="sq-tree__item">
+    <div class="sq-tree__row">
+      <button class="sq-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
+        <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
-      <span class="v2-tree__label">us-east-1</span>
-      <span class="v2-tree__meta">3 nodes</span>
+      <span class="sq-tree__label">us-east-1</span>
+      <span class="sq-tree__meta">3 nodes</span>
     </div>
 
-    <div class="v2-tree__group">
-      <div class="v2-tree__item">
-        <div class="v2-tree__row">
-          <span class="v2-tree__spacer" aria-hidden="true"></span>
-          <span class="v2-tree__label v2-tree__label--mono">octra-01</span>
-          <span class="v2-tree__meta">running</span>
+    <div class="sq-tree__group">
+      <div class="sq-tree__item">
+        <div class="sq-tree__row">
+          <span class="sq-tree__spacer" aria-hidden="true"></span>
+          <span class="sq-tree__label sq-tree__label--mono">octra-01</span>
+          <span class="sq-tree__meta">running</span>
         </div>
       </div>
     </div>
@@ -626,12 +630,12 @@ needed. `aria-expanded` on the toggle is the single source of truth.
 | Class / hook | Purpose |
 |---|---|
 | `data-sq-tree` | Enables the runtime (click + keyboard handling) |
-| `.v2-tree__item` | One node: a row plus an optional `.v2-tree__group` |
-| `.v2-tree__row` | Toggle · label · meta on one line |
-| `.v2-tree__toggle` | Caret button; rotate is driven by `aria-expanded` |
-| `.v2-tree__spacer` | Keeps leaf labels aligned with sibling toggles |
-| `.v2-tree__group` | Nested children; hidden when the parent is collapsed |
-| `.v2-tree__label--mono` | Mono treatment for resource ids |
+| `.sq-tree__item` | One node: a row plus an optional `.sq-tree__group` |
+| `.sq-tree__row` | Toggle · label · meta on one line |
+| `.sq-tree__toggle` | Caret button; rotate is driven by `aria-expanded` |
+| `.sq-tree__spacer` | Keeps leaf labels aligned with sibling toggles |
+| `.sq-tree__group` | Nested children; hidden when the parent is collapsed |
+| `.sq-tree__label--mono` | Mono treatment for resource ids |
 
 Keyboard model (focus lives on the toggles): `ArrowDown` / `ArrowUp` move
 between visible nodes, `ArrowRight` expands or enters the first child,
@@ -646,15 +650,15 @@ the design system only supports three.
 Vertical progress indicator for multi-step flows and deployment timelines.
 
 ```html
-<div class="v2-stepper" data-sq-stepper data-sq-step="2">
-  <div class="v2-stepper__item">
-    <span class="v2-stepper__marker" aria-hidden="true">
-      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+<div class="sq-stepper" data-sq-stepper data-sq-step="2">
+  <div class="sq-stepper__item">
+    <span class="sq-stepper__marker" aria-hidden="true">
+      <svg class="sq-icon sq-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
     </span>
-    <div class="v2-stepper__body">
-      <div class="v2-stepper__title">Provision instance</div>
-      <div class="v2-stepper__desc">Compute, network and volume created.</div>
-      <div class="v2-stepper__meta">00:42</div>
+    <div class="sq-stepper__body">
+      <div class="sq-stepper__title">Provision instance</div>
+      <div class="sq-stepper__desc">Compute, network and volume created.</div>
+      <div class="sq-stepper__meta">00:42</div>
     </div>
   </div>
   <!-- more items -->
@@ -663,12 +667,12 @@ Vertical progress indicator for multi-step flows and deployment timelines.
 
 | Class | Purpose |
 |---|---|
-| `.v2-stepper` | Column container; `data-sq-stepper` + `data-sq-step` drive the state |
-| `.v2-stepper__item` | Grid row: marker column + body; owns the connecting rail |
-| `.v2-stepper__marker` | Circle marker (number, check icon or anything inline) |
-| `.v2-stepper__title` / `__desc` / `__meta` | Body slots |
+| `.sq-stepper` | Column container; `data-sq-stepper` + `data-sq-step` drive the state |
+| `.sq-stepper__item` | Grid row: marker column + body; owns the connecting rail |
+| `.sq-stepper__marker` | Circle marker (number, check icon or anything inline) |
+| `.sq-stepper__title` / `__desc` / `__meta` | Body slots |
 | `is-complete` / `is-active` / `is-pending` / `is-error` | Applied by `setStep()`; `is-error` is manual |
-| `.v2-stepper--horizontal` | Row layout that folds back to vertical below 720px |
+| `.sq-stepper--horizontal` | Row layout that folds back to vertical below 720px |
 
 ```js
 SynteqUI.setStep(stepperEl, 3);          // 0-based; marks 0–2 complete
@@ -688,15 +692,15 @@ Syntax-free code surface with an optional header bar, a runtime-generated
 line-number gutter and a copy button.
 
 ```html
-<div class="v2-code" data-sq-code data-sq-line-numbers>
-  <div class="v2-code__head">
-    <span class="v2-code__title">install.sh</span>
-    <div class="v2-code__actions">
-      <button class="v2-code__copy" data-sq-code-copy="Copied" aria-label="Copy code">Copy</button>
+<div class="sq-code" data-sq-code data-sq-line-numbers>
+  <div class="sq-code__head">
+    <span class="sq-code__title">install.sh</span>
+    <div class="sq-code__actions">
+      <button class="sq-code__copy" data-sq-code-copy="Copied" aria-label="Copy code">Copy</button>
     </div>
   </div>
-  <div class="v2-code__body">
-    <pre class="v2-code__pre"><code>npm install
+  <div class="sq-code__body">
+    <pre class="sq-code__pre"><code>npm install
 npx synteq build --theme dark</code></pre>
   </div>
 </div>
@@ -706,12 +710,12 @@ npx synteq build --theme dark</code></pre>
 |---|---|
 | `data-sq-code` | Enables the runtime (gutter + copy wiring) |
 | `data-sq-line-numbers="false"` | Opt out of the gutter |
-| `.v2-code__head` | Optional bar with title and actions |
-| `.v2-code__body` | Flex row: gutter (generated) + `<pre>` |
-| `.v2-code__pre` | `white-space: pre`, horizontal scroll, no wrapping |
+| `.sq-code__head` | Optional bar with title and actions |
+| `.sq-code__body` | Flex row: gutter (generated) + `<pre>` |
+| `.sq-code__pre` | `white-space: pre`, horizontal scroll, no wrapping |
 | `[data-sq-code-copy]` | Copy trigger; the attribute value is the confirmation label |
-| `.v2-code--plain` / `.v2-code--scroll` | Canvas surface / bounded height (`--sq-code-h`) |
-| `.v2-code--plain` caption | `.v2-code__caption` for a footnote under the block |
+| `.sq-code--plain` / `.sq-code--scroll` | Canvas surface / bounded height (`--sq-code-h`) |
+| `.sq-code--plain` caption | `.sq-code__caption` for a footnote under the block |
 
 Line numbers are generated from the `<pre>` text on init, and the code copy
 button reuses the same clipboard helper and "Copied" tip as `[data-sq-copy]`.
@@ -723,32 +727,32 @@ The gutter is hidden below 520px so code keeps the full width on phones.
 
 ```html
 <!-- Button variants -->
-<button class="v2-btn">Default</button>
-<button class="v2-btn v2-btn--primary">Primary</button>
-<button class="v2-btn v2-btn--brand">Brand</button>
-<button class="v2-btn v2-btn--info">Info</button>
-<button class="v2-btn v2-btn--warn">Warning</button>
-<button class="v2-btn v2-btn--danger">Danger</button>
-<button class="v2-btn v2-btn--ghost">Ghost</button>
-<button class="v2-btn v2-btn--icon" aria-label="Options">...</button>
-<button class="v2-btn v2-btn--block">Full width</button>
+<button class="sq-btn">Default</button>
+<button class="sq-btn sq-btn--primary">Primary</button>
+<button class="sq-btn sq-btn--brand">Brand</button>
+<button class="sq-btn sq-btn--info">Info</button>
+<button class="sq-btn sq-btn--warn">Warning</button>
+<button class="sq-btn sq-btn--danger">Danger</button>
+<button class="sq-btn sq-btn--ghost">Ghost</button>
+<button class="sq-btn sq-btn--icon" aria-label="Options">...</button>
+<button class="sq-btn sq-btn--block">Full width</button>
 
 <!-- Segmented bar -->
-<div class="v2-seg" role="group" aria-label="Actions">
-  <button class="v2-seg__btn">Console</button>
-  <button class="v2-seg__btn">Power</button>
-  <button class="v2-seg__btn">Reboot</button>
+<div class="sq-seg" role="group" aria-label="Actions">
+  <button class="sq-seg__btn">Console</button>
+  <button class="sq-seg__btn">Power</button>
+  <button class="sq-seg__btn">Reboot</button>
 </div>
 
 <!-- Badges -->
-<span class="v2-badge v2-badge--info">Info</span>
-<span class="v2-badge v2-badge--ok">Running</span>
-<span class="v2-badge v2-badge--warn">Degraded</span>
-<span class="v2-badge v2-badge--err">Error</span>
-<span class="v2-badge v2-badge--brand">New</span>
+<span class="sq-badge sq-badge--info">Info</span>
+<span class="sq-badge sq-badge--ok">Running</span>
+<span class="sq-badge sq-badge--warn">Degraded</span>
+<span class="sq-badge sq-badge--err">Error</span>
+<span class="sq-badge sq-badge--brand">New</span>
 
 <!-- Keyboard pill -->
-<kbd class="v2-kbd">⌘K</kbd>
+<kbd class="sq-kbd">⌘K</kbd>
 ```
 
 ### Semantic variants
@@ -758,16 +762,16 @@ so one status never has to borrow another's hue:
 
 | Component | Info | Warning |
 |---|---|---|
-| Button | `.v2-btn--info` | `.v2-btn--warn` / `.v2-btn--warning` |
-| Badge | `.v2-badge--info` | `.v2-badge--warn` |
-| Tag | `.v2-tag--info` | `.v2-tag--warn` |
-| Alert | `.v2-alert--info` | `.v2-alert--warn` |
+| Button | `.sq-btn--info` | `.sq-btn--warn` / `.sq-btn--warning` |
+| Badge | `.sq-badge--info` | `.sq-badge--warn` |
+| Tag | `.sq-tag--info` | `.sq-tag--warn` |
+| Alert | `.sq-alert--info` | `.sq-alert--warn` |
 | Toast | `kind: 'info'` | `kind: 'warn'` |
-| Tip | `.v2-tip--info` | `.v2-tip--warn` |
-| Progress fill | `.v2-progress__fill--info` | `.v2-progress__fill--warn` |
-| Gauge fill | `.v2-gauge__fill--info` | `.v2-gauge__fill--warn` |
-| Status dot | `.v2-dot--info` | `.v2-dot--warn` |
-| Icon tint | `.v2-icon--info` | `.v2-icon--warn` |
+| Tip | `.sq-tip--info` | `.sq-tip--warn` |
+| Progress fill | `.sq-progress__fill--info` | `.sq-progress__fill--warn` |
+| Gauge fill | `.sq-gauge__fill--info` | `.sq-gauge__fill--warn` |
+| Status dot | `.sq-dot--info` | `.sq-dot--warn` |
+| Icon tint | `.sq-icon--info` | `.sq-icon--warn` |
 | Log row / level | `--info` | `--warn` |
 
 Tonal variants (button / badge / tag / log level) paint the status hue at
@@ -790,8 +794,8 @@ second red border underneath it.
 
 ## Motion
 
-Mount animation fires automatically on `.v2-stagger` children.  
-For scroll-triggered stagger, add `data-sq-stagger` to the container — the JS runtime observes it and adds `.v2-stagger` on entry.
+Mount animation fires automatically on `.sq-stagger` children.  
+For scroll-triggered stagger, add `data-sq-stagger` to the container — the JS runtime observes it and adds `.sq-stagger` on entry.
 
 ```html
 <div data-sq-stagger>
@@ -803,7 +807,7 @@ For scroll-triggered stagger, add `data-sq-stagger` to the container — the JS 
 
 Skeleton shimmer for loading states:
 ```html
-<span class="v2-skeleton" style="width:120px;height:14px;display:block;">&nbsp;</span>
+<span class="sq-skeleton" style="width:120px;height:14px;display:block;">&nbsp;</span>
 ```
 
 ### Replaying an animation
@@ -830,21 +834,23 @@ action, so it should still be visible. Query the state with
 `SynteqUI.prefersReducedMotion()` when you want to explain that in the UI.
 
 All *ambient* motion (mount, stagger, shimmer, pulse) is still suppressed when
-`prefers-reduced-motion: reduce` is active (set in `base.css`).
+`prefers-reduced-motion: reduce` is active (set in `base.css`). Essential loading
+indicators (`.sq-spinner`, `.sq-progress__fill--indeterminate`) stay animated at a
+slower rate so a loading state never looks frozen.
 
 ---
 
 ## Key-Value Rows
 
 ```html
-<div class="v2-kv">
-  <div class="v2-kv__row">
-    <span class="v2-kv__label">Hostname</span>
-    <span class="v2-kv__value v2-mono">octra</span>
+<div class="sq-kv">
+  <div class="sq-kv__row">
+    <span class="sq-kv__label">Hostname</span>
+    <span class="sq-kv__value sq-mono">octra</span>
   </div>
-  <div class="v2-kv__row">
-    <span class="v2-kv__label">OS</span>
-    <span class="v2-kv__value">Ubuntu 24.04 LTS</span>
+  <div class="sq-kv__row">
+    <span class="sq-kv__label">OS</span>
+    <span class="sq-kv__value">Ubuntu 24.04 LTS</span>
   </div>
 </div>
 ```
@@ -858,19 +864,19 @@ Each row gets a `1px` top border automatically. No manual rules needed.
 All icons are inline SVG with `aria-hidden="true"`. Size and tint via utility classes:
 
 ```html
-<svg class="v2-icon v2-icon--16 v2-icon--mute" viewBox="0 0 24 24" aria-hidden="true">
+<svg class="sq-icon sq-icon--16 sq-icon--mute" viewBox="0 0 24 24" aria-hidden="true">
   <!-- Lucide or any 24×24 stroke icon path -->
 </svg>
 ```
 
 | Class | Size |
 |---|---|
-| `v2-icon--14` | 14 × 14 px |
-| `v2-icon--16` | 16 × 16 px |
-| `v2-icon--18` | 18 × 18 px |
-| `v2-icon--20` | 20 × 20 px |
+| `sq-icon--14` | 14 × 14 px |
+| `sq-icon--16` | 16 × 16 px |
+| `sq-icon--18` | 18 × 18 px |
+| `sq-icon--20` | 20 × 20 px |
 
-Tint helpers: `v2-icon--mute`, `v2-icon--brand`, `v2-icon--info`, `v2-icon--ok`, `v2-icon--warn`, `v2-icon--err`.
+Tint helpers: `sq-icon--mute`, `sq-icon--brand`, `sq-icon--info`, `sq-icon--ok`, `sq-icon--warn`, `sq-icon--err`.
 
 ---
 
@@ -880,7 +886,7 @@ Tint helpers: `v2-icon--mute`, `v2-icon--brand`, `v2-icon--info`, `v2-icon--ok`,
 |---|---|
 | `> 1080px` | Centred content column, all dock destinations visible |
 | `≤ 1080px` | Dock items narrow; drag-to-scroll + `More` drop-up activate |
-| `≤ 900px` | `.v2-grid--auto` collapses to one column |
+| `≤ 900px` | `.sq-grid--auto` collapses to one column |
 | `≤ 860px` | Dock brand/footer compact, 72px nav items, 44px+ touch targets |
 | `≤ 720px` | Two/three column grids collapse to a single column |
 | `≤ 520px` | Stat strip tightens, dock compresses (48px brand / 64px items) |
@@ -912,6 +918,6 @@ Tint helpers: `v2-icon--mute`, `v2-icon--brand`, `v2-icon--info`, `v2-icon--ok`,
 - Gauge tracks carry `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
 - Icon-only buttons require explicit `aria-label`
 - Status dots use `aria-label` on the parent element
-- `prefers-reduced-motion` is honored globally; `SynteqUI.replayAnimation()` degrades to an opacity-only cross-fade instead of doing nothing
+- `prefers-reduced-motion` is honored globally; ambient motion is removed while essential loading indicators stay slowly animated, and `SynteqUI.replayAnimation()` degrades to an opacity-only cross-fade instead of doing nothing
 - Color tokens maintain ≥ 4.5:1 contrast ratio (WCAG 2.2 AA) in both themes — tonal status surfaces (buttons, badges, tags, log levels) resolve their label colour through `--sq-status-ink-mix`, so a status hue is never painted raw on a light background
 - `[hidden] { display: none !important; }` is part of the reset, so runtime filters really hide elements

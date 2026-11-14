@@ -6,7 +6,7 @@
    ========================================================================== */
 
 /* ---- Toolbar (sits above the table, closed by a hairline) ---- */
-.v2-table-toolbar {
+.sq-table-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,8 +17,8 @@
   min-width: 0;
 }
 
-.v2-table-toolbar__start,
-.v2-table-toolbar__end {
+.sq-table-toolbar__start,
+.sq-table-toolbar__end {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
@@ -26,7 +26,7 @@
   min-width: 0;
 }
 
-.v2-table-toolbar__title {
+.sq-table-toolbar__title {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -36,7 +36,7 @@
   white-space: nowrap;
 }
 
-.v2-table-toolbar__meta {
+.sq-table-toolbar__meta {
   font-size: var(--sq-text-xs);
   color: var(--sq-text-subtle);
   font-variant-numeric: tabular-nums;
@@ -44,7 +44,7 @@
 }
 
 /* Filter field inside the toolbar */
-.v2-table-toolbar__filter {
+.sq-table-toolbar__filter {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -58,11 +58,11 @@
   transition: border-color var(--sq-dur-fast) var(--sq-ease);
 }
 
-.v2-table-toolbar__filter:focus-within {
+.sq-table-toolbar__filter:focus-within {
   border-color: var(--sq-brand);
 }
 
-.v2-table-toolbar__filter input {
+.sq-table-toolbar__filter input {
   width: 100%;
   min-width: 0;
   background: transparent;
@@ -73,12 +73,12 @@
   font-size: var(--sq-text-sm);
 }
 
-.v2-table-toolbar__filter input::placeholder {
+.sq-table-toolbar__filter input::placeholder {
   color: var(--sq-text-subtle);
 }
 
-/* ---- Sticky head (works inside .v2-table-wrap scroll regions) ---- */
-.v2-table--sticky thead th {
+/* ---- Sticky head (works inside .sq-table-wrap scroll regions) ---- */
+.sq-table--sticky thead th {
   position: sticky;
   top: 0;
   z-index: 2;
@@ -87,7 +87,7 @@
 }
 
 /* ---- Sortable column header ---- */
-.v2-table__sort {
+.sq-table__sort {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-1);
@@ -102,76 +102,76 @@
   transition: color var(--sq-dur-instant) var(--sq-ease);
 }
 
-.v2-table__sort:hover {
+.sq-table__sort:hover {
   color: var(--sq-text-strong);
 }
 
-.v2-table__sort svg,
-.v2-table__sort-icon {
+.sq-table__sort svg,
+.sq-table__sort-icon {
   flex-shrink: 0;
   opacity: 0.4;
   transition: transform var(--sq-dur-fast) var(--sq-ease),
               opacity var(--sq-dur-fast) var(--sq-ease);
 }
 
-.v2-table th[aria-sort="ascending"] .v2-table__sort,
-.v2-table th[aria-sort="descending"] .v2-table__sort {
+.sq-table th[aria-sort="ascending"] .sq-table__sort,
+.sq-table th[aria-sort="descending"] .sq-table__sort {
   color: var(--sq-text-strong);
 }
 
-.v2-table th[aria-sort="ascending"] .v2-table__sort svg,
-.v2-table th[aria-sort="descending"] .v2-table__sort svg {
+.sq-table th[aria-sort="ascending"] .sq-table__sort svg,
+.sq-table th[aria-sort="descending"] .sq-table__sort svg {
   opacity: 1;
   color: var(--sq-brand);
 }
 
-.v2-table th[aria-sort="descending"] .v2-table__sort svg {
+.sq-table th[aria-sort="descending"] .sq-table__sort svg {
   transform: rotate(180deg);
 }
 
 /* Numeric headers keep their right alignment when they become buttons */
-.v2-table th.v2-table__num .v2-table__sort {
+.sq-table th.sq-table__num .sq-table__sort {
   justify-content: flex-end;
   width: 100%;
 }
 
 /* ---- Row selection ---- */
-.v2-table__check {
+.sq-table__check {
   width: var(--sq-space-7);
   padding-right: 0;
   text-align: center;
 }
 
-.v2-table thead th.v2-table__check {
+.sq-table thead th.sq-table__check {
   color: var(--sq-text-subtle);
 }
 
-.v2-table tr.is-selected td {
+.sq-table tr.is-selected td {
   background: color-mix(in srgb, var(--sq-brand) 7%, transparent);
 }
 
-.v2-table tbody tr.is-selected:hover td {
+.sq-table tbody tr.is-selected:hover td {
   background: color-mix(in srgb, var(--sq-brand) 11%, transparent);
 }
 
 /* ---- Density modifiers ---- */
-.v2-table--compact th,
-.v2-table--compact td {
+.sq-table--compact th,
+.sq-table--compact td {
   padding-top: var(--sq-space-1);
   padding-bottom: var(--sq-space-1);
 }
 
-.v2-table--dense {
+.sq-table--dense {
   font-size: var(--sq-text-xs);
 }
 
-.v2-table--dense th,
-.v2-table--dense td {
+.sq-table--dense th,
+.sq-table--dense td {
   padding: var(--sq-space-1) var(--sq-space-2);
 }
 
 /* ---- Empty / no-results row ---- */
-.v2-table__empty {
+.sq-table__empty {
   padding: var(--sq-space-6) var(--sq-space-3);
   text-align: center;
   font-family: var(--sq-font-sans);
@@ -183,7 +183,7 @@
 
 
 /* ---- Pagination ---- */
-.v2-pagination {
+.sq-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,21 +194,21 @@
   min-width: 0;
 }
 
-.v2-pagination__info {
+.sq-pagination__info {
   font-size: var(--sq-text-xs);
   color: var(--sq-text-subtle);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.v2-pagination__pages {
+.sq-pagination__pages {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-1);
   flex-wrap: wrap;
 }
 
-.v2-pagination__btn {
+.sq-pagination__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -228,23 +228,23 @@
               border-color var(--sq-dur-instant) var(--sq-ease);
 }
 
-.v2-pagination__btn:hover:not(:disabled) {
+.sq-pagination__btn:hover:not(:disabled) {
   background: var(--sq-hover);
   color: var(--sq-text-strong);
 }
 
-.v2-pagination__btn[aria-current="page"] {
+.sq-pagination__btn[aria-current="page"] {
   border-color: var(--sq-brand);
   color: var(--sq-brand);
   font-weight: var(--sq-fw-medium);
 }
 
-.v2-pagination__btn:disabled {
+.sq-pagination__btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.v2-pagination__gap {
+.sq-pagination__gap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -257,24 +257,24 @@
 
 /* ---- Responsive ---- */
 @media (max-width: 720px) {
-  .v2-table-toolbar,
-  .v2-pagination {
+  .sq-table-toolbar,
+  .sq-pagination {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .v2-pagination__pages {
+  .sq-pagination__pages {
     width: 100%;
   }
 }
 
 @media (max-width: 520px) {
-  .v2-table--compact th,
-  .v2-table--compact td {
+  .sq-table--compact th,
+  .sq-table--compact td {
     padding-inline: var(--sq-space-2);
   }
 
-  .v2-table__check {
+  .sq-table__check {
     width: var(--sq-space-6);
   }
 }

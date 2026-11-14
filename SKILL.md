@@ -19,13 +19,13 @@ description: Implements clean, viewport-locked dashboard UIs using the Synteq UI
 
 Every implementation MUST honor all eight. Violating any one of them breaks the design system.
 
-1. Body MUST never scroll — set `height: 100dvh; overflow: hidden` on both `html` and `body`. The only element that produces a scrollbar is `.v2-content.v2-scroll`.
+1. Body MUST never scroll — set `height: 100dvh; overflow: hidden` on both `html` and `body`. The only element that produces a scrollbar is `.sq-content.sq-scroll`.
 2. Font MUST be Google Sans Code loaded from `fonts/` via the `fonts.css` import — NEVER link to Google Fonts or any CDN.
 3. MUST use only `--sq-*` CSS custom properties for any value that maps to a design token (color, spacing, radius, type size, motion). Never write raw hex, px, or rem values in component CSS.
-4. MUST NOT use cards, `box-shadow`, or tonal backgrounds to separate content areas. Visual hierarchy comes exclusively from `.v2-section` top-border hairlines.
+4. MUST NOT use cards, `box-shadow`, or tonal backgrounds to separate content areas. Visual hierarchy comes exclusively from `.sq-section` top-border hairlines.
 5. MUST have exactly ONE navigation dock toggle button — the topbar control with `data-sq-sidebar-toggle`. It hides/shows the sticky bottom dock, swaps its icon between menu and close, and keeps `aria-label`/`aria-expanded` in sync; the default state is open, so the default glyph is close; never add a second close button.
 6. MUST use `aria-label` on every icon-only interactive element (buttons, links, icon controls).
-7. One section MUST fill exactly one screen: vertical padding belongs to `.v2-section`, never to `.v2-content`, and the section content is centred on both axes.
+7. One section MUST fill exactly one screen: vertical padding belongs to `.sq-section`, never to `.sq-content`, and the section content is centred on both axes.
 8. The active dock item MUST colour both icon and label with `--sq-brand`; dock toggles MUST be idempotent so repeated init calls never double-bind.
 
 ---
@@ -45,62 +45,62 @@ Minimum boilerplate for any new page. Adjust the `<title>`, breadcrumb copy, and
 </head>
 <body>
 
-<div class="v2-app" id="app">
+<div class="sq-app" id="app">
 
 <!-- STICKY BOTTOM NAVIGATION DOCK -->
-  <aside class="v2-aside" aria-label="Primary navigation" id="sidebar">
+  <aside class="sq-aside" aria-label="Primary navigation" id="sidebar">
 
-    <a href="#" class="v2-aside__brand" aria-label="App home">
-      <span class="v2-aside__brand-mark" aria-hidden="true">
+    <a href="#" class="sq-aside__brand" aria-label="App home">
+      <span class="sq-aside__brand-mark" aria-hidden="true">
         <!-- 12×12 inline SVG logo mark -->
       </span>
       AppName
     </a>
 
-    <nav class="v2-nav" aria-label="Primary navigation links">
-      <a href="#" class="v2-nav__item v2-nav__item--active" aria-current="page">
-        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- icon path --></svg>
+    <nav class="sq-nav" aria-label="Primary navigation links">
+      <a href="#" class="sq-nav__item sq-nav__item--active" aria-current="page">
+        <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- icon path --></svg>
         Nav Item
       </a>
-      <a href="#" class="v2-nav__item">
-        <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- icon path --></svg>
+      <a href="#" class="sq-nav__item">
+        <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- icon path --></svg>
         Another Item
       </a>
     </nav>
 
-    <div class="v2-aside__footer">
-      <span class="v2-dot" aria-label="Online"></span>
-      <a href="#" class="v2-user" aria-label="Account: User Name">
-        <span class="v2-avatar" aria-hidden="true">UN</span>
-        <span class="v2-user__info">
-          <span class="v2-user__name">User Name</span>
-          <span class="v2-user__email">user@example.com</span>
+    <div class="sq-aside__footer">
+      <span class="sq-dot" aria-label="Online"></span>
+      <a href="#" class="sq-user" aria-label="Account: User Name">
+        <span class="sq-avatar" aria-hidden="true">UN</span>
+        <span class="sq-user__info">
+          <span class="sq-user__name">User Name</span>
+          <span class="sq-user__email">user@example.com</span>
         </span>
       </a>
     </div>
   </aside>
 
   <!-- TOPBAR — the ONE sidebar toggle lives here -->
-  <header class="v2-topbar" role="banner">
-    <button class="v2-sidebar-toggle"
+  <header class="sq-topbar" role="banner">
+    <button class="sq-sidebar-toggle"
             data-sq-sidebar-toggle
             aria-label="Toggle navigation"
             aria-expanded="true"
             aria-controls="sidebar">
-      <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+      <svg class="sq-icon sq-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
 
-    <div class="v2-topbar__left">
-      <span class="v2-topbar__title">Page Title</span>
+    <div class="sq-topbar__left">
+      <span class="sq-topbar__title">Page Title</span>
     </div>
 
-    <div class="v2-topbar__right">
-      <button class="v2-iconbtn v2-theme-toggle" data-sq-toggle-theme aria-label="Toggle theme">
-        <svg class="v2-icon v2-icon--16 v2-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+    <div class="sq-topbar__right">
+      <button class="sq-iconbtn sq-theme-toggle" data-sq-toggle-theme aria-label="Toggle theme">
+        <svg class="sq-icon sq-icon--16 sq-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
@@ -108,8 +108,8 @@ Minimum boilerplate for any new page. Adjust the `<title>`, breadcrumb copy, and
   </header>
 
   <!-- MAIN — only this element scrolls -->
-  <main class="v2-main" aria-label="Main content">
-    <div class="v2-content v2-scroll" id="main-content">
+  <main class="sq-main" aria-label="Main content">
+    <div class="sq-content sq-scroll" id="main-content">
 
       <!-- sections go here -->
 
@@ -127,21 +127,21 @@ Minimum boilerplate for any new page. Adjust the `<title>`, breadcrumb copy, and
 
 ## Quick Component Reference
 
-Copy-paste blueprints. All snippets are self-contained and work inside `.v2-content.v2-scroll`.
+Copy-paste blueprints. All snippets are self-contained and work inside `.sq-content.sq-scroll`.
 
 ### Sidebar nav item (active + default)
 
 ```html
 <!-- Active item (current page) -->
-<a href="#" class="v2-nav__item v2-nav__item--active" aria-current="page">
-  <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
+<a href="#" class="sq-nav__item sq-nav__item--active" aria-current="page">
+  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
   Instances
-  <span class="v2-nav__badge">4</span>
+  <span class="sq-nav__badge">4</span>
 </a>
 
 <!-- Default item -->
-<a href="#" class="v2-nav__item">
-  <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
+<a href="#" class="sq-nav__item">
+  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
   Networks
 </a>
 ```
@@ -149,13 +149,13 @@ Copy-paste blueprints. All snippets are self-contained and work inside `.v2-cont
 ### Section with head
 
 ```html
-<div class="v2-section">
-  <div class="v2-section__head">
-    <span class="v2-section__title">
-      <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
+<div class="sq-section">
+  <div class="sq-section__head">
+    <span class="sq-section__title">
+      <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
       Section Title
     </span>
-    <span class="v2-section__meta">updated 5s ago</span>
+    <span class="sq-section__meta">updated 5s ago</span>
   </div>
   <!-- section content -->
 </div>
@@ -164,18 +164,18 @@ Copy-paste blueprints. All snippets are self-contained and work inside `.v2-cont
 ### Stat strip (3 stats)
 
 ```html
-<div class="v2-stat-strip">
-  <div class="v2-stat">
-    <span class="v2-stat__label">vCPU</span>
-    <div class="v2-stat__value">4 <span class="v2-unit">cores</span></div>
+<div class="sq-stat-strip">
+  <div class="sq-stat">
+    <span class="sq-stat__label">vCPU</span>
+    <div class="sq-stat__value">4 <span class="sq-unit">cores</span></div>
   </div>
-  <div class="v2-stat">
-    <span class="v2-stat__label">RAM</span>
-    <div class="v2-stat__value">8 <span class="v2-unit">GB</span></div>
+  <div class="sq-stat">
+    <span class="sq-stat__label">RAM</span>
+    <div class="sq-stat__value">8 <span class="sq-unit">GB</span></div>
   </div>
-  <div class="v2-stat">
-    <span class="v2-stat__label">Storage</span>
-    <div class="v2-stat__value">160 <span class="v2-unit">GB SSD</span></div>
+  <div class="sq-stat">
+    <span class="sq-stat__label">Storage</span>
+    <div class="sq-stat__value">160 <span class="sq-unit">GB SSD</span></div>
   </div>
 </div>
 ```
@@ -183,18 +183,18 @@ Copy-paste blueprints. All snippets are self-contained and work inside `.v2-cont
 ### KV list (3 rows)
 
 ```html
-<div class="v2-kv">
-  <div class="v2-kv__row">
-    <span class="v2-kv__label">Hostname</span>
-    <span class="v2-kv__value v2-mono">octra</span>
+<div class="sq-kv">
+  <div class="sq-kv__row">
+    <span class="sq-kv__label">Hostname</span>
+    <span class="sq-kv__value sq-mono">octra</span>
   </div>
-  <div class="v2-kv__row">
-    <span class="v2-kv__label">OS</span>
-    <span class="v2-kv__value">Ubuntu 24.04 LTS</span>
+  <div class="sq-kv__row">
+    <span class="sq-kv__label">OS</span>
+    <span class="sq-kv__value">Ubuntu 24.04 LTS</span>
   </div>
-  <div class="v2-kv__row">
-    <span class="v2-kv__label">Region</span>
-    <span class="v2-kv__value">AMS1 — Amsterdam</span>
+  <div class="sq-kv__row">
+    <span class="sq-kv__label">Region</span>
+    <span class="sq-kv__value">AMS1 — Amsterdam</span>
   </div>
 </div>
 ```
@@ -206,15 +206,15 @@ Each row gets a `1px` top border automatically. No extra CSS needed.
 `data-sq-gauge` on the outer element drives `initGauges()` on load. Provide `role="progressbar"` + aria attributes for accessibility.
 
 ```html
-<div class="v2-gauge" data-sq-gauge="72"
+<div class="sq-gauge" data-sq-gauge="72"
      role="progressbar" aria-label="CPU usage"
      aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
-  <div class="v2-gauge__head">
-    <span class="v2-gauge__label">CPU</span>
-    <span class="v2-gauge__value">72<span class="v2-gauge__max"> / 100%</span></span>
+  <div class="sq-gauge__head">
+    <span class="sq-gauge__label">CPU</span>
+    <span class="sq-gauge__value">72<span class="sq-gauge__max"> / 100%</span></span>
   </div>
-  <div class="v2-gauge__track">
-    <div class="v2-gauge__fill"></div>
+  <div class="sq-gauge__track">
+    <div class="sq-gauge__fill"></div>
   </div>
 </div>
 ```
@@ -222,41 +222,41 @@ Each row gets a `1px` top border automatically. No extra CSS needed.
 To override auto-coloring with brand tint (e.g. bandwidth):
 
 ```html
-<div class="v2-gauge__track">
-  <div class="v2-gauge__fill v2-gauge__fill--brand"></div>
+<div class="sq-gauge__track">
+  <div class="sq-gauge__fill sq-gauge__fill--brand"></div>
 </div>
 ```
 
 ### Segmented button bar
 
 ```html
-<div class="v2-seg" role="group" aria-label="Instance actions">
-  <button class="v2-seg__btn" aria-label="Open console">
-    <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
+<div class="sq-seg" role="group" aria-label="Instance actions">
+  <button class="sq-seg__btn" aria-label="Open console">
+    <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
     Console
   </button>
-  <button class="v2-seg__btn" aria-label="Power options">Power</button>
-  <button class="v2-seg__btn" aria-label="Reboot instance">Reboot</button>
+  <button class="sq-seg__btn" aria-label="Power options">Power</button>
+  <button class="sq-seg__btn" aria-label="Reboot instance">Reboot</button>
 </div>
 ```
 
 ### Button variants
 
 ```html
-<button class="v2-btn">Default</button>
-<button class="v2-btn v2-btn--primary">Primary</button>
-<button class="v2-btn v2-btn--brand">Brand</button>
-<button class="v2-btn v2-btn--ghost">Ghost</button>
-<button class="v2-btn v2-btn--block">Full width</button>
+<button class="sq-btn">Default</button>
+<button class="sq-btn sq-btn--primary">Primary</button>
+<button class="sq-btn sq-btn--brand">Brand</button>
+<button class="sq-btn sq-btn--ghost">Ghost</button>
+<button class="sq-btn sq-btn--block">Full width</button>
 
 <!-- Tonal status actions: tinted background (16%), status-coloured label -->
-<button class="v2-btn v2-btn--info">Info</button>
-<button class="v2-btn v2-btn--warn">Warning</button>   <!-- alias: --warning -->
-<button class="v2-btn v2-btn--danger">Danger</button>
+<button class="sq-btn sq-btn--info">Info</button>
+<button class="sq-btn sq-btn--warn">Warning</button>   <!-- alias: --warning -->
+<button class="sq-btn sq-btn--danger">Danger</button>
 
 <!-- Icon-only button — aria-label required -->
-<button class="v2-btn v2-iconbtn" aria-label="Options">
-  <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
+<button class="sq-btn sq-iconbtn" aria-label="Options">
+  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><!-- path --></svg>
 </button>
 ```
 
@@ -268,20 +268,20 @@ so they clear WCAG AA in both themes.
 ### Badge variants
 
 ```html
-<span class="v2-badge">Default</span>
-<span class="v2-badge v2-badge--info">Info</span>
-<span class="v2-badge v2-badge--ok">Running</span>
-<span class="v2-badge v2-badge--warn">Degraded</span>
-<span class="v2-badge v2-badge--err">Error</span>
-<span class="v2-badge v2-badge--brand">New</span>
+<span class="sq-badge">Default</span>
+<span class="sq-badge sq-badge--info">Info</span>
+<span class="sq-badge sq-badge--ok">Running</span>
+<span class="sq-badge sq-badge--warn">Degraded</span>
+<span class="sq-badge sq-badge--err">Error</span>
+<span class="sq-badge sq-badge--brand">New</span>
 ```
 
 ### Status: one signal per state, never both
 
-- **dot + text** - `<span class="v2-status"><span class="v2-dot"></span> Running</span>`
-- **badge + text** - `<span class="v2-badge v2-badge--ok">Running</span>`
+- **dot + text** - `<span class="sq-status"><span class="sq-dot"></span> Running</span>`
+- **badge + text** - `<span class="sq-badge sq-badge--ok">Running</span>`
 
-Nesting a `.v2-dot` inside a `.v2-badge` says the same thing twice and is
+Nesting a `.sq-dot` inside a `.sq-badge` says the same thing twice and is
 deprecated: the badge colour already carries the state.
 
 ### Bar chart (JS-rendered)
@@ -289,7 +289,7 @@ deprecated: the badge colour already carries the state.
 HTML declares the container; JS populates it. Set `--sq-bars-cols` to match your sample count.
 
 ```html
-<div class="v2-bars" id="net-bars"
+<div class="sq-bars" id="net-bars"
      role="img" aria-label="Network I/O chart"
      style="--sq-bars-cols: 24;"></div>
 ```
@@ -305,7 +305,7 @@ SynteqUI.renderBars(document.getElementById('net-bars'), [
 ### Sparkline (JS-rendered)
 
 ```html
-<svg class="v2-spark" id="cpu-spark"
+<svg class="sq-spark" id="cpu-spark"
      viewBox="0 0 200 40" preserveAspectRatio="none"
      role="img" aria-label="CPU usage trend"></svg>
 ```
@@ -318,49 +318,49 @@ SynteqUI.renderSparkline(
 );
 ```
 
-Add `.v2-spark--out` to the `<svg>` to use the outbound (red) color palette instead of the default inbound (green).
+Add `.sq-spark--out` to the `<svg>` to use the outbound (red) color palette instead of the default inbound (green).
 
-Add `.v2-spark--tall` (56 px) or set `--sq-spark-h` for a custom height. Fewer than
+Add `.sq-spark--tall` (56 px) or set `--sq-spark-h` for a custom height. Fewer than
 two values clears the path and sets `data-sq-spark-empty="true"`.
 
 ### Data table
 
 ```html
-<div class="v2-table-wrap">
-  <table class="v2-table">
+<div class="sq-table-wrap">
+  <table class="sq-table">
     <thead>
-      <tr><th scope="col">Peer</th><th scope="col" class="v2-table__num">Lag</th><th scope="col">Source</th></tr>
+      <tr><th scope="col">Peer</th><th scope="col" class="sq-table__num">Lag</th><th scope="col">Source</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td class="v2-table__mono">oct3SUwRsi…v2v4Bm</td>
-        <td class="v2-table__num">8</td>
-        <td class="v2-table__mute">epoch_root</td>
+        <td class="sq-table__mono">oct3SUwRsi…v2v4Bm</td>
+        <td class="sq-table__num">8</td>
+        <td class="sq-table__mute">epoch_root</td>
       </tr>
-      <tr class="is-stale"><td>…</td><td class="v2-table__num">—</td><td>cached</td></tr>
+      <tr class="is-stale"><td>…</td><td class="sq-table__num">—</td><td>cached</td></tr>
     </tbody>
   </table>
 </div>
 ```
 
 Cell modifiers: `__num` (right, mono), `__mono`, `__mute`, row/cell `is-stale`,
-`.v2-table--fixed` for equal columns. Wrap in `.v2-table-wrap` when rows can overflow.
+`.sq-table--fixed` for equal columns. Wrap in `.sq-table-wrap` when rows can overflow.
 
 ### Log viewer
 
 ```html
-<div class="v2-log v2-log--scroll v2-log--bordered" role="log" aria-label="Log tail">
-  <div class="v2-log__row">
-    <span class="v2-log__ts">14:33:05</span>
-    <span class="v2-log__level">INFO</span>
-    <span class="v2-log__comp">consensus</span>
-    <span class="v2-log__msg">event = post_finalize_root_verified epoch = 1756254</span>
+<div class="sq-log sq-log--scroll sq-log--bordered" role="log" aria-label="Log tail">
+  <div class="sq-log__row">
+    <span class="sq-log__ts">14:33:05</span>
+    <span class="sq-log__level">INFO</span>
+    <span class="sq-log__comp">consensus</span>
+    <span class="sq-log__msg">event = post_finalize_root_verified epoch = 1756254</span>
   </div>
-  <div class="v2-log__row v2-log__row--warn">
-    <span class="v2-log__ts">14:33:07</span>
-    <span class="v2-log__level v2-log__level--warn">WARN</span>
-    <span class="v2-log__comp">p2p</span>
-    <span class="v2-log__msg">event = frame_budget_rejected reason = frame_count_budget</span>
+  <div class="sq-log__row sq-log__row--warn">
+    <span class="sq-log__ts">14:33:07</span>
+    <span class="sq-log__level sq-log__level--warn">WARN</span>
+    <span class="sq-log__comp">p2p</span>
+    <span class="sq-log__msg">event = frame_budget_rejected reason = frame_count_budget</span>
   </div>
 </div>
 ```
@@ -376,33 +376,33 @@ timestamp hidden `≤420px`.
 ### Tabs
 
 ```html
-<div class="v2-tabs" data-sq-tabs role="tablist" aria-label="Settings tabs">
-  <div class="v2-tabs__list">
-    <button class="v2-tabs__tab" role="tab" aria-selected="true" 
+<div class="sq-tabs" data-sq-tabs role="tablist" aria-label="Settings tabs">
+  <div class="sq-tabs__list">
+    <button class="sq-tabs__tab" role="tab" aria-selected="true" 
             aria-controls="panel-general" id="tab-general">
       General
     </button>
-    <button class="v2-tabs__tab" role="tab" aria-selected="false" 
+    <button class="sq-tabs__tab" role="tab" aria-selected="false" 
             aria-controls="panel-security" id="tab-security">
       Security
     </button>
-    <button class="v2-tabs__tab" role="tab" aria-selected="false" 
+    <button class="sq-tabs__tab" role="tab" aria-selected="false" 
             aria-controls="panel-billing" id="tab-billing">
       Billing
     </button>
   </div>
 
-  <div class="v2-tabs__panel" role="tabpanel" id="panel-general" 
+  <div class="sq-tabs__panel" role="tabpanel" id="panel-general" 
        aria-labelledby="tab-general" aria-hidden="false">
     <p>General settings panel content.</p>
   </div>
 
-  <div class="v2-tabs__panel" role="tabpanel" id="panel-security" 
+  <div class="sq-tabs__panel" role="tabpanel" id="panel-security" 
        aria-labelledby="tab-security" aria-hidden="true">
     <p>Security settings panel content.</p>
   </div>
 
-  <div class="v2-tabs__panel" role="tabpanel" id="panel-billing" 
+  <div class="sq-tabs__panel" role="tabpanel" id="panel-billing" 
        aria-labelledby="tab-billing" aria-hidden="true">
     <p>Billing settings panel content.</p>
   </div>
@@ -414,17 +414,17 @@ Tabs auto-init with roving tabindex (arrow keys navigate). Use `data-sq-tabs` to
 ### Accordion
 
 ```html
-<div class="v2-accordion">
-  <details class="v2-accordion__item" open>
-    <summary class="v2-accordion__trigger">What is Synteq UI?</summary>
-    <div class="v2-accordion__content">
+<div class="sq-accordion">
+  <details class="sq-accordion__item" open>
+    <summary class="sq-accordion__trigger">What is Synteq UI?</summary>
+    <div class="sq-accordion__content">
       <p>Synteq UI is a viewport-locked, offline-first dashboard framework.</p>
     </div>
   </details>
 
-  <details class="v2-accordion__item">
-    <summary class="v2-accordion__trigger">How do I get started?</summary>
-    <div class="v2-accordion__content">
+  <details class="sq-accordion__item">
+    <summary class="sq-accordion__trigger">How do I get started?</summary>
+    <div class="sq-accordion__content">
       <p>Link to synteq-ui.css and synteq-ui.js in your HTML.</p>
     </div>
   </details>
@@ -437,35 +437,35 @@ Uses native `<details>` for progressive enhancement. Multiple items can be open 
 
 ```html
 <div style="position: relative;">
-  <button class="v2-btn" data-sq-menu-trigger="actions-menu" 
+  <button class="sq-btn" data-sq-menu-trigger="actions-menu" 
           aria-haspopup="menu" aria-expanded="false">
     Actions
   </button>
-  <div class="v2-menu v2-menu--bottom" id="actions-menu" role="menu" hidden>
-    <button class="v2-menu__item" role="menuitem">
-      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+  <div class="sq-menu sq-menu--bottom" id="actions-menu" role="menu" hidden>
+    <button class="sq-menu__item" role="menuitem">
+      <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true">
         <!-- icon path -->
       </svg>
       Edit
     </button>
-    <button class="v2-menu__item" role="menuitem">Refresh</button>
-    <hr class="v2-menu__separator" />
-    <button class="v2-menu__item" role="menuitem">Delete</button>
+    <button class="sq-menu__item" role="menuitem">Refresh</button>
+    <hr class="sq-menu__separator" />
+    <button class="sq-menu__item" role="menuitem">Delete</button>
   </div>
 </div>
 ```
 
-JS runtime wires `data-sq-menu-trigger`. Position variants: `v2-menu--top`, `v2-menu--bottom`, `v2-menu--left`, `v2-menu--right`. Auto-dismiss on click outside or Escape.
+JS runtime wires `data-sq-menu-trigger`. Position variants: `sq-menu--top`, `sq-menu--bottom`, `sq-menu--left`, `sq-menu--right`. Auto-dismiss on click outside or Escape.
 
 ### Popover
 
 ```html
 <div style="position: relative;">
-  <button class="v2-btn" data-sq-popover-trigger="help-popover" 
+  <button class="sq-btn" data-sq-popover-trigger="help-popover" 
           aria-haspopup="dialog">
     Help
   </button>
-  <div class="v2-popover" id="help-popover" role="dialog" hidden>
+  <div class="sq-popover" id="help-popover" role="dialog" hidden>
     Click tabs to navigate. Use arrow keys for keyboard navigation.
   </div>
 </div>
@@ -474,8 +474,8 @@ JS runtime wires `data-sq-menu-trigger`. Position variants: `v2-menu--top`, `v2-
 Rich variant with title:
 
 ```html
-<div class="v2-popover v2-popover--rich" id="info-popover" role="dialog" hidden>
-  <div class="v2-popover__title">Instance Details</div>
+<div class="sq-popover sq-popover--rich" id="info-popover" role="dialog" hidden>
+  <div class="sq-popover__title">Instance Details</div>
   <p>4 vCPU, 8 GB RAM, 160 GB SSD<br>Region: US East</p>
 </div>
 ```
@@ -485,40 +485,40 @@ JS runtime wires `data-sq-popover-trigger`. Auto-dismiss on click outside or Esc
 ### Dialog (Modal)
 
 ```html
-<dialog class="v2-dialog" id="demo-dialog">
-  <div class="v2-dialog__header">
-    <h2 class="v2-dialog__title">Dialog Title</h2>
-    <button class="v2-dialog__close" onclick="this.closest('dialog').close()" 
+<dialog class="sq-dialog" id="demo-dialog">
+  <div class="sq-dialog__header">
+    <h2 class="sq-dialog__title">Dialog Title</h2>
+    <button class="sq-dialog__close" onclick="this.closest('dialog').close()" 
             aria-label="Close dialog">
-      <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+      <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
   </div>
-  <div class="v2-dialog__body">
+  <div class="sq-dialog__body">
     <p>Dialog content goes here.</p>
   </div>
-  <div class="v2-dialog__footer">
-    <button class="v2-btn v2-btn--ghost" onclick="this.closest('dialog').close()">
+  <div class="sq-dialog__footer">
+    <button class="sq-btn sq-btn--ghost" onclick="this.closest('dialog').close()">
       Cancel
     </button>
-    <button class="v2-btn v2-btn--primary" onclick="this.closest('dialog').close()">
+    <button class="sq-btn sq-btn--primary" onclick="this.closest('dialog').close()">
       Save Changes
     </button>
   </div>
 </dialog>
 
 <!-- Trigger -->
-<button class="v2-btn" onclick="document.getElementById('demo-dialog').showModal()">
+<button class="sq-btn" onclick="document.getElementById('demo-dialog').showModal()">
   Open Dialog
 </button>
 ```
 
-Size variants: `v2-dialog--sm`, `v2-dialog--lg`. Uses native `<dialog>` element. Backdrop click closes modal.
+Size variants: `sq-dialog--sm`, `sq-dialog--lg`. Uses native `<dialog>` element. Backdrop click closes modal.
 
-**Centring:** `.v2-dialog` sets `margin: auto` (with `max-height` + `overflow-y: auto`) because the framework reset zeroes the UA `dialog { margin: auto }`. Without it every modal is pinned to the top-left corner. Never override the dialog `margin` with `0`.
+**Centring:** `.sq-dialog` sets `margin: auto` (with `max-height` + `overflow-y: auto`) because the framework reset zeroes the UA `dialog { margin: auto }`. Without it every modal is pinned to the top-left corner. Never override the dialog `margin` with `0`.
 
-**Command palettes** (`<form method="dialog" class="v2-command">` + `data-sq-search-input`
+**Command palettes** (`<form method="dialog" class="sq-command">` + `data-sq-search-input`
 + `data-sq-command="#section"` rows) are wired by the runtime: input filters the
 rows, **Enter activates the first visible row** (implicit form submission is
 cancelled so the palette does not close silently), and the filter is reset when
@@ -541,10 +541,10 @@ SynteqUI.toast('File saved successfully', {
 Markup triggers carry the kind as an attribute:
 
 ```html
-<button class="v2-btn v2-btn--primary" data-sq-toast="Deployment completed" data-sq-toast-kind="ok">
+<button class="sq-btn sq-btn--primary" data-sq-toast="Deployment completed" data-sq-toast-kind="ok">
   Success toast
 </button>
-<button class="v2-btn v2-btn--warn" data-sq-toast="Memory above 85%" data-sq-toast-kind="warn">
+<button class="sq-btn sq-btn--warn" data-sq-toast="Memory above 85%" data-sq-toast-kind="warn">
   Warning toast
 </button>
 ```
@@ -559,60 +559,60 @@ left accent rail (`--info` uses `--sq-status-info`).
 ### Alert / Banner
 
 ```html
-<div class="v2-alert v2-alert--info" role="alert">
-  <svg class="v2-icon v2-icon--16 v2-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
+<div class="sq-alert sq-alert--info" role="alert">
+  <svg class="sq-icon sq-icon--16 sq-alert__icon" viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="10"/>
     <line x1="12" y1="16" x2="12" y2="12"/>
     <line x1="12" y1="8" x2="12.01" y2="8"/>
   </svg>
-  <div class="v2-alert__content">
-    <div class="v2-alert__title">Update Available</div>
-    <div class="v2-alert__message">Version 2.1.0 is ready to install.</div>
+  <div class="sq-alert__content">
+    <div class="sq-alert__title">Update Available</div>
+    <div class="sq-alert__message">Version 2.1.0 is ready to install.</div>
   </div>
-  <button class="v2-alert__dismiss" aria-label="Dismiss alert">
-    <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true">
+  <button class="sq-alert__dismiss" aria-label="Dismiss alert">
+    <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true">
       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
     </svg>
   </button>
 </div>
 ```
 
-Variants: `v2-alert--info`, `v2-alert--ok`, `v2-alert--warn`, `v2-alert--err`. Left border rail matches kind color.
+Variants: `sq-alert--info`, `sq-alert--ok`, `sq-alert--warn`, `sq-alert--err`. Left border rail matches kind color.
 
 ### Progress bar
 
 ```html
-<div class="v2-progress" role="progressbar" aria-valuenow="65" 
+<div class="sq-progress" role="progressbar" aria-valuenow="65" 
      aria-valuemin="0" aria-valuemax="100">
-  <div class="v2-progress__head">
-    <span class="v2-progress__label">Upload progress</span>
-    <span class="v2-progress__value">65%</span>
+  <div class="sq-progress__head">
+    <span class="sq-progress__label">Upload progress</span>
+    <span class="sq-progress__value">65%</span>
   </div>
-  <div class="v2-progress__track">
-    <div class="v2-progress__fill" style="width: 65%;"></div>
+  <div class="sq-progress__track">
+    <div class="sq-progress__fill" style="width: 65%;"></div>
   </div>
 </div>
 ```
 
-Color variants: `v2-progress__fill--ok`, `v2-progress__fill--warn`, `v2-progress__fill--err`.
+Color variants: `sq-progress__fill--ok`, `sq-progress__fill--warn`, `sq-progress__fill--err`.
 
 Indeterminate (loading state):
 
 ```html
-<div class="v2-progress__track">
-  <div class="v2-progress__fill v2-progress__fill--indeterminate"></div>
+<div class="sq-progress__track">
+  <div class="sq-progress__fill sq-progress__fill--indeterminate"></div>
 </div>
 ```
 
 ### Breadcrumb
 
 ```html
-<nav class="v2-breadcrumb" aria-label="Breadcrumb">
-  <a href="#" class="v2-breadcrumb__item">Home</a>
-  <span class="v2-breadcrumb__separator">/</span>
-  <a href="#" class="v2-breadcrumb__item">Settings</a>
-  <span class="v2-breadcrumb__separator">/</span>
-  <span class="v2-breadcrumb__item" aria-current="page">Security</span>
+<nav class="sq-breadcrumb" aria-label="Breadcrumb">
+  <a href="#" class="sq-breadcrumb__item">Home</a>
+  <span class="sq-breadcrumb__separator">/</span>
+  <a href="#" class="sq-breadcrumb__item">Settings</a>
+  <span class="sq-breadcrumb__separator">/</span>
+  <span class="sq-breadcrumb__item" aria-current="page">Security</span>
 </nav>
 ```
 
@@ -621,18 +621,18 @@ Current page item is not clickable. Use any separator character.
 ### Empty state
 
 ```html
-<div class="v2-empty">
-  <svg class="v2-empty__icon" viewBox="0 0 24 24" aria-hidden="true">
+<div class="sq-empty">
+  <svg class="sq-empty__icon" viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="10"/>
     <line x1="12" y1="8" x2="12" y2="16"/>
     <line x1="8" y1="12" x2="16" y2="12"/>
   </svg>
-  <div class="v2-empty__title">No instances found</div>
-  <div class="v2-empty__message">
+  <div class="sq-empty__title">No instances found</div>
+  <div class="sq-empty__message">
     Get started by creating your first instance. It only takes a minute.
   </div>
-  <div class="v2-empty__action">
-    <button class="v2-btn v2-btn--primary">Create Instance</button>
+  <div class="sq-empty__action">
+    <button class="sq-btn sq-btn--primary">Create Instance</button>
   </div>
 </div>
 ```
@@ -641,19 +641,19 @@ Current page item is not clickable. Use any separator character.
 
 ```html
 <!-- Text line -->
-<span class="v2-skeleton v2-skeleton--text">&nbsp;</span>
+<span class="sq-skeleton sq-skeleton--text">&nbsp;</span>
 
 <!-- Title -->
-<span class="v2-skeleton v2-skeleton--title">&nbsp;</span>
+<span class="sq-skeleton sq-skeleton--title">&nbsp;</span>
 
 <!-- Circle (avatar) -->
-<span class="v2-skeleton v2-skeleton--circle">&nbsp;</span>
+<span class="sq-skeleton sq-skeleton--circle">&nbsp;</span>
 
 <!-- Button -->
-<span class="v2-skeleton v2-skeleton--btn">&nbsp;</span>
+<span class="sq-skeleton sq-skeleton--btn">&nbsp;</span>
 
 <!-- Custom size -->
-<span class="v2-skeleton" style="height: 14px; width: 72%;">&nbsp;</span>
+<span class="sq-skeleton" style="height: 14px; width: 72%;">&nbsp;</span>
 ```
 
 Shimmer animation auto-plays. Use `&nbsp;` for non-empty content.
@@ -661,33 +661,33 @@ Shimmer animation auto-plays. Use `&nbsp;` for non-empty content.
 ### Spinner
 
 ```html
-<span class="v2-spinner" role="status" aria-label="Loading"></span>
-<span class="v2-spinner v2-spinner--sm" role="status" aria-label="Loading"></span>
-<span class="v2-spinner v2-spinner--lg" role="status" aria-label="Loading"></span>
+<span class="sq-spinner" role="status" aria-label="Loading"></span>
+<span class="sq-spinner sq-spinner--sm" role="status" aria-label="Loading"></span>
+<span class="sq-spinner sq-spinner--lg" role="status" aria-label="Loading"></span>
 ```
 
 ### Tag / Chip (dismissible badge)
 
 ```html
-<span class="v2-tag">
+<span class="sq-tag">
   Default
 </span>
 
-<span class="v2-tag v2-tag--brand">
+<span class="sq-tag sq-tag--brand">
   Featured
 </span>
 
-<span class="v2-tag v2-tag--ok">
+<span class="sq-tag sq-tag--ok">
   Active
-  <button class="v2-tag__dismiss" aria-label="Remove tag">
-    <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true">
+  <button class="sq-tag__dismiss" aria-label="Remove tag">
+    <svg class="sq-icon sq-icon--12" viewBox="0 0 24 24" aria-hidden="true">
       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
     </svg>
   </button>
 </span>
 ```
 
-Variants: `v2-tag--brand`, `v2-tag--ok`, `v2-tag--warn`, `v2-tag--err`. Pill-shaped with optional dismiss button.
+Variants: `sq-tag--brand`, `sq-tag--ok`, `sq-tag--warn`, `sq-tag--err`. Pill-shaped with optional dismiss button.
 
 ---
 
@@ -696,40 +696,40 @@ Variants: `v2-tag--brand`, `v2-tag--ok`, `v2-tag--warn`, `v2-tag--err`. Pill-sha
 ### Text input with field wrapper
 
 ```html
-<div class="v2-field">
-  <label for="username" class="v2-field__label v2-field__label--required">Username</label>
-  <input type="text" id="username" class="v2-input" placeholder="Enter username" 
+<div class="sq-field">
+  <label for="username" class="sq-field__label sq-field__label--required">Username</label>
+  <input type="text" id="username" class="sq-input" placeholder="Enter username" 
          aria-required="true" aria-describedby="username-hint">
-  <span id="username-hint" class="v2-field__hint">Must be 3-20 characters, alphanumeric only</span>
+  <span id="username-hint" class="sq-field__hint">Must be 3-20 characters, alphanumeric only</span>
 </div>
 ```
 
 Invalid state (shows error, hides hint):
 
 ```html
-<div class="v2-field v2-field--invalid">
-  <label for="email" class="v2-field__label">Email</label>
-  <input type="email" id="email" class="v2-input" aria-invalid="true" 
+<div class="sq-field sq-field--invalid">
+  <label for="email" class="sq-field__label">Email</label>
+  <input type="email" id="email" class="sq-input" aria-invalid="true" 
          aria-describedby="email-error">
-  <span id="email-error" class="v2-field__error">Please enter a valid email address</span>
+  <span id="email-error" class="sq-field__error">Please enter a valid email address</span>
 </div>
 ```
 
 ### Textarea
 
 ```html
-<div class="v2-field">
-  <label for="notes" class="v2-field__label">Notes</label>
-  <textarea id="notes" class="v2-textarea" rows="4" placeholder="Enter notes..."></textarea>
+<div class="sq-field">
+  <label for="notes" class="sq-field__label">Notes</label>
+  <textarea id="notes" class="sq-textarea" rows="4" placeholder="Enter notes..."></textarea>
 </div>
 ```
 
 ### Select dropdown
 
 ```html
-<div class="v2-field">
-  <label for="region" class="v2-field__label">Region</label>
-  <select id="region" class="v2-select">
+<div class="sq-field">
+  <label for="region" class="sq-field__label">Region</label>
+  <select id="region" class="sq-select">
     <option value="">Select a region</option>
     <option value="us-east">US East</option>
     <option value="us-west">US West</option>
@@ -741,8 +741,8 @@ Invalid state (shows error, hides hint):
 ### Checkbox
 
 ```html
-<label class="v2-checkbox-label">
-  <input type="checkbox" class="v2-checkbox">
+<label class="sq-checkbox-label">
+  <input type="checkbox" class="sq-checkbox">
   I agree to the terms and conditions
 </label>
 ```
@@ -750,19 +750,19 @@ Invalid state (shows error, hides hint):
 ### Radio group
 
 ```html
-<div class="v2-field">
-  <span class="v2-field__label">Instance size</span>
-  <div class="v2-radio-group" role="radiogroup" aria-label="Instance size">
-    <label class="v2-radio-label">
-      <input type="radio" name="size" value="small" class="v2-radio">
+<div class="sq-field">
+  <span class="sq-field__label">Instance size</span>
+  <div class="sq-radio-group" role="radiogroup" aria-label="Instance size">
+    <label class="sq-radio-label">
+      <input type="radio" name="size" value="small" class="sq-radio">
       Small (2 vCPU, 4 GB)
     </label>
-    <label class="v2-radio-label">
-      <input type="radio" name="size" value="medium" class="v2-radio" checked>
+    <label class="sq-radio-label">
+      <input type="radio" name="size" value="medium" class="sq-radio" checked>
       Medium (4 vCPU, 8 GB)
     </label>
-    <label class="v2-radio-label">
-      <input type="radio" name="size" value="large" class="v2-radio">
+    <label class="sq-radio-label">
+      <input type="radio" name="size" value="large" class="sq-radio">
       Large (8 vCPU, 16 GB)
     </label>
   </div>
@@ -772,8 +772,8 @@ Invalid state (shows error, hides hint):
 ### Switch (toggle)
 
 ```html
-<label class="v2-switch-label">
-  <input type="checkbox" class="v2-switch" role="switch" aria-checked="false">
+<label class="sq-switch-label">
+  <input type="checkbox" class="sq-switch" role="switch" aria-checked="false">
   Enable auto-renewal
 </label>
 ```
@@ -781,12 +781,12 @@ Invalid state (shows error, hides hint):
 ### Input group (prefix/suffix)
 
 ```html
-<div class="v2-field">
-  <label for="amount" class="v2-field__label">Amount</label>
-  <div class="v2-input-group">
-    <span class="v2-input-group__affix">$</span>
-    <input type="number" id="amount" class="v2-input" placeholder="0.00">
-    <span class="v2-input-group__affix">USD</span>
+<div class="sq-field">
+  <label for="amount" class="sq-field__label">Amount</label>
+  <div class="sq-input-group">
+    <span class="sq-input-group__affix">$</span>
+    <input type="number" id="amount" class="sq-input" placeholder="0.00">
+    <span class="sq-input-group__affix">USD</span>
   </div>
 </div>
 ```
@@ -794,12 +794,12 @@ Invalid state (shows error, hides hint):
 ### Range slider
 
 ```html
-<div class="v2-range-label">
-  <div class="v2-range-label__head">
-    <span class="v2-range-label__name">CPU Limit</span>
-    <span class="v2-range-label__value">75%</span>
+<div class="sq-range-label">
+  <div class="sq-range-label__head">
+    <span class="sq-range-label__name">CPU Limit</span>
+    <span class="sq-range-label__value">75%</span>
   </div>
-  <input type="range" class="v2-range" min="0" max="100" value="75" 
+  <input type="range" class="sq-range" min="0" max="100" value="75" 
          aria-label="CPU limit percentage">
 </div>
 ```
@@ -815,61 +815,61 @@ Invalid state (shows error, hides hint):
 ### Sortable, selectable, paginated table
 
 ```html
-<div class="v2-table-toolbar">
-  <div class="v2-table-toolbar__start">
-    <span class="v2-table-toolbar__title">Instances</span>
-    <span class="v2-table-toolbar__meta" data-sq-table-count>0 rows</span>
+<div class="sq-table-toolbar">
+  <div class="sq-table-toolbar__start">
+    <span class="sq-table-toolbar__title">Instances</span>
+    <span class="sq-table-toolbar__meta" data-sq-table-count>0 rows</span>
   </div>
-  <div class="v2-table-toolbar__end">
-    <label class="v2-table-toolbar__filter">
-      <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <div class="sq-table-toolbar__end">
+    <label class="sq-table-toolbar__filter">
+      <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="search" data-sq-table-filter placeholder="Filter rows..." aria-label="Filter rows" />
     </label>
   </div>
 </div>
 
-<div class="v2-table-wrap">
-  <table class="v2-table v2-table--sticky v2-table--compact" data-sq-table data-sq-page-size="6">
+<div class="sq-table-wrap">
+  <table class="sq-table sq-table--sticky sq-table--compact" data-sq-table data-sq-page-size="6">
     <thead>
       <tr>
-        <th class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-select-all aria-label="Select all rows" /></th>
+        <th class="sq-table__check"><input type="checkbox" class="sq-checkbox" data-sq-select-all aria-label="Select all rows" /></th>
         <th>
-          <button class="v2-table__sort" data-sq-sort="text">
+          <button class="sq-table__sort" data-sq-sort="text">
             Instance
-            <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+            <svg class="sq-icon sq-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
           </button>
         </th>
-        <th class="v2-table__num"><button class="v2-table__sort" data-sq-sort="number">CPU %</button></th>
+        <th class="sq-table__num"><button class="sq-table__sort" data-sq-sort="number">CPU %</button></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="v2-table__check"><input type="checkbox" class="v2-checkbox" data-sq-row-select aria-label="Select octra-01" /></td>
-        <td class="v2-table__mono">octra-01</td>
-        <td class="v2-table__num">42</td>
+        <td class="sq-table__check"><input type="checkbox" class="sq-checkbox" data-sq-row-select aria-label="Select octra-01" /></td>
+        <td class="sq-table__mono">octra-01</td>
+        <td class="sq-table__num">42</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<nav class="v2-pagination" data-sq-table-pagination aria-label="Table pagination"></nav>
+<nav class="sq-pagination" data-sq-table-pagination aria-label="Table pagination"></nav>
 ```
 
-`data-sq-table` is the only required hook — `initTables()` (part of `init()`) finds the toolbar, filter, counter and pagination inside the enclosing `[data-sq-table-scope]` or `.v2-section`. Sorting sets `aria-sort`; selection emits `sq:rowselection`; paging emits `sq:pagechange`. Call `SynteqUI.initTables()` again after injecting rows.
+`data-sq-table` is the only required hook — `initTables()` (part of `init()`) finds the toolbar, filter, counter and pagination inside the enclosing `[data-sq-table-scope]` or `.sq-section`. Sorting sets `aria-sort`; selection emits `sq:rowselection`; paging emits `sq:pagechange`. Call `SynteqUI.initTables()` again after injecting rows.
 
 ### Line / area chart (JS-rendered)
 
 ```html
-<div class="v2-chart">
-  <div class="v2-chart__head">
-    <span class="v2-chart__title">Request rate</span>
-    <span class="v2-chart__meta">last 12 intervals</span>
+<div class="sq-chart">
+  <div class="sq-chart__head">
+    <span class="sq-chart__title">Request rate</span>
+    <span class="sq-chart__meta">last 12 intervals</span>
   </div>
-  <div class="v2-chart__body">
-    <svg class="v2-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
+  <div class="sq-chart__body">
+    <svg class="sq-chart__svg" id="chart-line" viewBox="0 0 640 168" role="img"
          aria-label="Request rate and error rate"></svg>
   </div>
-  <div class="v2-chart__legend" data-sq-chart-legend></div>
+  <div class="sq-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -885,13 +885,13 @@ Axes, gridlines, tick labels, the legend and the hover tooltip (with crosshair) 
 ### Stacked bars (JS-rendered)
 
 ```html
-<div class="v2-chart">
-  <div class="v2-chart__head"><span class="v2-chart__title">Traffic by class</span></div>
-  <div class="v2-chart__body">
-    <div class="v2-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
+<div class="sq-chart">
+  <div class="sq-chart__head"><span class="sq-chart__title">Traffic by class</span></div>
+  <div class="sq-chart__body">
+    <div class="sq-chart__cols" id="chart-stacked" role="img" aria-label="Stacked traffic"></div>
   </div>
-  <div class="v2-chart__xlabels" data-sq-chart-labels></div>
-  <div class="v2-chart__legend" data-sq-chart-legend></div>
+  <div class="sq-chart__xlabels" data-sq-chart-labels></div>
+  <div class="sq-chart__legend" data-sq-chart-legend></div>
 </div>
 ```
 
@@ -912,21 +912,21 @@ Series 1 is always at the baseline; hovering a column dims siblings and opens th
 ### Tree (expand / collapse, max 3 levels)
 
 ```html
-<div class="v2-tree" data-sq-tree>
-  <div class="v2-tree__item">
-    <div class="v2-tree__row">
-      <button class="v2-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
-        <svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+<div class="sq-tree" data-sq-tree>
+  <div class="sq-tree__item">
+    <div class="sq-tree__row">
+      <button class="sq-tree__toggle" aria-expanded="true" aria-label="Collapse us-east-1">
+        <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
-      <span class="v2-tree__label">us-east-1</span>
-      <span class="v2-tree__meta">3 nodes</span>
+      <span class="sq-tree__label">us-east-1</span>
+      <span class="sq-tree__meta">3 nodes</span>
     </div>
-    <div class="v2-tree__group">
-      <div class="v2-tree__item">
-        <div class="v2-tree__row">
-          <span class="v2-tree__spacer" aria-hidden="true"></span>
-          <span class="v2-tree__label v2-tree__label--mono">octra-01</span>
-          <span class="v2-tree__meta">running</span>
+    <div class="sq-tree__group">
+      <div class="sq-tree__item">
+        <div class="sq-tree__row">
+          <span class="sq-tree__spacer" aria-hidden="true"></span>
+          <span class="sq-tree__label sq-tree__label--mono">octra-01</span>
+          <span class="sq-tree__meta">running</span>
         </div>
       </div>
     </div>
@@ -934,20 +934,20 @@ Series 1 is always at the baseline; hovering a column dims siblings and opens th
 </div>
 ```
 
-`aria-expanded` on the toggle drives the rotated caret *and* group visibility. Leaf rows use `.v2-tree__spacer` so labels stay aligned. Keyboard: `ArrowUp`/`ArrowDown` move between visible nodes, `ArrowRight` expands or enters, `ArrowLeft` collapses or goes to the parent, `Home`/`End` jump to the edges. Only three nesting levels are supported — deeper trees log a console warning.
+`aria-expanded` on the toggle drives the rotated caret *and* group visibility. Leaf rows use `.sq-tree__spacer` so labels stay aligned. Keyboard: `ArrowUp`/`ArrowDown` move between visible nodes, `ArrowRight` expands or enters, `ArrowLeft` collapses or goes to the parent, `Home`/`End` jump to the edges. Only three nesting levels are supported — deeper trees log a console warning.
 
 ### Stepper / timeline
 
 ```html
-<div class="v2-stepper" data-sq-stepper data-sq-step="2">
-  <div class="v2-stepper__item">
-    <span class="v2-stepper__marker" aria-hidden="true">
-      <svg class="v2-icon v2-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+<div class="sq-stepper" data-sq-stepper data-sq-step="2">
+  <div class="sq-stepper__item">
+    <span class="sq-stepper__marker" aria-hidden="true">
+      <svg class="sq-icon sq-icon--12" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
     </span>
-    <div class="v2-stepper__body">
-      <div class="v2-stepper__title">Provision instance</div>
-      <div class="v2-stepper__desc">Compute, network and volume created.</div>
-      <div class="v2-stepper__meta">00:42</div>
+    <div class="sq-stepper__body">
+      <div class="sq-stepper__title">Provision instance</div>
+      <div class="sq-stepper__desc">Compute, network and volume created.</div>
+      <div class="sq-stepper__meta">00:42</div>
     </div>
   </div>
   <!-- additional items: number or check glyph in the marker -->
@@ -959,26 +959,26 @@ SynteqUI.setStep(stepperEl, 3);   // 0-based; earlier items become is-complete
 stepperEl.addEventListener('sq:stepchange', function (e) { console.log(e.detail.index); });
 ```
 
-States applied by `setStep()`: `is-complete`, `is-active` (gets `aria-current="step"`), `is-pending`. Add `is-error` manually for a failed step. `.v2-stepper--horizontal` switches to a row layout that folds back to vertical below 720px.
+States applied by `setStep()`: `is-complete`, `is-active` (gets `aria-current="step"`), `is-pending`. Add `is-error` manually for a failed step. `.sq-stepper--horizontal` switches to a row layout that folds back to vertical below 720px.
 
 ### Code block (line numbers + copy)
 
 ```html
-<div class="v2-code" data-sq-code data-sq-line-numbers>
-  <div class="v2-code__head">
-    <span class="v2-code__title">install.sh</span>
-    <div class="v2-code__actions">
-      <button class="v2-code__copy" data-sq-code-copy="Copied" aria-label="Copy code">Copy</button>
+<div class="sq-code" data-sq-code data-sq-line-numbers>
+  <div class="sq-code__head">
+    <span class="sq-code__title">install.sh</span>
+    <div class="sq-code__actions">
+      <button class="sq-code__copy" data-sq-code-copy="Copied" aria-label="Copy code">Copy</button>
     </div>
   </div>
-  <div class="v2-code__body">
-    <pre class="v2-code__pre"><code>npm install
+  <div class="sq-code__body">
+    <pre class="sq-code__pre"><code>npm install
 npx synteq build --theme dark</code></pre>
   </div>
 </div>
 ```
 
-The gutter (`.v2-code__lines`) is generated from the `<pre>` text, so never hand-write line numbers. `data-sq-line-numbers="false"` opts out. The code area never wraps — it scrolls horizontally — which keeps the gutter aligned. Use `.v2-code--plain` for a canvas surface and `.v2-code--scroll` for a bounded height (`--sq-code-h`).
+The gutter (`.sq-code__lines`) is generated from the `<pre>` text, so never hand-write line numbers. `data-sq-line-numbers="false"` opts out. The code area never wraps — it scrolls horizontally — which keeps the gutter aligned. Use `.sq-code--plain` for a canvas surface and `.sq-code--scroll` for a bounded height (`--sq-code-h`).
 
 ---
 
@@ -1002,11 +1002,11 @@ All methods are on the `SynteqUI` global, available after `synteq-ui.js` loads.
 | `setStep` | `setStep(stepperEl, index) → number` | Marks items before `index` `is-complete`, `index` `is-active` (with `aria-current="step"`), the rest `is-pending`. Emits `sq:stepchange`. |
 | `initStepper` | `initStepper()` | Applies `data-sq-step` (default `0`) to every `[data-sq-stepper]`. |
 | `initCodeBlocks` | `initCodeBlocks()` | Generates the line-number gutter and wires `[data-sq-code-copy]` for every `[data-sq-code]`. |
-| `scrollToSection` | `scrollToSection(id, opts?) → boolean` | Scrolls `.v2-content` to `#id`; `opts.behavior` = `'smooth' \| 'auto'`. Hash deep links (`/#logs`) and `hashchange` are handled automatically. |
+| `scrollToSection` | `scrollToSection(id, opts?) → boolean` | Scrolls `.sq-content` to `#id`; `opts.behavior` = `'smooth' \| 'auto'`. Hash deep links (`/#logs`) and `hashchange` are handled automatically. |
 | `tip` | `tip(anchorEl, message, opts?) → Element` | Transient anchored label (the copy handler shows "Copied" through it). `opts.kind` = `'info' \| 'ok' \| 'warn' \| 'err'`, `opts.duration` default 1500 ms. Fixed-positioned, viewport-clamped, `role="status"`, one at a time. |
 | `replayAnimation` | `replayAnimation(el, opts?) → Animation \| null` | Restarts a mount animation on demand (used by "Replay animation" demos). `opts.preset` = `'fade-up' \| 'fade' \| 'zoom-in'`, `opts.duration` (default 280 ms), `opts.force` ignores reduced-motion. Cancels running animations first and drives the effect through the Web Animations API, so it works even though `base.css` shortens CSS animations to `0.001ms` under `prefers-reduced-motion` — in that case it plays a 120 ms opacity-only cross-fade (no movement). |
 | `prefersReducedMotion` | `prefersReducedMotion() → boolean` | Reports the live `prefers-reduced-motion: reduce` state; use it to show an honest "reduced motion" hint in demos. |
-| `initSparklines` | `initSparklines()` | Renders every `.v2-spark` from its stored series or `data-sq-spark="1,2,3"`. Called automatically on `DOMContentLoaded`. |
+| `initSparklines` | `initSparklines()` | Renders every `.sq-spark` from its stored series or `data-sq-spark="1,2,3"`. Called automatically on `DOMContentLoaded`. |
 | `initNavDock` | `initNavDock()` | Adds drag-to-scroll and the `More` drop-up when dock destinations overflow. Called automatically on `DOMContentLoaded`. |
 | `initGauges` | `initGauges()` | Processes all `[data-sq-gauge]` elements in the DOM. Called automatically on `DOMContentLoaded`. |
 | `sidebarToggle` | `sidebarToggle()` | Toggles open/closed based on current state and viewport width |
@@ -1017,16 +1017,16 @@ All methods are on the `SynteqUI` global, available after `synteq-ui.js` loads.
 
 ## Sidebar Toggle Wiring (single button rule)
 
-**There is exactly one sidebar toggle in the entire page.** It lives in `.v2-topbar` and carries `data-sq-sidebar-toggle`. The JS runtime wires it automatically — no manual event listener needed.
+**There is exactly one sidebar toggle in the entire page.** It lives in `.sq-topbar` and carries `data-sq-sidebar-toggle`. The JS runtime wires it automatically — no manual event listener needed.
 
 ```html
-<!-- In .v2-topbar — the ONLY toggle. Do not add another anywhere. -->
-<button class="v2-sidebar-toggle"
+<!-- In .sq-topbar — the ONLY toggle. Do not add another anywhere. -->
+<button class="sq-sidebar-toggle"
         data-sq-sidebar-toggle
         aria-label="Toggle navigation"
         aria-expanded="true"
         aria-controls="sidebar">
-  <svg class="v2-icon v2-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+  <svg class="sq-icon sq-icon--18 icon-menu" viewBox="0 0 24 24" aria-hidden="true">
     <line x1="3" y1="6" x2="21" y2="6"/>
     <line x1="3" y1="12" x2="21" y2="12"/>
     <line x1="3" y1="18" x2="21" y2="18"/>
@@ -1034,10 +1034,10 @@ All methods are on the `SynteqUI` global, available after `synteq-ui.js` loads.
 </button>
 ```
 
-**All viewports:** toggle adds/removes `.nav-collapsed` on `.v2-app#app`. The dock slides away and the content area expands without introducing page scroll.
+**All viewports:** toggle adds/removes `.nav-collapsed` on `.sq-app#app`. The dock slides away and the content area expands without introducing page scroll.
 
 The dock remains sticky at the bottom on mobile. Do **not** add group labels
-(`.v2-nav__group-label`) inside the dock — the horizontal strip only renders
+(`.sq-nav__group-label`) inside the dock — the horizontal strip only renders
 icon + label items. When destinations overflow the strip:
 
 - the strip becomes drag-scrollable (mouse/pen) and accepts horizontal wheel input;
@@ -1086,8 +1086,8 @@ All icons are inline SVG sourced from a 24×24 viewBox (Lucide or equivalent str
 
 ```html
 <!-- Decorative icon inside a labeled button -->
-<button class="v2-iconbtn" aria-label="Copy to clipboard">
-  <svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" aria-hidden="true">
+<button class="sq-iconbtn" aria-label="Copy to clipboard">
+  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true">
     <!-- Lucide copy icon paths -->
     <rect x="9" y="9" width="13" height="13" rx="2"/>
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -1095,30 +1095,30 @@ All icons are inline SVG sourced from a 24×24 viewBox (Lucide or equivalent str
 </button>
 ```
 
-**Size classes** (apply alongside `v2-icon`):
+**Size classes** (apply alongside `sq-icon`):
 
 | Class | Rendered size |
 |---|---|
-| `v2-icon--14` | 14 × 14 px |
-| `v2-icon--16` | 16 × 16 px |
-| `v2-icon--18` | 18 × 18 px |
-| `v2-icon--20` | 20 × 20 px |
+| `sq-icon--14` | 14 × 14 px |
+| `sq-icon--16` | 16 × 16 px |
+| `sq-icon--18` | 18 × 18 px |
+| `sq-icon--20` | 20 × 20 px |
 
 **Tint classes** (optional, stack with size class):
 
 | Class | Color |
 |---|---|
-| `v2-icon--mute` | Subtle/muted text color |
-| `v2-icon--brand` | Brand accent |
-| `v2-icon--info` | Blue / informational |
-| `v2-icon--ok` | Green / success |
-| `v2-icon--warn` | Amber / warning |
-| `v2-icon--err` | Red / error |
+| `sq-icon--mute` | Subtle/muted text color |
+| `sq-icon--brand` | Brand accent |
+| `sq-icon--info` | Blue / informational |
+| `sq-icon--ok` | Green / success |
+| `sq-icon--warn` | Amber / warning |
+| `sq-icon--err` | Red / error |
 
-Base class `v2-icon` is always required. Example with size and tint:
+Base class `sq-icon` is always required. Example with size and tint:
 
 ```html
-<svg class="v2-icon v2-icon--16 v2-icon--ok" viewBox="0 0 24 24" aria-hidden="true">
+<svg class="sq-icon sq-icon--16 sq-icon--ok" viewBox="0 0 24 24" aria-hidden="true">
   <polyline points="20 6 9 17 4 12"/>
 </svg>
 ```
@@ -1127,21 +1127,21 @@ Base class `v2-icon` is always required. Example with size and tint:
 
 ## Common Mistakes to Avoid
 
-1. **Adding a second sidebar close button.** The framework manages sidebar state through a single `data-sq-sidebar-toggle` button. A second close button (e.g. inside `.v2-aside`) creates two competing state sources and breaks the desktop/mobile toggle logic.
+1. **Adding a second sidebar close button.** The framework manages sidebar state through a single `data-sq-sidebar-toggle` button. A second close button (e.g. inside `.sq-aside`) creates two competing state sources and breaks the desktop/mobile toggle logic.
 
 2. **Using `min-height: 100%` or `overflow: auto` on `body`/`html`.** Synteq UI's viewport lock requires `height: 100dvh; overflow: hidden` on both. Any deviation reintroduces a page scrollbar and breaks the shell grid.
 
 3. **Hard-coding color or spacing values in component styles.** Writing `color: #fff` or `padding: 16px` bypasses the token system. Theme switching and future token updates will silently break those elements. Always use `var(--sq-text-strong)` and `var(--sq-space-4)`.
 
-4. **Wrapping content in card elements with `box-shadow` or tonal backgrounds.** Synteq UI's flat surface model means every surface is the same canvas color. Visual grouping comes from `.v2-section` hairlines only. Introducing elevation or tonal wrappers breaks visual consistency.
+4. **Wrapping content in card elements with `box-shadow` or tonal backgrounds.** Synteq UI's flat surface model means every surface is the same canvas color. Visual grouping comes from `.sq-section` hairlines only. Introducing elevation or tonal wrappers breaks visual consistency.
 
 5. **Linking to Google Fonts CDN for Google Sans Code.** The font is self-hosted in `fonts/`. A CDN link introduces an external network request, breaks offline-first operation, and loads a different version of the typeface than the one the design was built against.
 
 6. **Rendering a sparkline without a `viewBox`.** `renderSparkline` draws in viewBox units (default `0 0 200 40`). Keep a `viewBox` on the `<svg>` (any size works) instead of relying on rendered pixel dimensions — that is what keeps the path inside the chart at every breakpoint. Call `SynteqUI.initSparklines()` after dynamic content changes so new charts (and resized ones) are redrawn.
 
-7. **Hiding elements with `.hidden = true` on a component that sets its own `display`.** `.v2-btn`, `.v2-menu` and friends declare `display: flex/inline-flex`, which beats the UA `[hidden]` rule. `base.css` now ships `[hidden] { display: none !important; }`; if you add a component with a `display` rule, rely on that reset instead of writing another `[hidden]` override.
+7. **Hiding elements with `.hidden = true` on a component that sets its own `display`.** `.sq-btn`, `.sq-menu` and friends declare `display: flex/inline-flex`, which beats the UA `[hidden]` rule. `base.css` now ships `[hidden] { display: none !important; }`; if you add a component with a `display` rule, rely on that reset instead of writing another `[hidden]` override.
 
 8. **Giving a field two focus indicators.** The global `:focus-visible` outline in `base.css` is the ring everything else uses. Text fields, selects and checkboxes draw their own brand ring, so never add `border-color` *and* an outline on the same focus state — that is the double-border bug. Keep one indicator per control.
 
-9. **Overriding `.v2-dialog { margin }`.** The modal is centred by `margin: auto` (the UA rule is zeroed by the framework reset). Setting `margin: 0` or a custom value drags the dialog to the top-left corner.
+9. **Overriding `.sq-dialog { margin }`.** The modal is centred by `margin: auto` (the UA rule is zeroed by the framework reset). Setting `margin: 0` or a custom value drags the dialog to the top-left corner.
 

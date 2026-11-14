@@ -5,7 +5,7 @@
    stay aligned; the code area scrolls horizontally without wrapping.
    ========================================================================== */
 
-.v2-code {
+.sq-code {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -16,7 +16,7 @@
 }
 
 /* ---- Header (optional) ---- */
-.v2-code__head {
+.sq-code__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,7 +26,7 @@
   min-width: 0;
 }
 
-.v2-code__title {
+.sq-code__title {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -39,14 +39,14 @@
   white-space: nowrap;
 }
 
-.v2-code__actions {
+.sq-code__actions {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-1);
   flex-shrink: 0;
 }
 
-.v2-code__copy {
+.sq-code__copy {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-1);
@@ -63,24 +63,24 @@
               border-color var(--sq-dur-instant) var(--sq-ease);
 }
 
-.v2-code__copy:hover {
+.sq-code__copy:hover {
   color: var(--sq-text-strong);
   background: var(--sq-hover);
 }
 
-.v2-code__copy.is-copied {
+.sq-code__copy.is-copied {
   color: var(--sq-status-running);
   border-color: var(--sq-status-running);
 }
 
 /* ---- Body: gutter + code ---- */
-.v2-code__body {
+.sq-code__body {
   display: flex;
   align-items: stretch;
   min-width: 0;
 }
 
-.v2-code__lines {
+.sq-code__lines {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -96,12 +96,12 @@
   user-select: none;
 }
 
-.v2-code__line-num {
+.sq-code__line-num {
   display: block;
   min-width: var(--sq-space-4);
 }
 
-.v2-code__pre {
+.sq-code__pre {
   flex: 1;
   margin: 0;
   padding: var(--sq-space-3) var(--sq-space-4);
@@ -118,32 +118,59 @@
   min-width: 0;
 }
 
-.v2-code__pre code {
+.sq-code__pre code {
   font: inherit;
   color: inherit;
 }
 
-.v2-code__pre::-webkit-scrollbar {
+.sq-code__pre::-webkit-scrollbar {
   height: var(--sq-space-1);
 }
 
-.v2-code__pre::-webkit-scrollbar-thumb {
+.sq-code__pre::-webkit-scrollbar-thumb {
   background: var(--sq-line-strong);
   border-radius: var(--sq-radius-micro);
 }
 
 /* ---- Variants ---- */
-.v2-code--plain {
+.sq-code--plain {
   background: var(--sq-canvas);
 }
 
-.v2-code--scroll .v2-code__pre {
+/* Bounded height: the body scrolls so the gutter and code stay aligned.
+   The gutter is sticky on the horizontal axis so line numbers remain visible
+   while long lines scroll under them. */
+.sq-code--scroll .sq-code__body {
   max-height: var(--sq-code-h, 320px);
-  overflow-y: auto;
+  overflow: auto;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sq-line-strong) transparent;
 }
 
-.v2-code__caption {
+.sq-code--scroll .sq-code__body::-webkit-scrollbar {
+  width: var(--sq-space-2);
+  height: var(--sq-space-2);
+}
+
+.sq-code--scroll .sq-code__body::-webkit-scrollbar-thumb {
+  background: var(--sq-line-strong);
+  border-radius: var(--sq-radius-micro);
+}
+
+.sq-code--scroll .sq-code__pre {
+  max-height: none;
+  overflow: visible;
+}
+
+.sq-code--scroll .sq-code__lines {
+  position: sticky;
+  left: 0;
+  align-self: flex-start;
+  z-index: 1;
+}
+
+.sq-code__caption {
   padding: var(--sq-space-2) var(--sq-space-3);
   border-top: var(--sq-line-h) solid var(--sq-line);
   font-size: var(--sq-text-xs);
@@ -151,11 +178,11 @@
 }
 
 @media (max-width: 520px) {
-  .v2-code__pre {
+  .sq-code__pre {
     padding: var(--sq-space-3);
   }
 
-  .v2-code__lines {
+  .sq-code__lines {
     display: none;
   }
 }

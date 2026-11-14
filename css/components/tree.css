@@ -5,7 +5,7 @@
    needed and the markup stays readable.
    ========================================================================== */
 
-.v2-tree {
+.sq-tree {
   display: flex;
   flex-direction: column;
   gap: var(--sq-line-h);
@@ -13,13 +13,13 @@
   min-width: 0;
 }
 
-.v2-tree__item {
+.sq-tree__item {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.v2-tree__row {
+.sq-tree__row {
   display: flex;
   align-items: center;
   gap: var(--sq-space-1);
@@ -30,20 +30,20 @@
   transition: background-color var(--sq-dur-instant) var(--sq-ease);
 }
 
-.v2-tree__row:hover {
+.sq-tree__row:hover {
   background: var(--sq-hover);
 }
 
-.v2-tree__row--active {
+.sq-tree__row--active {
   background: color-mix(in srgb, var(--sq-brand) 9%, transparent);
 }
 
-.v2-tree__row--active .v2-tree__label {
+.sq-tree__row--active .sq-tree__label {
   color: var(--sq-text-strong);
 }
 
 /* Toggle button - the caret rotates when the group is open */
-.v2-tree__toggle {
+.sq-tree__toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -59,26 +59,26 @@
   transition: color var(--sq-dur-instant) var(--sq-ease);
 }
 
-.v2-tree__toggle:hover {
+.sq-tree__toggle:hover {
   color: var(--sq-text-strong);
 }
 
-.v2-tree__toggle svg {
+.sq-tree__toggle svg {
   transition: transform var(--sq-dur-fast) var(--sq-ease);
 }
 
-.v2-tree__toggle[aria-expanded="true"] svg {
+.sq-tree__toggle[aria-expanded="true"] svg {
   transform: rotate(90deg);
 }
 
 /* Leaf rows keep their label aligned with sibling toggles */
-.v2-tree__spacer {
+.sq-tree__spacer {
   width: var(--sq-space-4);
   height: var(--sq-space-4);
   flex-shrink: 0;
 }
 
-.v2-tree__label {
+.sq-tree__label {
   display: inline-flex;
   align-items: center;
   gap: var(--sq-space-2);
@@ -89,12 +89,12 @@
   color: var(--sq-text);
 }
 
-.v2-tree__label--mono {
+.sq-tree__label--mono {
   font-family: var(--sq-font-mono);
   font-size: var(--sq-text-sm);
 }
 
-.v2-tree__meta {
+.sq-tree__meta {
   margin-left: auto;
   padding-left: var(--sq-space-3);
   font-size: var(--sq-text-xs);
@@ -105,7 +105,7 @@
 }
 
 /* Nested group - one hairline rail per level */
-.v2-tree__group {
+.sq-tree__group {
   display: flex;
   flex-direction: column;
   gap: var(--sq-line-h);
@@ -115,32 +115,32 @@
   min-width: 0;
 }
 
-.v2-tree__group[hidden] {
+.sq-tree__group[hidden] {
   display: none;
 }
 
 /* Level tint for the deepest (third) level */
-.v2-tree__group .v2-tree__group {
+.sq-tree__group .sq-tree__group {
   border-left-color: var(--sq-line-strong);
 }
 
-.v2-tree__group .v2-tree__group .v2-tree__row {
+.sq-tree__group .sq-tree__group .sq-tree__row {
   font-size: var(--sq-text-sm);
   color: var(--sq-text-subtle);
 }
 
-.v2-tree__empty {
+.sq-tree__empty {
   padding: var(--sq-space-2) var(--sq-space-3);
   font-size: var(--sq-text-xs);
   color: var(--sq-text-subtle);
 }
 
 @media (max-width: 520px) {
-  .v2-tree__group {
+  .sq-tree__group {
     margin-left: var(--sq-space-4);
   }
 
-  .v2-tree__meta {
+  .sq-tree__meta {
     display: none;
   }
 }

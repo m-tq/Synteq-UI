@@ -18,7 +18,7 @@
  *  - replayAnimation() — restart a mount animation on demand (WAAPI, reduced-
  *    motion aware) for "replay" demos and success feedback
  *  - Nav scroll + scroll-spy (BoundingClientRect-based, works inside
- *    any scrollable .v2-content container)
+ *    any scrollable .sq-content container)
  *  - Clipboard copy buttons [data-sq-copy]
  */
 (function (global) {
@@ -61,7 +61,7 @@
   }
 
   /* ======================================================
-     GAUGE  —  sets .v2-gauge__fill width via data-value
+     GAUGE  —  sets .sq-gauge__fill width via data-value
      Usage:  renderGauge(el, 72.5)                  // thresholds
              renderGauge(el, 100, { kind:'brand' }) // quorum-style
              renderGauge(el, 42, { kind:'neutral' })// no state colour
@@ -72,13 +72,13 @@
     var kind = (opts && opts.kind) || 'auto';
     var clamped = Math.max(0, Math.min(100, pct));
     // Remove state classes then apply the requested one
-    fillEl.classList.remove('v2-gauge__fill--ok', 'v2-gauge__fill--warn', 'v2-gauge__fill--err', 'v2-gauge__fill--brand');
+    fillEl.classList.remove('sq-gauge__fill--ok', 'sq-gauge__fill--warn', 'sq-gauge__fill--err', 'sq-gauge__fill--brand');
     if (kind === 'brand') {
-      fillEl.classList.add('v2-gauge__fill--brand');
+      fillEl.classList.add('sq-gauge__fill--brand');
     } else if (kind !== 'neutral') {
-      if (clamped >= 90) fillEl.classList.add('v2-gauge__fill--err');
-      else if (clamped >= 75) fillEl.classList.add('v2-gauge__fill--warn');
-      else fillEl.classList.add('v2-gauge__fill--ok');
+      if (clamped >= 90) fillEl.classList.add('sq-gauge__fill--err');
+      else if (clamped >= 75) fillEl.classList.add('sq-gauge__fill--warn');
+      else fillEl.classList.add('sq-gauge__fill--ok');
     }
     // Delay so CSS transition fires after paint
     requestAnimationFrame(function () {
@@ -91,7 +91,7 @@
 
   function initGauges() {
     $$('[data-sq-gauge]').forEach(function (track) {
-      const fill = track.querySelector('.v2-gauge__fill');
+      const fill = track.querySelector('.sq-gauge__fill');
       if (!fill) return;
       const pct = parseFloat(track.getAttribute('data-sq-gauge')) || 0;
       renderGauge(fill, pct);
@@ -100,7 +100,7 @@
 
   /* ======================================================
      BARS  — dual-series bar chart (in / out)
-     stageEl  : .v2-bars container
+     stageEl  : .sq-bars container
      samples  : Array of [inPct, outPct] each 0–100
      opts     : { minCols, stepSec, emptyLabel }
                 minCols   pad with empty columns so a short series still
@@ -125,16 +125,25 @@
     // Leading empty columns keep the chart geometry stable while data fills in
     for (var p = 0; p < padCols; p++) {
       var padCol = document.createElement('div');
-      padCol.className = 'v2-bars__col v2-bars__col--pad';
+      padCol.className = 'sq-bars__col sq-bars__col--pad';
       padCol.setAttribute('aria-hidden', 'true');
       stageEl.appendChild(padCol);
     }
+
+    // Keep the absolute 0-100 scale for normal data, but expand it when a
+    // stacked in/out pair exceeds 100 so the taller column cannot overflow.
+    var scale = 100;
+    samples.forEach(function (pair) {
+      var inPct  = Math.max(0, Math.min(100, pair[0] || 0));
+      var outPct = Math.max(0, Math.min(100, pair[1] || 0));
+      scale = Math.max(scale, inPct + outPct);
+    });
 
     samples.forEach(function (pair, idx) {
       var inPct  = Math.max(0, Math.min(100, pair[0] || 0));
       var outPct = Math.max(0, Math.min(100, pair[1] || 0));
       var col = document.createElement('div');
-      col.className = 'v2-bars__col';
+      col.className = 'sq-bars__col';
 
       var offset = samples.length - idx;                       // 1 = newest
       var label = opts.stepSec
@@ -144,12 +153,13 @@
         label + '  ↓ ' + inPct.toFixed(1) + '%  ↑ ' + outPct.toFixed(1) + '%');
 
       var segOut = document.createElement('div');
-      segOut.className = 'v2-bars__seg v2-bars__seg--out';
-      segOut.style.height = outPct + '%';
+      segOut.className = 'sq-bars__seg sq-bars__seg--out';
+      segOut.style.height = (outPct / scale) * 100 + '%';
 
       var segIn = document.createElement('div');
-      segIn.className = 'v2-bars__seg v2-bars__seg--in';
-      segIn.style.height = inPct + '%';
+      segIn.className = 'sq-bars__seg sq-bars__seg--in';
+      segIn.style.height = (inPct / scale) * 100 + '%';
+
 
       col.appendChild(segOut);
       col.appendChild(segIn);
@@ -158,8 +168,8 @@
   }
 
   /* ======================================================
-     SPARKLINE  — draws an SVG polyline inside .v2-spark
-     sparkEl  : SVG element with class .v2-spark
+     SPARKLINE  — draws an SVG polyline inside .sq-spark
+     sparkEl  : SVG element with class .sq-spark
      values   : Array of numbers (raw values, auto-scaled)
      ====================================================== */
   function renderSparkline(sparkEl, values) {
@@ -202,7 +212,7 @@
     const first = sx(0) + ',' + sy(values[0]);
     const last  = sx(values.length - 1) + ',' + sy(values[values.length - 1]);
     const area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    area.setAttribute('class', 'v2-spark__area');
+    area.setAttribute('class', 'sq-spark__area');
     area.setAttribute('points',
       first + ' ' + pts + ' ' + last + ' ' +
       sx(values.length - 1) + ',' + H + ' ' + sx(0) + ',' + H);
@@ -210,24 +220,24 @@
 
     // Line
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-    line.setAttribute('class', 'v2-spark__line');
+    line.setAttribute('class', 'sq-spark__line');
     line.setAttribute('points', pts);
     sparkEl.appendChild(line);
 
     // Latest-point dot
     const lastIdx = values.length - 1;
     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    dot.setAttribute('class', 'v2-spark__dot');
+    dot.setAttribute('class', 'sq-spark__dot');
     dot.setAttribute('cx', sx(lastIdx));
     dot.setAttribute('cy', sy(values[lastIdx]));
     dot.setAttribute('r', '2.5');
     sparkEl.appendChild(dot);
   }
 
-  /* Draws every .v2-spark from its remembered series (or data-sq-spark="1,2,3")
+  /* Draws every .sq-spark from its remembered series (or data-sq-spark="1,2,3")
      and redraws them once the viewport is resized. */
   function initSparklines() {
-    $$('.v2-spark').forEach(function (el) {
+    $$('.sq-spark').forEach(function (el) {
       if (!el.__sqSparkValues) {
         var raw = el.getAttribute('data-sq-spark');
         if (raw) {
@@ -245,7 +255,7 @@
     window.addEventListener('resize', function () {
       clearTimeout(timer);
       timer = setTimeout(function () {
-        $$('.v2-spark').forEach(function (el) {
+        $$('.sq-spark').forEach(function (el) {
           if (el.__sqSparkValues) renderSparkline(el, el.__sqSparkValues);
         });
       }, 120);
@@ -253,7 +263,7 @@
   }
 
   function sidebarOpen() {
-    var app = document.getElementById('app') || $('.v2-app');
+    var app = document.getElementById('app') || $('.sq-app');
     if (!app) return;
     app.classList.remove('nav-collapsed');
     $$('[data-sq-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'true'); });
@@ -261,7 +271,7 @@
   }
 
   function sidebarClose() {
-    var app = document.getElementById('app') || $('.v2-app');
+    var app = document.getElementById('app') || $('.sq-app');
     if (!app) return;
     app.classList.add('nav-collapsed');
     $$('[data-sq-sidebar-toggle]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'false'); });
@@ -269,7 +279,7 @@
   }
 
   function sidebarToggle() {
-    var app = document.getElementById('app') || $('.v2-app');
+    var app = document.getElementById('app') || $('.sq-app');
     if (!app) return;
     app.classList.contains('nav-collapsed') ? sidebarOpen() : sidebarClose();
   }
@@ -281,18 +291,18 @@
       btn.addEventListener('click', function (e) { e.stopPropagation(); sidebarToggle(); });
     });
 
-    var app = document.getElementById('app') || $('.v2-app');
+    var app = document.getElementById('app') || $('.sq-app');
     var saved; try { saved = localStorage.getItem('sq-sidebar'); } catch (_) {}
     if (saved === 'closed') sidebarClose(); else if (app) sidebarOpen();
   }
 
   /* ======================================================
-     TOPBAR SCROLL SHADOW  — adds .is-scrolled to .v2-topbar
+     TOPBAR SCROLL SHADOW  — adds .is-scrolled to .sq-topbar
      when the in-content region scrolls past 4px
      ====================================================== */
   function initScrollShadow() {
-    $$('.v2-content').forEach(function (content) {
-      var topbar = $('.v2-topbar');
+    $$('.sq-content').forEach(function (content) {
+      var topbar = $('.sq-topbar');
       if (!topbar) return;
       content.addEventListener('scroll', function () {
         topbar.classList.toggle('is-scrolled', content.scrollTop > 4);
@@ -301,7 +311,7 @@
   }
 
   /* ======================================================
-     STAGGER MOUNT  — triggers .v2-stagger animation when
+     STAGGER MOUNT  — triggers .sq-stagger animation when
      the element scrolls into view (IntersectionObserver).
      Skips animation if reduced-motion is active.
      ====================================================== */
@@ -311,7 +321,7 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('v2-stagger');
+          entry.target.classList.add('sq-stagger');
           io.unobserve(entry.target);
         }
       });
@@ -352,15 +362,15 @@
     var frames = reduced ? MOTION_FRAMES.fade : preset;
     var duration = opts.duration || (reduced ? 120 : 280);
 
-    if (!el.classList.contains('v2-fade-up') && (opts.preset || 'fade-up') === 'fade-up') {
-      el.classList.add('v2-fade-up');
+    if (!el.classList.contains('sq-fade-up') && (opts.preset || 'fade-up') === 'fade-up') {
+      el.classList.add('sq-fade-up');
     }
 
     if (typeof el.animate !== 'function') {
       // Legacy fallback: restart the CSS animation through a forced reflow.
-      el.classList.remove('v2-fade-up');
+      el.classList.remove('sq-fade-up');
       void el.offsetWidth;
-      el.classList.add('v2-fade-up');
+      el.classList.add('sq-fade-up');
       return null;
     }
 
@@ -394,11 +404,11 @@
     if (!anchor || !message || typeof document === 'undefined') return null;
     opts = opts || {};
 
-    var existing = $('.v2-tip');
+    var existing = $('.sq-tip');
     if (existing) existing.remove();
 
     var el = document.createElement('div');
-    el.className = 'v2-tip' + (opts.kind ? ' v2-tip--' + opts.kind : '');
+    el.className = 'sq-tip' + (opts.kind ? ' sq-tip--' + opts.kind : '');
     el.setAttribute('role', 'status');
     el.textContent = String(message);
     document.body.appendChild(el);
@@ -430,7 +440,7 @@
      Any element carrying [data-sq-copy] copies its value (or the text of its
      previous sibling when the attribute is empty). Delegation means buttons
      added or swapped in later keep working without re-initialisation.
-     Feedback: .v2-copy--ok + a "Copied" tip + aria-label swap.
+     Feedback: .sq-copy--ok + a "Copied" tip + aria-label swap.
      ====================================================== */
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -479,11 +489,11 @@
       copyToClipboard(text).then(function () {
         var orig = btn.getAttribute('aria-label') || 'Copy';
         btn.setAttribute('aria-label', label);
-        btn.classList.add('v2-copy--ok');
+        btn.classList.add('sq-copy--ok');
         tip(btn, label, { kind: 'ok' });
         setTimeout(function () {
           btn.setAttribute('aria-label', orig);
-          btn.classList.remove('v2-copy--ok');
+          btn.classList.remove('sq-copy--ok');
         }, 1800);
       }).catch(function () {
         tip(btn, 'Copy failed', { kind: 'err' });
@@ -511,45 +521,45 @@
     var duration = opts.duration || 4000;
     var dismissible = opts.dismissible !== false;
 
-    var region = $('[data-sq-toast-region]') || $('.v2-toast-region');
+    var region = $('[data-sq-toast-region]') || $('.sq-toast-region');
     if (!region) {
       region = document.createElement('div');
-      region.className = 'v2-toast-region';
+      region.className = 'sq-toast-region';
       region.setAttribute('role', 'status');
       region.setAttribute('aria-live', kind === 'err' ? 'assertive' : 'polite');
       document.body.appendChild(region);
     }
 
     var item = document.createElement('div');
-    item.className = 'v2-toast' + (kind ? ' v2-toast--' + kind : '');
+    item.className = 'sq-toast' + (kind ? ' sq-toast--' + kind : '');
 
     // Icon (optional, based on kind)
     var iconMap = {
-      info: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-      ok: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
-      warn: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-      err: '<svg class="v2-icon v2-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+      info: '<svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      ok: '<svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+      warn: '<svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      err: '<svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
     };
 
     if (iconMap[kind]) {
       var iconSpan = document.createElement('span');
-      iconSpan.className = 'v2-toast__icon';
+      iconSpan.className = 'sq-toast__icon';
       iconSpan.innerHTML = iconMap[kind];
       item.appendChild(iconSpan);
     }
 
     // Content
     var content = document.createElement('div');
-    content.className = 'v2-toast__content';
+    content.className = 'sq-toast__content';
     content.textContent = message;
     item.appendChild(content);
 
     // Dismiss button
     if (dismissible) {
       var dismiss = document.createElement('button');
-      dismiss.className = 'v2-toast__dismiss';
+      dismiss.className = 'sq-toast__dismiss';
       dismiss.setAttribute('aria-label', 'Dismiss');
-      dismiss.innerHTML = '<svg class="v2-icon v2-icon--14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+      dismiss.innerHTML = '<svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
       dismiss.addEventListener('click', function () { removeToast(item); });
       item.appendChild(dismiss);
     }
@@ -576,7 +586,7 @@
 
   /* ======================================================
      TABS — roving tabindex + arrow keys
-     Wire with data-sq-tabs on .v2-tabs container
+     Wire with data-sq-tabs on .sq-tabs container
      ====================================================== */
   function initTabs() {
     $$('[data-sq-tabs]').forEach(function (container) {
@@ -632,7 +642,7 @@
   /* ======================================================
      MENU — open/close, keyboard nav, escape
      Trigger: data-sq-menu-trigger="menu-id"
-     Menu: .v2-menu#menu-id
+     Menu: .sq-menu#menu-id
      ====================================================== */
   function initMenus() {
     $$('[data-sq-menu-trigger]').forEach(function (trigger) {
@@ -643,7 +653,7 @@
       var menu = document.getElementById(menuId);
       if (!menu) return;
 
-      var items = $$('.v2-menu__item', menu);
+      var items = $$('.sq-menu__item', menu);
       var currentFocus = -1;
 
       function openMenu() {
@@ -705,7 +715,7 @@
   /* ======================================================
      POPOVER — show/hide, positioning, escape
      Trigger: data-sq-popover-trigger="popover-id"
-     Popover: .v2-popover#popover-id
+     Popover: .sq-popover#popover-id
      ====================================================== */
   function initPopovers() {
     $$('[data-sq-popover-trigger]').forEach(function (trigger) {
@@ -795,7 +805,7 @@
     $$('[data-sq-search-input]').forEach(function (input) {
       input.addEventListener('input', function () {
         var query = input.value.trim().toLowerCase();
-        $$('.v2-command [data-sq-command]').forEach(function (item) { item.hidden = query && !item.textContent.toLowerCase().includes(query); });
+        $$('.sq-command [data-sq-command]').forEach(function (item) { item.hidden = query && !item.textContent.toLowerCase().includes(query); });
       });
       // A text input inside <form method="dialog"> triggers implicit submission
       // on Enter, which closed the palette before anything was picked. Enter now
@@ -813,7 +823,7 @@
       if (dialog) {
         dialog.addEventListener('close', function () {
           input.value = '';
-          $$('.v2-command [data-sq-command]', dialog).forEach(function (item) { item.hidden = false; });
+          $$('.sq-command [data-sq-command]', dialog).forEach(function (item) { item.hidden = false; });
         });
       }
     });
@@ -824,12 +834,12 @@
         if (dialog) dialog.close();
         if (target && target.charAt(0) === '#') {
           var section = document.querySelector(target);
-          var content = $('.v2-content');
+          var content = $('.sq-content');
           if (section && content) {
             // Rect-based math: offsetTop is relative to offsetParent, not the
             // scroll container, and lands on the wrong section.
             var delta = section.getBoundingClientRect().top - content.getBoundingClientRect().top + content.scrollTop - 16;
-            content.scrollTo({ top: Math.max(0, delta), behavior: 'smooth' });
+            content.scrollTo({ top: Math.max(0, delta), behavior: prefersReduced() ? 'auto' : 'smooth' });
           }
         }
         else toast(item.textContent.trim() + ' selected');
@@ -845,9 +855,9 @@
      • Keeps the active item visible when the scroll-spy changes.
      ====================================================== */
   function initNavDock() {
-    var aside = $('.v2-aside');
+    var aside = $('.sq-aside');
     if (!aside) return;
-    var nav = $('.v2-nav', aside);
+    var nav = $('.sq-nav', aside);
     if (!nav) return;
     if (nav.getAttribute('data-sq-dock-ready') === 'true') {
       // Re-scan after dynamic nav changes (new destinations added/removed)
@@ -857,23 +867,23 @@
     nav.setAttribute('data-sq-dock-ready', 'true');
 
     var isActive = function (el) {
-      return el.classList.contains('is-active') || el.classList.contains('v2-nav__item--active');
+      return el.classList.contains('is-active') || el.classList.contains('sq-nav__item--active');
     };
-    var navItems = function () { return $$('.v2-nav__item', nav); };
+    var navItems = function () { return $$('.sq-nav__item', nav); };
     var overflowing = function () { return nav.scrollWidth - nav.clientWidth > 1; };
 
     /* ---- More trigger + drop-up shell ---- */
     var more = document.createElement('button');
     more.type = 'button';
-    more.className = 'v2-nav__more';
+    more.className = 'sq-nav__more';
     more.hidden = true;
     more.setAttribute('aria-haspopup', 'menu');
     more.setAttribute('aria-expanded', 'false');
     more.setAttribute('aria-label', 'More navigation items');
-    more.innerHTML = '<svg class="v2-icon v2-icon--18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span aria-hidden="true">More</span>';
+    more.innerHTML = '<svg class="sq-icon sq-icon--18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span aria-hidden="true">More</span>';
 
     var menu = document.createElement('div');
-    menu.className = 'v2-nav__menu';
+    menu.className = 'sq-nav__menu';
     menu.hidden = true;
     menu.setAttribute('role', 'menu');
     menu.setAttribute('aria-label', 'All navigation items');
@@ -898,10 +908,10 @@
       });
       outOfView.forEach(function (src) {
         var clone = src.cloneNode(true);
-        clone.classList.remove('v2-nav__item');
-        clone.classList.remove('v2-nav__item--active');
+        clone.classList.remove('sq-nav__item');
+        clone.classList.remove('sq-nav__item--active');
         clone.classList.remove('is-active');
-        clone.classList.add('v2-nav__menu-item');
+        clone.classList.add('sq-nav__menu-item');
         if (isActive(src)) clone.classList.add('is-active');
         clone.removeAttribute('aria-current');
         clone.setAttribute('role', 'menuitem');
@@ -1029,17 +1039,17 @@
 
     nav.__sqDockRefresh = function () {
       updateOverflow();
-      ensureVisible(nav.querySelector('.is-active, .v2-nav__item--active'));
+      ensureVisible(nav.querySelector('.is-active, .sq-nav__item--active'));
     };
 
     requestAnimationFrame(function () {
       updateOverflow();
-      ensureVisible(nav.querySelector('.is-active, .v2-nav__item--active'));
+      ensureVisible(nav.querySelector('.is-active, .sq-nav__item--active'));
     });
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
         updateOverflow();
-        ensureVisible(nav.querySelector('.is-active, .v2-nav__item--active'));
+        ensureVisible(nav.querySelector('.is-active, .sq-nav__item--active'));
       });
     }
   }
@@ -1049,7 +1059,7 @@
      - Click nav item → smooth scroll to target section
      - Scroll-spy: highlight nav item when section in view
      Uses getBoundingClientRect for accurate scroll detection
-     inside any scrollable container (.v2-content).
+     inside any scrollable container (.sq-content).
      ====================================================== */
 
   /* ======================================================
@@ -1057,7 +1067,7 @@
      scrollToSection('logs') / scrollToSection('#logs')
      ====================================================== */
   function scrollToSection(id, opts) {
-    var content = $('.v2-content');
+    var content = $('.sq-content');
     if (!content || !id) return false;
     var target = document.getElementById(String(id).replace(/^#/, ''));
     if (!target) return false;
@@ -1086,15 +1096,15 @@
   }
 
   function initNavScroll() {
-    var content = $('.v2-content');
+    var content = $('.sq-content');
     if (!content) return;
     if (content.dataset.sqNavReady === 'true') return;
     content.dataset.sqNavReady = 'true';
 
     // Build map of nav items → sections via href="#id"
-    var navItems = $$('.v2-nav__item[href^="#"]');
+    var navItems = $$('.sq-nav__item[href^="#"]');
     var sections = [];
-    var app = document.getElementById('app') || $('.v2-app');
+    var app = document.getElementById('app') || $('.sq-app');
 
     navItems.forEach(function (item) {
       var href = item.getAttribute('href');
@@ -1113,10 +1123,10 @@
           try { history.replaceState(null, '', '#' + id); } catch (_) {}
           // Immediate active update on click
           navItems.forEach(function (n) {
-            n.classList.remove('is-active', 'v2-nav__item--active');
+            n.classList.remove('is-active', 'sq-nav__item--active');
             n.removeAttribute('aria-current');
           });
-          item.classList.add('is-active', 'v2-nav__item--active');
+          item.classList.add('is-active', 'sq-nav__item--active');
           item.setAttribute('aria-current', 'page');
           if (app && app.classList.contains('nav-collapsed')) sidebarOpen();
         });
@@ -1141,7 +1151,7 @@
       sections.forEach(function (pair, idx) {
         var active = idx === activeIdx;
         pair.item.classList.toggle('is-active',           active);
-        pair.item.classList.toggle('v2-nav__item--active', active);
+        pair.item.classList.toggle('sq-nav__item--active', active);
         if (active) {
           pair.item.setAttribute('aria-current', 'page');
           activeItem = pair.item;
@@ -1164,17 +1174,17 @@
   /* ======================================================
      ADVANCED TABLE  — sort, select, filter, paginate
      Markup contract:
-       <table class="v2-table" data-sq-table data-sq-page-size="8">
-         thead th > button.v2-table__sort[data-sq-sort="text|number"]
-         tbody tr > td.v2-table__check > input.v2-checkbox[data-sq-row-select]
+       <table class="sq-table" data-sq-table data-sq-page-size="8">
+         thead th > button.sq-table__sort[data-sq-sort="text|number"]
+         tbody tr > td.sq-table__check > input.sq-checkbox[data-sq-row-select]
        Optional, inside the same scope element ([data-sq-table-scope] or
-       the enclosing .v2-section):
+       the enclosing .sq-section):
          [data-sq-select-all] [data-sq-table-filter]
          [data-sq-table-count] [data-sq-table-pagination]
      Events: sq:rowselection, sq:pagechange (both bubble)
      ====================================================== */
   function tableScope(table) {
-    return table.closest('[data-sq-table-scope]') || table.closest('.v2-section') || table.parentElement;
+    return table.closest('[data-sq-table-scope]') || table.closest('.sq-section') || table.parentElement;
   }
 
   function tableRows(table) {
@@ -1303,7 +1313,7 @@
     var tr = document.createElement('tr');
     tr.setAttribute('data-sq-table-generated', '');
     var td = document.createElement('td');
-    td.className = 'v2-table__empty';
+    td.className = 'sq-table__empty';
     td.colSpan = columns;
     td.textContent = table.getAttribute('data-sq-empty-label') || 'No matching rows';
     tr.appendChild(td);
@@ -1317,20 +1327,20 @@
     nav.innerHTML = '';
 
     var info = document.createElement('span');
-    info.className = 'v2-pagination__info';
+    info.className = 'sq-pagination__info';
     info.textContent = total === 0
       ? 'No rows'
       : (start + 1) + '\u2013' + Math.min(end, total) + ' of ' + total;
     nav.appendChild(info);
 
     var list = document.createElement('div');
-    list.className = 'v2-pagination__pages';
+    list.className = 'sq-pagination__pages';
     nav.appendChild(list);
 
     function pageButton(label, target, current, disabled, ariaLabel) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'v2-pagination__btn';
+      btn.className = 'sq-pagination__btn';
       btn.textContent = label;
       if (ariaLabel) btn.setAttribute('aria-label', ariaLabel);
       if (current) btn.setAttribute('aria-current', 'page');
@@ -1350,7 +1360,7 @@
 
     function gap() {
       var el = document.createElement('span');
-      el.className = 'v2-pagination__gap';
+      el.className = 'sq-pagination__gap';
       el.textContent = '\u2026';
       return el;
     }
@@ -1457,7 +1467,7 @@
      Both draw in element pixel units (the SVG height comes from CSS), so the
      chart redraws on resize instead of scaling stale geometry.
      ====================================================== */
-  var CHART_TINTS = ['v2-chart__s1', 'v2-chart__s2', 'v2-chart__s3', 'v2-chart__s4'];
+  var CHART_TINTS = ['sq-chart__s1', 'sq-chart__s2', 'sq-chart__s3', 'sq-chart__s4'];
 
   function svgNode(tag, attrs) {
     var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -1485,14 +1495,26 @@
   }
 
   function chartHost(el) {
-    return el.closest('.v2-chart__body') || el.parentElement;
+    return el.closest('.sq-chart__body') || el.parentElement;
+  }
+
+  // SVG geometry is in viewBox units, while pointer/tooltip coordinates are CSS
+  // pixels. getScreenCTM() also accounts for preserveAspectRatio letterboxing,
+  // so hover alignment survives responsive scaling.
+  function svgClientPoint(svgEl, x, y) {
+    if (!svgEl || !svgEl.createSVGPoint || !svgEl.getScreenCTM) return null;
+    var pt = svgEl.createSVGPoint();
+    pt.x = x;
+    pt.y = y;
+    var ctm = svgEl.getScreenCTM();
+    return ctm ? pt.matrixTransform(ctm) : null;
   }
 
   function ensureChartTip(host) {
-    var tip = host.querySelector('.v2-chart__tip');
+    var tip = host.querySelector('.sq-chart__tip');
     if (!tip) {
       tip = document.createElement('div');
-      tip.className = 'v2-chart__tip';
+      tip.className = 'sq-chart__tip';
       tip.hidden = true;
       tip.setAttribute('role', 'status');
       host.appendChild(tip);
@@ -1503,9 +1525,11 @@
   function hideChartTip(event) {
     var host = chartHost(event.currentTarget);
     if (!host) return;
-    var tip = host.querySelector('.v2-chart__tip');
+    var tip = host.querySelector('.sq-chart__tip');
     if (tip) tip.hidden = true;
-    var cols = host.querySelectorAll('.v2-chart__col.is-hover');
+    var cursor = host.querySelector('.sq-chart__cursor');
+    if (cursor) cursor.style.opacity = '0';
+    var cols = host.querySelectorAll('.sq-chart__col.is-hover');
     Array.prototype.forEach.call(cols, function (col) { col.classList.remove('is-hover'); });
   }
 
@@ -1516,9 +1540,9 @@
     legend.innerHTML = '';
     series.forEach(function (item, index) {
       var wrap = document.createElement('span');
-      wrap.className = 'v2-chart__legend-item';
+      wrap.className = 'sq-chart__legend-item';
       var sw = document.createElement('span');
-      sw.className = 'v2-chart__sw ' + CHART_TINTS[index % CHART_TINTS.length];
+      sw.className = 'sq-chart__sw ' + CHART_TINTS[index % CHART_TINTS.length];
       var name = document.createElement('span');
       name.textContent = item.name || 'Series ' + (index + 1);
       wrap.appendChild(sw);
@@ -1545,7 +1569,7 @@
       window.addEventListener('resize', function () {
         clearTimeout(timer);
         timer = setTimeout(function () {
-          $$('.v2-chart__svg').forEach(function (el) {
+          $$('.sq-chart__svg').forEach(function (el) {
             if (el.__sqChart) drawLineChart(el);
           });
         }, 120);
@@ -1601,11 +1625,11 @@
       var tickValue = yMin + t * step;
       var tickY = sy(tickValue);
       svgEl.appendChild(svgNode('line', {
-        class: 'v2-chart__grid',
+        class: 'sq-chart__grid',
         x1: padL, x2: W - padR, y1: tickY, y2: tickY
       }));
       var tick = svgNode('text', {
-        class: 'v2-chart__tick',
+        class: 'sq-chart__tick',
         x: padL - 6, y: tickY + 3, 'text-anchor': 'end'
       });
       tick.textContent = chartFormat(tickValue, opts);
@@ -1614,7 +1638,7 @@
 
     // Value axis
     svgEl.appendChild(svgNode('line', {
-      class: 'v2-chart__axis', x1: padL, x2: padL, y1: padT, y2: padT + plotH
+      class: 'sq-chart__axis', x1: padL, x2: padL, y1: padT, y2: padT + plotH
     }));
 
     // x tick labels
@@ -1622,7 +1646,7 @@
     for (var i = 0; i < count; i++) {
       if (i % every !== 0 && i !== count - 1) continue;
       var label = svgNode('text', {
-        class: 'v2-chart__tick',
+        class: 'sq-chart__tick',
         x: sx(i), y: padT + plotH + 15, 'text-anchor': 'middle'
       });
       label.textContent = labels[i] !== undefined ? labels[i] : String(i + 1);
@@ -1636,7 +1660,7 @@
       s.values.forEach(function (value, idx) { pts.push(sx(idx) + ',' + sy(value)); });
       if (!pts.length) return;
       svgEl.appendChild(svgNode('polygon', {
-        class: 'v2-chart__area ' + CHART_TINTS[index % CHART_TINTS.length],
+        class: 'sq-chart__area ' + CHART_TINTS[index % CHART_TINTS.length],
         points: pts.join(' ') + ' ' + sx(s.values.length - 1) + ',' + (padT + plotH) +
                 ' ' + sx(0) + ',' + (padT + plotH)
       }));
@@ -1648,20 +1672,20 @@
       if (!pts.length) return;
 
       svgEl.appendChild(svgNode('polyline', {
-        class: 'v2-chart__line ' + CHART_TINTS[index % CHART_TINTS.length],
+        class: 'sq-chart__line ' + CHART_TINTS[index % CHART_TINTS.length],
         points: pts.join(' ')
       }));
 
       var lastIdx = s.values.length - 1;
       svgEl.appendChild(svgNode('circle', {
-        class: 'v2-chart__dot ' + CHART_TINTS[index % CHART_TINTS.length],
+        class: 'sq-chart__dot ' + CHART_TINTS[index % CHART_TINTS.length],
         cx: sx(lastIdx), cy: sy(s.values[lastIdx]), r: 2.5
       }));
     });
 
     // Crosshair used by the hover handler
     var cursor = svgNode('line', {
-      class: 'v2-chart__cursor',
+      class: 'sq-chart__cursor',
       x1: padL, x2: padL, y1: padT, y2: padT + plotH
     });
     cursor.style.opacity = '0';
@@ -1673,7 +1697,7 @@
       sx: sx, sy: sy, cursor: cursor
     };
 
-    fillChartLegend(svgEl.closest('.v2-chart'), series);
+    fillChartLegend(svgEl.closest('.sq-chart'), series);
   }
 
   function onLineChartHover(event) {
@@ -1681,8 +1705,14 @@
     var g = svgEl.__sqGeom;
     if (!g) return;
 
-    var box = svgEl.getBoundingClientRect();
-    var ratio = (event.clientX - box.left - g.padL) / (g.plotW || 1);
+    var ctm = svgEl.getScreenCTM && svgEl.getScreenCTM();
+    if (!ctm) return;
+
+    var pointer = svgEl.createSVGPoint();
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+    var local = pointer.matrixTransform(ctm.inverse());
+    var ratio = (local.x - g.padL) / (g.plotW || 1);
     var index = Math.round(ratio * (g.count - 1));
     index = Math.max(0, Math.min(g.count - 1, index));
 
@@ -1690,7 +1720,7 @@
     var tip = ensureChartTip(host);
 
     var labelEl = document.createElement('div');
-    labelEl.className = 'v2-chart__tip-label';
+    labelEl.className = 'sq-chart__tip-label';
     labelEl.textContent = g.labels[index] !== undefined ? g.labels[index] : '#' + (index + 1);
     tip.innerHTML = '';
     tip.appendChild(labelEl);
@@ -1702,16 +1732,16 @@
       topY = Math.min(topY, g.sy(value));
 
       var row = document.createElement('div');
-      row.className = 'v2-chart__tip-row';
+      row.className = 'sq-chart__tip-row';
 
       var sw = document.createElement('span');
-      sw.className = 'v2-chart__tip-swatch ' + CHART_TINTS[seriesIndex % CHART_TINTS.length];
+      sw.className = 'sq-chart__tip-swatch ' + CHART_TINTS[seriesIndex % CHART_TINTS.length];
 
       var name = document.createElement('span');
       name.textContent = s.name || 'Series ' + (seriesIndex + 1);
 
       var val = document.createElement('span');
-      val.className = 'v2-chart__tip-value';
+      val.className = 'sq-chart__tip-value';
       val.textContent = chartFormat(value, g.opts);
 
       row.appendChild(sw);
@@ -1723,8 +1753,11 @@
     if (!isFinite(topY)) topY = g.padT;
 
     var hostBox = host.getBoundingClientRect();
-    tip.style.left = Math.round(box.left - hostBox.left + g.sx(index)) + 'px';
-    tip.style.top = Math.round(box.top - hostBox.top + topY) + 'px';
+    var anchor = svgClientPoint(svgEl, g.sx(index), topY);
+    if (anchor) {
+      tip.style.left = Math.round(anchor.x - hostBox.left) + 'px';
+      tip.style.top = Math.round(anchor.y - hostBox.top) + 'px';
+    }
     tip.hidden = false;
 
     if (g.cursor) {
@@ -1757,14 +1790,14 @@
 
     for (var c = 0; c < count; c++) {
       var col = document.createElement('div');
-      col.className = 'v2-chart__col';
+      col.className = 'sq-chart__col';
       col.setAttribute('data-sq-index', String(c));
       col.setAttribute('data-sq-total', String(totals[c]));
 
       series.forEach(function (item, seriesIndex) {
         var value = Math.max(0, (item.values || [])[c] || 0);
         var seg = document.createElement('div');
-        seg.className = 'v2-chart__seg v2-chart__seg--s' + ((seriesIndex % 4) + 1);
+        seg.className = 'sq-chart__seg sq-chart__seg--s' + ((seriesIndex % 4) + 1);
         seg.style.height = ((value / scale) * 100) + '%';
         seg.setAttribute('data-sq-series', item.name || String(seriesIndex));
         seg.setAttribute('data-sq-value', String(value));
@@ -1782,21 +1815,21 @@
     colsEl.__sqBars = { series: series, opts: opts, labels: opts.labels || [] };
 
     if (opts.labels && opts.labels.length) {
-      var host = colsEl.closest('.v2-chart');
+      var host = colsEl.closest('.sq-chart');
       var labelRow = host ? host.querySelector('[data-sq-chart-labels]') : null;
       if (labelRow) {
         labelRow.innerHTML = '';
         labelRow.style.setProperty('--sq-chart-cols', String(count));
         for (var l = 0; l < count; l++) {
           var span = document.createElement('span');
-          span.className = 'v2-chart__xlabel';
+          span.className = 'sq-chart__xlabel';
           span.textContent = opts.labels[l] !== undefined ? opts.labels[l] : '';
           labelRow.appendChild(span);
         }
       }
     }
 
-    fillChartLegend(colsEl.closest('.v2-chart'), series);
+    fillChartLegend(colsEl.closest('.sq-chart'), series);
   }
 
   function onStackedBarsHover(event) {
@@ -1804,13 +1837,13 @@
     var state = colsEl.__sqBars;
     if (!state) return;
 
-    var col = event.target.closest ? event.target.closest('.v2-chart__col') : null;
+    var col = event.target.closest ? event.target.closest('.sq-chart__col') : null;
     if (!col || !colsEl.contains(col)) {
       hideChartTip(event);
       return;
     }
 
-    Array.prototype.forEach.call(colsEl.querySelectorAll('.v2-chart__col'), function (item) {
+    Array.prototype.forEach.call(colsEl.querySelectorAll('.sq-chart__col'), function (item) {
       item.classList.toggle('is-hover', item === col);
     });
 
@@ -1821,23 +1854,23 @@
     tip.innerHTML = '';
 
     var labelEl = document.createElement('div');
-    labelEl.className = 'v2-chart__tip-label';
+    labelEl.className = 'sq-chart__tip-label';
     labelEl.textContent = state.labels[index] !== undefined ? state.labels[index] : '#' + (index + 1);
     tip.appendChild(labelEl);
 
     state.series.forEach(function (item, seriesIndex) {
       var value = (item.values || [])[index] || 0;
       var row = document.createElement('div');
-      row.className = 'v2-chart__tip-row';
+      row.className = 'sq-chart__tip-row';
 
       var sw = document.createElement('span');
-      sw.className = 'v2-chart__tip-swatch ' + CHART_TINTS[seriesIndex % CHART_TINTS.length];
+      sw.className = 'sq-chart__tip-swatch ' + CHART_TINTS[seriesIndex % CHART_TINTS.length];
 
       var name = document.createElement('span');
       name.textContent = item.name || 'Series ' + (seriesIndex + 1);
 
       var val = document.createElement('span');
-      val.className = 'v2-chart__tip-value';
+      val.className = 'sq-chart__tip-value';
       val.textContent = chartFormat(value, state.opts);
 
       row.appendChild(sw);
@@ -1855,13 +1888,13 @@
   /* ======================================================
      TREE  — expand / collapse with keyboard support (max 3 levels)
      Markup:
-       <div class="v2-tree" data-sq-tree>
-         <div class="v2-tree__item">
-           <div class="v2-tree__row">
-             <button class="v2-tree__toggle" aria-expanded="true" aria-label="Toggle X">…</button>
-             <span class="v2-tree__label">…</span>
+       <div class="sq-tree" data-sq-tree>
+         <div class="sq-tree__item">
+           <div class="sq-tree__row">
+             <button class="sq-tree__toggle" aria-expanded="true" aria-label="Toggle X">…</button>
+             <span class="sq-tree__label">…</span>
            </div>
-           <div class="v2-tree__group"> …nested items… </div>
+           <div class="sq-tree__group"> …nested items… </div>
          </div>
        </div>
      ====================================================== */
@@ -1869,13 +1902,13 @@
 
   function treeGroupOf(item) {
     for (var i = 0; i < item.children.length; i++) {
-      if (item.children[i].classList.contains('v2-tree__group')) return item.children[i];
+      if (item.children[i].classList.contains('sq-tree__group')) return item.children[i];
     }
     return null;
   }
 
   function toggleTreeNode(btn, expand) {
-    var item = btn.closest('.v2-tree__item');
+    var item = btn.closest('.sq-tree__item');
     if (!item) return null;
     var group = treeGroupOf(item);
     if (!group) return null;
@@ -1887,7 +1920,7 @@
   }
 
   function treeVisibleToggles(root) {
-    return $$('.v2-tree__toggle', root).filter(function (btn) {
+    return $$('.sq-tree__toggle', root).filter(function (btn) {
       var node = btn;
       while (node && node !== root) {
         if (node.hidden) return false;
@@ -1920,9 +1953,9 @@
       if (btn.getAttribute('aria-expanded') !== 'true') {
         toggleTreeNode(btn, true);
       } else {
-        var item = btn.closest('.v2-tree__item');
+        var item = btn.closest('.sq-tree__item');
         var group = item ? treeGroupOf(item) : null;
-        var child = group ? group.querySelector('.v2-tree__toggle') : null;
+        var child = group ? group.querySelector('.sq-tree__toggle') : null;
         if (child) child.focus();
       }
     } else if (event.key === 'ArrowLeft') {
@@ -1930,12 +1963,12 @@
       if (btn.getAttribute('aria-expanded') === 'true') {
         toggleTreeNode(btn, false);
       } else {
-        var own = btn.closest('.v2-tree__item');
+        var own = btn.closest('.sq-tree__item');
         var parentGroup = own ? own.parentElement : null;
-        var parentItem = parentGroup && parentGroup.classList.contains('v2-tree__group')
-          ? parentGroup.closest('.v2-tree__item')
+        var parentItem = parentGroup && parentGroup.classList.contains('sq-tree__group')
+          ? parentGroup.closest('.sq-tree__item')
           : null;
-        var parentToggle = parentItem ? parentItem.querySelector('.v2-tree__toggle') : null;
+        var parentToggle = parentItem ? parentItem.querySelector('.sq-tree__toggle') : null;
         if (parentToggle) parentToggle.focus();
       }
     }
@@ -1946,7 +1979,7 @@
       if (root.dataset.sqTreeReady === 'true') return;
       root.dataset.sqTreeReady = 'true';
 
-      $$('.v2-tree__toggle', root).forEach(function (btn) {
+      $$('.sq-tree__toggle', root).forEach(function (btn) {
         btn.addEventListener('click', function (event) {
           event.preventDefault();
           toggleTreeNode(btn);
@@ -1955,22 +1988,22 @@
       });
 
       // Normalise the initial state: the group follows aria-expanded
-      $$('.v2-tree__item', root).forEach(function (item) {
+      $$('.sq-tree__item', root).forEach(function (item) {
         var group = treeGroupOf(item);
         if (!group) return;
-        var row = item.querySelector('.v2-tree__row');
-        var btn = row ? row.querySelector('.v2-tree__toggle') : null;
+        var row = item.querySelector('.sq-tree__row');
+        var btn = row ? row.querySelector('.sq-tree__toggle') : null;
         if (!btn) return;
         toggleTreeNode(btn, btn.getAttribute('aria-expanded') === 'true');
       });
 
       if (root.getAttribute('data-sq-tree-depth') === null) {
         var deepest = 1;
-        $$('.v2-tree__item', root).forEach(function (item) {
+        $$('.sq-tree__item', root).forEach(function (item) {
           var levels = 0;
           var node = item.parentElement;
           while (node && node !== root) {
-            if (node.classList.contains('v2-tree__group')) levels++;
+            if (node.classList.contains('sq-tree__group')) levels++;
             node = node.parentElement;
           }
           deepest = Math.max(deepest, levels + 1);
@@ -1989,7 +2022,7 @@
      ====================================================== */
   function setStep(stepperEl, index) {
     if (!stepperEl) return null;
-    var items = $$('.v2-stepper__item', stepperEl);
+    var items = $$('.sq-stepper__item', stepperEl);
     if (!items.length) return null;
 
     var current = Math.min(Math.max(0, index | 0), items.length - 1);
@@ -2020,31 +2053,31 @@
   /* ======================================================
      CODE BLOCK  — gutter with line numbers + copy button
      Markup:
-       <div class="v2-code" data-sq-code data-sq-line-numbers>
-         <div class="v2-code__head">
-           <span class="v2-code__title">terminal</span>
-           <button class="v2-code__copy" data-sq-code-copy aria-label="Copy code">Copy</button>
+       <div class="sq-code" data-sq-code data-sq-line-numbers>
+         <div class="sq-code__head">
+           <span class="sq-code__title">terminal</span>
+           <button class="sq-code__copy" data-sq-code-copy aria-label="Copy code">Copy</button>
          </div>
-         <div class="v2-code__body">
-           <pre class="v2-code__pre"><code>...</code></pre>
+         <div class="sq-code__body">
+           <pre class="sq-code__pre"><code>...</code></pre>
          </div>
        </div>
      Pass data-sq-line-numbers="false" to hide the gutter.
      ====================================================== */
   function addCodeLineNumbers(block, pre) {
     var body = pre.parentElement;
-    if (!body || body.querySelector('.v2-code__lines')) return;
+    if (!body || body.querySelector('.sq-code__lines')) return;
 
     var text = pre.textContent.replace(/\n+$/, '');
     var total = text ? text.split('\n').length : 1;
 
     var gutter = document.createElement('div');
-    gutter.className = 'v2-code__lines';
+    gutter.className = 'sq-code__lines';
     gutter.setAttribute('aria-hidden', 'true');
 
     for (var i = 1; i <= total; i++) {
       var line = document.createElement('span');
-      line.className = 'v2-code__line-num';
+      line.className = 'sq-code__line-num';
       line.textContent = String(i);
       gutter.appendChild(line);
     }
@@ -2077,14 +2110,14 @@
       if (block.dataset.sqCodeReady === 'true') return;
       block.dataset.sqCodeReady = 'true';
 
-      var pre = $('.v2-code__pre', block);
+      var pre = $('.sq-code__pre', block);
       if (!pre) return;
 
       if (block.getAttribute('data-sq-line-numbers') !== 'false') {
         addCodeLineNumbers(block, pre);
       }
 
-      var copy = $('[data-sq-code-copy]', block) || $('.v2-code__copy', block);
+      var copy = $('[data-sq-code-copy]', block) || $('.sq-code__copy', block);
       if (copy) {
         copy.addEventListener('click', function () { copyCodeBlock(block, pre, copy); });
       }
