@@ -17,7 +17,7 @@ Synteq UI is a **viewport-locked, offline-first, text-first** dashboard UI frame
 | 2 | **Responsive on any screen** | Fluid type scale (`clamp`), adaptive content grid, and a sticky hideable bottom dock work from phone to ultra-wide. |
 | 3 | **Simple & lightweight** | Minimal token set, flat surfaces, zero external runtime dependencies. |
 | 4 | **No cards** | Visual separation comes from `1px` hairline separators only — never from background color shifts or box shadows that create card-like wrappers. |
-| 5 | **Lightweight motion** | Subtle fade-up mounts, smooth gauge fills, pulse indicators. Ambient motion is auto-disabled via `prefers-reduced-motion`; essential loading indicators keep moving. |
+| 5 | **Lightweight motion** | Press + ripple feedback, header line loading, subtle fade-up mounts, smooth gauge fills, pulse indicators. Ambient motion is auto-disabled via `prefers-reduced-motion`; essential loading indicators keep moving. |
 | 6 | **Inline icons** | Every interactive label carries an inline SVG icon for instant context recognition. No icon fonts, no external icon CDNs. |
 
 ---
@@ -49,7 +49,7 @@ Synteq UI uses a single flat canvas instead of a multi-tier tonal elevation mode
 | Gauge | 86-tick discrete bar | Continuous smooth fill bar |
 | Network chart | 48-bar histogram (112px) | Dual-segment bars (72px) + axis-labelled line/area and stacked columns |
 | Tables | Static markup | Sortable, selectable, filterable, paginated module |
-| Motion | Transition-only | Fade-up mount + stagger + shimmer + IntersectionObserver |
+| Motion | Transition-only | Press + ripple, header line loading, fade-up mount + stagger + shimmer + IntersectionObserver |
 
 
 ---
@@ -217,7 +217,7 @@ synteq-ui/
 │       ├── icons.css             — inline SVG icon sizing (.sq-icon, 12–20px) and tint modifiers
 │       ├── shell.css             — viewport-locked grid (.sq-app), dock collapse, content scroll region
 │       ├── sidebar.css           — sticky bottom dock, nav items, brand and account controls
-│       ├── topbar.css            — topbar layout, sidebar toggle button, breadcrumb, search, icon buttons
+│       ├── topbar.css            — topbar layout, sidebar toggle, breadcrumb, search, icon buttons, loading line
 │       ├── content.css           — section separators, section head, layout grids (.sq-grid), stat strip
 │       ├── data.css              — stat blocks, KV rows, slim gauges, sparklines, bar chart, legend, status dots
 │       ├── controls.css          — buttons (all variants incl. info/warn), segmented bar, badges, kbd pill, avatar
@@ -230,7 +230,7 @@ synteq-ui/
 │       ├── stepper.css           — vertical progress indicator / timeline
 │       ├── code.css              — syntax-free code surface with gutter and copy button
 │       ├── framework.css         — density control, forced-colors, touch targets
-│       └── motion.css            — fade-up animation, stagger children, soft pulse, hover lift
+│       └── motion.css            — button ripple, fade-up animation, stagger children, soft pulse, hover lift
 ├── js/
 │   └── synteq-ui.js              — zero-dependency runtime: theme, dock, scroll-spy, toast, command palette,
 │                                   tables, tree, stepper, code blocks, data helpers
@@ -553,12 +553,15 @@ Synteq UI restyles native HTML form elements to match the flat-surface model. Al
 
 ---
 
-### 5.7 Motion
+### 5.8 Animated UI
 
-Ambient animations use `--sq-ease`; spinners use `linear` and indeterminate progress uses a standard cubic curve. Ambient motion is suppressed by `prefers-reduced-motion` in `base.css`; spinners and indeterminate progress stay animated at a slower rate because they are essential state indicators.
+Ambient animations use `--sq-ease`; spinners use `linear` and indeterminate progress uses a standard cubic curve. Ambient motion is suppressed by `prefers-reduced-motion` in `base.css`; spinners, the header loading line, and indeterminate progress stay animated at a slower rate because they are essential state indicators.
 
 | Class / Attribute | Behavior |
 |-------------------|---------|
+| `.sq-ripple` | Runtime-injected `currentColor` ripple on pointer/keyboard activation of buttons and copy triggers. Removed on `animationend`. |
+| `.sq-topbar__loader` | Two-pixel indeterminate line on the header baseline. Shows when the topbar has `.is-loading` or `aria-busy="true"`. |
+| `SynteqUI.setLoading(active, target?)` | Toggles the header loader and `aria-busy`; targets the first `.sq-topbar` by default. |
 | `.sq-fade-up` | Single element mount: fade in + `6px` upward drift over `--sq-dur-normal`. |
 | `.sq-stagger` | Parent: each child gets `sq-fade-up` with 60ms incremental delays (up to child 6+). |
 | `data-sq-stagger` | Triggers `.sq-stagger` via IntersectionObserver when element enters the viewport (JS-managed). |
@@ -576,7 +579,7 @@ Ambient motion stays suppressed.
 
 ---
 
-### 5.8 Icons
+### 5.9 Icons
 
 Icons are **inline SVG only** — no icon font, no `<img>`. Every icon SVG must use `aria-hidden="true"` (the parent button/label provides the accessible name).
 
@@ -610,7 +613,7 @@ All icons inherit `stroke: currentColor` — tint is set by parent element color
 
 ---
 
-### 5.9 Advanced Table
+### 5.10 Advanced Table
 
 The table module is behaviour, not chrome: `tables.css` adds hairline-separated
 toolbar and pagination rails around the existing `.sq-table`, never a frame.
@@ -639,7 +642,7 @@ nav.sq-pagination
 | Separation | Toolbar `border-bottom` + pagination `border-top`, both `--sq-line`. No shadows, no tonal fills. |
 | Density | `--compact` trims vertical padding, `--dense` also drops the type one step. |
 
-### 5.10 Chart Extensions
+### 5.11 Chart Extensions
 
 Two modules share one frame (`.sq-chart`) and one tooltip (`.sq-chart__tip`).
 
@@ -655,7 +658,7 @@ Two modules share one frame (`.sq-chart`) and one tooltip (`.sq-chart__tip`).
 Height is a single variable (`--sq-chart-h`, `168px`; `--sq-chart-h-sm`, `128px`
 below 520px) so a chart and a stacked column block line up on the same row.
 
-### 5.11 Tree
+### 5.12 Tree
 
 ```
 .sq-tree
@@ -673,7 +676,7 @@ below 520px) so a chart and a stacked column block line up on the same row.
   the supported maximum; `initTree()` warns beyond that.
 - `.sq-tree__meta` is pushed right with `margin-left: auto` and hides below 520px.
 
-### 5.12 Stepper / Timeline
+### 5.13 Stepper / Timeline
 
 ```
 .sq-stepper[data-sq-step]
@@ -694,7 +697,7 @@ below 520px) so a chart and a stacked column block line up on the same row.
 horizontal rail between markers, and folds back to the vertical layout below
 720px — the rail is repositioned, not duplicated.
 
-### 5.13 Code Block
+### 5.14 Code Block
 
 ```
 .sq-code[data-sq-code]
@@ -957,7 +960,7 @@ transition-duration: 0.001ms !important;
 scroll-behavior: auto !important;
 ```
 
-This applies to all elements, including gauge fills, sparklines, skeleton shimmers, and stagger animations. Essential loading indicators are exempt: `.sq-spinner` and `.sq-progress__fill--indeterminate` keep an `infinite` animation at a slower duration in `feedback.css`, because a frozen spinner communicates a broken state rather than calm.
+This applies to all elements, including gauge fills, sparklines, skeleton shimmers, and stagger animations. Essential loading indicators are exempt: `.sq-spinner`, `.sq-progress__fill--indeterminate`, and `.sq-topbar__loader` keep an `infinite` animation at a slower duration, because a frozen loading state communicates a broken interface rather than calm.
 
 The JS runtime also checks `prefersReduced()` before attaching the IntersectionObserver for `.sq-stagger` — if reduced motion is active, the observer is never created and no mount animations fire.
 

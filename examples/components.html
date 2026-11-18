@@ -232,7 +232,7 @@
       </a>
       <a href="#motion" class="sq-nav__item">
         <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
-        Motion
+        Animated UI
       </a>
     </nav>
 
@@ -1395,15 +1395,6 @@ SynteqUI.renderLineChart(chart, [
                 <div class="sq-progress__fill sq-progress__fill--info" style="width: 12%;"></div>
               </div>
             </div>
-
-            <div class="sq-progress">
-              <div class="sq-progress__head">
-                <span class="sq-progress__label">Processing...</span>
-              </div>
-              <div class="sq-progress__track">
-                <div class="sq-progress__fill sq-progress__fill--indeterminate"></div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -1420,16 +1411,6 @@ SynteqUI.renderLineChart(chart, [
               <span class="sq-breadcrumb__separator">/</span>
               <span class="sq-breadcrumb__item" aria-current="page">i-0a1b2c3d</span>
             </nav>
-          </div>
-        </div>
-
-        <!-- Spinner -->
-        <div class="cx-block">
-          <span class="sq-t-xs sq-mute">Spinner — 3 sizes</span>
-          <div class="cx-preview" style="gap:var(--sq-space-4);">
-            <span class="sq-spinner sq-spinner--sm" role="status" aria-label="Loading"></span>
-            <span class="sq-spinner" role="status" aria-label="Loading"></span>
-            <span class="sq-spinner sq-spinner--lg" role="status" aria-label="Loading"></span>
           </div>
         </div>
 
@@ -1488,38 +1469,107 @@ SynteqUI.renderLineChart(chart, [
         </div>
       </div>
 
-      <!-- ══ MOTION ════════════════════════════════════════════════ -->
+      <!-- ══ ANIMATED UI ═══════════════════════════════════════════ -->
       <div class="sq-section" id="motion">
         <div class="sq-section__head">
           <span class="sq-section__title">
             <svg class="sq-icon sq-icon--14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
-            Motion
+            Animated UI
           </span>
-          <span class="sq-section__meta" id="motion-mode">auto-disabled with prefers-reduced-motion</span>
+          <span class="sq-section__meta" id="motion-mode">click, line loading, spinners, skeletons</span>
         </div>
         <div class="cx-block">
-          <span class="sq-t-xs sq-mute">Fade-up mount — click to replay (SynteqUI.replayAnimation)</span>
-          <div class="cx-preview">
-            <button class="sq-btn" id="replay-btn">Replay animation</button>
-            <div id="anim-target" class="sq-fade-up" style="padding:var(--sq-space-3) var(--sq-space-4);background:var(--sq-inset);border-radius:var(--sq-radius-control);">
-              <span class="sq-t-sm">Faded up ↑</span>
+          <span class="sq-t-xs sq-mute">Button click — press feedback + ripple</span>
+          <div class="cx-preview" style="gap:var(--sq-space-3);flex-wrap:wrap;">
+            <button class="sq-btn sq-btn--brand">Primary action</button>
+            <button class="sq-btn">Default action</button>
+            <button class="sq-btn sq-btn--ghost">Ghost action</button>
+            <button class="sq-iconbtn" aria-label="Add item">
+              <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <span class="sq-t-xs sq-mute">Pointer clicks ripple from the cursor; keyboard activation starts from the centre. Reduced motion falls back to the press transition only.</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="sq-t-xs sq-mute">Header loading line — <span class="cx-token">SynteqUI.setLoading(active, target?)</span></span>
+          <div class="cx-preview cx-preview--col">
+            <div class="sq-topbar is-loading" id="loader-preview" aria-busy="true" style="width:100%;min-height:var(--sq-topbar-h);padding:0 var(--sq-space-3);border:1px solid var(--sq-line);border-radius:var(--sq-radius-control);">
+              <span class="sq-topbar__title">Fetching metrics...</span>
+              <span class="sq-badge sq-badge--info" style="margin-left:auto;">line loader</span>
+              <div class="sq-topbar__loader" aria-hidden="true"></div>
+            </div>
+            <div style="display:flex;gap:var(--sq-space-2);flex-wrap:wrap;">
+              <button class="sq-btn" id="loader-demo-btn" aria-pressed="true">Stop header loading</button>
+              <button class="sq-btn sq-btn--ghost" id="loader-app-btn" aria-pressed="false">Show app header loading</button>
             </div>
           </div>
+          <span class="sq-t-xs sq-mute">The line is additive to the circle spinner: use it for page-level work, keep the spinner for local controls.</span>
+        </div>
+
+        <div class="cx-block">
+          <span class="sq-t-xs sq-mute">Circle spinner — 3 sizes</span>
+          <div class="cx-preview" style="gap:var(--sq-space-4);">
+            <span class="sq-spinner sq-spinner--sm" role="status" aria-label="Loading"></span>
+            <span class="sq-spinner" role="status" aria-label="Loading"></span>
+            <span class="sq-spinner sq-spinner--lg" role="status" aria-label="Loading"></span>
+          </div>
+        </div>
+
+        <div class="cx-block">
+          <span class="sq-t-xs sq-mute">Indeterminate progress — loading bar</span>
+          <div class="cx-preview cx-preview--col cx-narrow">
+            <div class="sq-progress" aria-busy="true">
+              <div class="sq-progress__head">
+                <span class="sq-progress__label">Syncing with the cluster...</span>
+              </div>
+              <div class="sq-progress__track">
+                <div class="sq-progress__fill sq-progress__fill--indeterminate"></div>
+              </div>
+            </div>
+          </div>
+          <span class="sq-t-xs sq-mute">Keeps moving under reduced motion at a slower rate.</span>
+        </div>
+
+        <div class="cx-block">
           <span class="sq-t-xs sq-mute">Skeleton shimmer</span>
           <div class="cx-preview cx-preview--col cx-narrow" style="gap:var(--sq-space-2);">
             <span class="sq-skeleton" style="height:14px;border-radius:var(--sq-radius-micro);">&nbsp;</span>
             <span class="sq-skeleton" style="height:14px;width:72%;border-radius:var(--sq-radius-micro);">&nbsp;</span>
             <span class="sq-skeleton" style="height:14px;width:54%;border-radius:var(--sq-radius-micro);">&nbsp;</span>
           </div>
+        </div>
+
+        <div class="cx-block">
+          <span class="sq-t-xs sq-mute">Fade-up mount — click to replay (<span class="cx-token">SynteqUI.replayAnimation</span>)</span>
+          <div class="cx-preview">
+            <button class="sq-btn" id="replay-btn">Replay animation</button>
+            <div id="anim-target" class="sq-fade-up" style="padding:var(--sq-space-3) var(--sq-space-4);background:var(--sq-inset);border-radius:var(--sq-radius-control);">
+              <span class="sq-t-sm">Faded up ↑</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cx-block">
           <span class="sq-t-xs sq-mute">Live pulse indicator</span>
           <div class="cx-preview">
             <span class="sq-status"><span class="sq-dot sq-live" aria-hidden="true"></span> Live data</span>
           </div>
+        </div>
+
+        <div class="cx-block">
           <span class="sq-t-xs sq-mute">Stagger on scroll — add <span class="cx-token">data-sq-stagger</span> to parent</span>
           <div class="cx-preview cx-preview--col cx-narrow" data-sq-stagger>
             <div style="padding:var(--sq-space-2) var(--sq-space-3);background:var(--sq-inset);border-radius:var(--sq-radius-micro);" class="sq-t-sm">Child 1</div>
             <div style="padding:var(--sq-space-2) var(--sq-space-3);background:var(--sq-inset);border-radius:var(--sq-radius-micro);" class="sq-t-sm">Child 2</div>
             <div style="padding:var(--sq-space-2) var(--sq-space-3);background:var(--sq-inset);border-radius:var(--sq-radius-micro);" class="sq-t-sm">Child 3</div>
+          </div>
+        </div>
+
+        <div class="cx-block">
+          <span class="sq-t-xs sq-mute">Overlay entrances (menu, popover, dialog, toast) keep their interactive previews in Overlays.</span>
+          <div class="cx-preview">
+            <a class="sq-btn sq-btn--ghost" href="#overlays">Open overlay animations</a>
           </div>
         </div>
       </div>
@@ -1549,7 +1599,7 @@ SynteqUI.renderLineChart(chart, [
       <button class="sq-btn sq-btn--ghost" type="button" data-sq-command="#tree">Tree</button>
       <button class="sq-btn sq-btn--ghost" type="button" data-sq-command="#stepper">Stepper / timeline</button>
       <button class="sq-btn sq-btn--ghost" type="button" data-sq-command="#code">Code block</button>
-      <button class="sq-btn sq-btn--ghost" type="button" data-sq-command="#motion">Motion primitives</button>
+          <button class="sq-btn sq-btn--ghost" type="button" data-sq-command="#motion">Animated UI</button>
     </form>
   </dialog>
 <dialog class="sq-dialog" id="cx-dialog" aria-labelledby="cx-dialog-title">
@@ -1612,11 +1662,33 @@ SynteqUI.renderLineChart(chart, [
   var animTarget = document.getElementById('anim-target');
   var motionMode = document.getElementById('motion-mode');
   if (motionMode && SynteqUI.prefersReducedMotion && SynteqUI.prefersReducedMotion()) {
-    motionMode.textContent = 'prefers-reduced-motion: reduce — replay falls back to a 120 ms cross-fade';
+    motionMode.textContent = 'click, line loading, spinners, skeletons · reduced motion: cross-fade replay';
   }
   if (replayBtn && animTarget) {
     replayBtn.addEventListener('click', function () {
       SynteqUI.replayAnimation(animTarget);
+    });
+  }
+
+  /* Header line loader demo: local preview + the real app header. */
+  var loaderPreview = document.getElementById('loader-preview');
+  var loaderDemoBtn = document.getElementById('loader-demo-btn');
+  var loaderAppBtn = document.getElementById('loader-app-btn');
+  if (loaderPreview && loaderDemoBtn) {
+    loaderDemoBtn.addEventListener('click', function () {
+      var on = !loaderPreview.classList.contains('is-loading');
+      SynteqUI.setLoading(on, loaderPreview);
+      loaderDemoBtn.textContent = on ? 'Stop header loading' : 'Start header loading';
+      loaderDemoBtn.setAttribute('aria-pressed', String(on));
+    });
+  }
+  if (loaderAppBtn) {
+    loaderAppBtn.addEventListener('click', function () {
+      var on = !loaderAppBtn.classList.contains('is-on');
+      loaderAppBtn.classList.toggle('is-on', on);
+      SynteqUI.setLoading(on);
+      loaderAppBtn.textContent = on ? 'Hide app header loading' : 'Show app header loading';
+      loaderAppBtn.setAttribute('aria-pressed', String(on));
     });
   }
 

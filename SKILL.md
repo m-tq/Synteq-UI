@@ -604,6 +604,32 @@ Indeterminate (loading state):
 </div>
 ```
 
+### Animated UI
+
+Buttons and copy triggers get the press transition and a lightweight ripple
+automatically (pointer clicks from the cursor, keyboard activation from the
+centre). No markup is required; the ripple is skipped under reduced motion.
+
+Header loading line — add one empty element to the topbar (optional; the runtime
+injects it if missing), then toggle it:
+
+```html
+<header class="sq-topbar">
+  ...
+  <div class="sq-topbar__loader" aria-hidden="true"></div>
+</header>
+```
+
+```js
+SynteqUI.setLoading(true);        // first .sq-topbar
+SynteqUI.setLoading(false);
+SynteqUI.setLoading(true, el);    // any specific .sq-topbar
+```
+
+The line is additive to `.sq-spinner`: page-level work uses the baseline line,
+local controls keep the circle spinner. Both stay animated when
+`prefers-reduced-motion: reduce` is active, at a slower rate.
+
 ### Breadcrumb
 
 ```html
@@ -1005,6 +1031,7 @@ All methods are on the `SynteqUI` global, available after `synteq-ui.js` loads.
 | `scrollToSection` | `scrollToSection(id, opts?) → boolean` | Scrolls `.sq-content` to `#id`; `opts.behavior` = `'smooth' \| 'auto'`. Hash deep links (`/#logs`) and `hashchange` are handled automatically. |
 | `tip` | `tip(anchorEl, message, opts?) → Element` | Transient anchored label (the copy handler shows "Copied" through it). `opts.kind` = `'info' \| 'ok' \| 'warn' \| 'err'`, `opts.duration` default 1500 ms. Fixed-positioned, viewport-clamped, `role="status"`, one at a time. |
 | `replayAnimation` | `replayAnimation(el, opts?) → Animation \| null` | Restarts a mount animation on demand (used by "Replay animation" demos). `opts.preset` = `'fade-up' \| 'fade' \| 'zoom-in'`, `opts.duration` (default 280 ms), `opts.force` ignores reduced-motion. Cancels running animations first and drives the effect through the Web Animations API, so it works even though `base.css` shortens CSS animations to `0.001ms` under `prefers-reduced-motion` — in that case it plays a 120 ms opacity-only cross-fade (no movement). |
+| `setLoading` | `setLoading(active, target?) → boolean` | Toggles `.is-loading` and `aria-busy` on a `.sq-topbar` (first one by default). The header line then animates via `.sq-topbar__loader`. |
 | `prefersReducedMotion` | `prefersReducedMotion() → boolean` | Reports the live `prefers-reduced-motion: reduce` state; use it to show an honest "reduced motion" hint in demos. |
 | `initSparklines` | `initSparklines()` | Renders every `.sq-spark` from its stored series or `data-sq-spark="1,2,3"`. Called automatically on `DOMContentLoaded`. |
 | `initNavDock` | `initNavDock()` | Adds drag-to-scroll and the `More` drop-up when dock destinations overflow. Called automatically on `DOMContentLoaded`. |

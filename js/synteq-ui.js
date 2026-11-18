@@ -3,6 +3,8 @@
  * Zero-dependency vanilla JS helpers:
  *  - Theme toggle (dark / light, persisted via localStorage)
  *  - Sticky bottom navigation dock toggle and persisted visibility
+ *  - Lightweight click ripple on buttons and copy triggers
+ *  - Thin topbar loading line (SynteqUI.setLoading)
  *  - Smooth gauge fill (width-based, uses CSS transition)
  *  - Mini bar chart renderer (network I/O or any dual-series data)
  *  - SVG sparkline renderer
@@ -30,6 +32,70 @@
   const prefersReduced = () =>
     typeof matchMedia !== 'undefined' &&
     matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const RIPPLE_SELECTOR =
+    '.sq-btn, .sq-iconbtn, .sq-seg__btn, .sq-search, .sq-sidebar-toggle, ' +
+    '.sq-theme-toggle, .sq-nav__more, [data-sq-copy]';
+
+  function spawnClickRipple(control, clientX, clientY) {
+    if (!control || control.disabled || control.getAttribute('aria-disabled') === 'true') return;
+    var rect = control.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    var size = Math.max(rect.width, rect.height) * 2;
+    var x = typeof clientX === 'number' ? clientX : rect.left + rect.width / 2;
+    var y = typeof clientY === 'number' ? clientY : rect.top + rect.height / 2;
+    var old = control.querySelector('.sq-ripple');
+    if (old) old.remove();
+
+    var ripple = document.createElement('span');
+    ripple.className = 'sq-ripple';
+    ripple.setAttribute('aria-hidden', 'true');
+    ripple.style.width = size + 'px';
+    ripple.style.height = size + 'px';
+    ripple.style.left = (x - rect.left - size / 2) + 'px';
+    ripple.style.top = (y - rect.top - size / 2) + 'px';
+    control.appendChild(ripple);
+    ripple.addEventListener('animationend', function () { ripple.remove(); }, { once: true });
+  }
+
+  function initClickRipple() {
+    if (document.__sqRippleBound) return;
+    document.__sqRippleBound = true;
+
+    document.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0 || prefersReduced()) return;
+      var control = e.target.closest && e.target.closest(RIPPLE_SELECTOR);
+      if (control) spawnClickRipple(control, e.clientX, e.clientY);
+    }, { passive: true });
+
+    // Keyboard activation has no pointer coordinates; start from the centre.
+    document.addEventListener('click', function (e) {
+      if (e.detail !== 0 || prefersReduced()) return;
+      var control = e.target.closest && e.target.closest(RIPPLE_SELECTOR);
+      if (control) spawnClickRipple(control);
+    });
+  }
+
+  function setLoading(active, target) {
+    var topbar = target
+      ? (typeof target === 'string' ? $(target) : target)
+      : $('.sq-topbar');
+    if (!topbar) return false;
+
+    var on = !!active;
+    var loader = topbar.querySelector('.sq-topbar__loader');
+    if (!loader && on) {
+      loader = document.createElement('div');
+      loader.className = 'sq-topbar__loader';
+      loader.setAttribute('aria-hidden', 'true');
+      topbar.appendChild(loader);
+    }
+
+    topbar.classList.toggle('is-loading', on);
+    topbar.setAttribute('aria-busy', on ? 'true' : 'false');
+    return on;
+  }
 
   /* ======================================================
      THEME
@@ -2136,6 +2202,7 @@
     initScrollShadow();
     initStagger();
     initCopyButtons();
+    initClickRipple();
     initProductionControls();
     initNavDock();
     initNavScroll();
@@ -2184,6 +2251,7 @@
     // Motion
     replayAnimation: replayAnimation,
     prefersReducedMotion: prefersReduced,
+    setLoading:      setLoading,
     // Navigation
     scrollToSection: scrollToSection,
     // Init helpers (call after dynamic content changes)

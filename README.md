@@ -6,7 +6,7 @@ A clean, viewport-locked dashboard framework built on six hard rules:
 2. **Responsive on any screen** — fluid type, clamp-based layout, centred sections, sticky bottom navigation dock that centre-aligns, drag-scrolls and exposes a `More` drop-up when it overflows
 3. **Simple & lightweight** — lean token set, flat surfaces, zero dependencies
 4. **No cards or wrappers** — visual hierarchy comes from hairline line separators only
-5. **Lightweight motion** — subtle fade-up mounts, smooth gauge fills, pulse indicators; ambient motion auto-disabled with `prefers-reduced-motion`
+5. **Lightweight motion** — press + ripple feedback, header line loading, subtle fade-up mounts, smooth gauge fills, pulse indicators; ambient motion auto-disabled with `prefers-reduced-motion`
 6. **Inline icons** — every label carries an SVG icon for instant context recognition
 
 ---
@@ -26,7 +26,7 @@ synteq-ui/
 │       ├── icons.css         — inline SVG icon sizing (12–20px) & tint helpers
 │       ├── shell.css         — viewport-locked app grid with bottom dock
 │       ├── sidebar.css       — sticky bottom navigation dock
-│       ├── topbar.css        — breadcrumb, search trigger, icon buttons, scroll state hook
+│       ├── topbar.css        — breadcrumb, search trigger, icon buttons, scroll state, loading line
 │       ├── content.css       — sections, hairline separators, layout grids, stat strip
 │       ├── data.css          — stat blocks, KV rows, slim gauges, sparkline, bar chart, data table, log viewer, legend
 │       ├── controls.css      — buttons, segmented bar, input, badges, kbd pill, avatar
@@ -39,7 +39,7 @@ synteq-ui/
 │       ├── stepper.css       — vertical progress indicator / timeline
 │       ├── code.css          — syntax-free code surface with gutter & copy
 │       ├── framework.css     — density control, forced-colors, touch targets
-│       └── motion.css        — fade-up, stagger, soft pulse, hover lift
+│       └── motion.css        — button ripple, fade-up, stagger, soft pulse, hover lift
 ├── js/
 │   └── synteq-ui.js          — runtime: theme, dock, scroll-spy, gauges, charts, tables, tree,
 │                               stepper, code blocks, toast, command palette
@@ -120,7 +120,7 @@ Synteq UI targets modern browsers with CSS custom properties, CSS Grid, and nati
 
 ### Progressive Enhancement
 
-- **`prefers-reduced-motion`** — ambient animations auto-disable when user prefers reduced motion; loading spinners and indeterminate progress stay active
+- **`prefers-reduced-motion`** — ambient animations auto-disable when user prefers reduced motion; loading spinners, header line loading and indeterminate progress stay active
 - **`prefers-color-scheme`** — detects system theme preference on first load
 - **`forced-colors`** — automatic Windows High Contrast Mode support
 - **JavaScript optional** — static content renders without JS; interactive features (tabs, menus, toasts) require `synteq-ui.js`
@@ -199,9 +199,10 @@ so buttons created *after* page load work too:
 ## Click feedback
 
 Every control (`.sq-btn`, `.sq-iconbtn`, `.sq-seg__btn`, `.sq-search`, the
-sidebar toggle, the dock's `More` button and anything with `data-sq-copy`) gets
-the same press treatment: a 1 px push, a 0.985 inward scale and an 8 %
-`currentColor` wash. No elevation, no ripple library.
+sidebar/theme toggle, the dock's `More` button and anything with `data-sq-copy`)
+gets the same press treatment: a 1 px push, a 0.985 inward scale, an 8 %
+`currentColor` wash and a lightweight ripple. No elevation and no ripple
+library — the ripple is one runtime-injected span.
 
 For your own actions, show the same transient label the copy handler uses:
 
@@ -792,7 +793,39 @@ second red border underneath it.
 
 ---
 
-## Motion
+## Animated UI
+
+Interaction motion is deliberately small: a press transition, a currentColor
+ripple, and loading indicators that never block the page.
+
+### Click ripple
+
+Every `.sq-btn`, `.sq-iconbtn`, `.sq-seg__btn`, `.sq-search`, sidebar/theme
+toggle, dock `More` button and `[data-sq-copy]` trigger gets the press
+treatment plus a lightweight ripple. Pointer clicks start at the cursor;
+keyboard activation starts at the centre. The ripple is skipped when
+`prefers-reduced-motion: reduce` is active.
+
+### Header loading line
+
+Add one empty line element to the topbar (or let `setLoading` create it), then
+toggle it from the runtime:
+
+```html
+<header class="sq-topbar">
+  ...
+  <div class="sq-topbar__loader" aria-hidden="true"></div>
+</header>
+```
+
+```js
+SynteqUI.setLoading(true);                 // app header
+SynteqUI.setLoading(false);                // stop
+SynteqUI.setLoading(true, previewTopbar);  // any .sq-topbar element
+```
+
+The line sits on the header baseline and is additive to `.sq-spinner`: use it
+for page-level work, keep the circle spinner for local controls.
 
 Mount animation fires automatically on `.sq-stagger` children.  
 For scroll-triggered stagger, add `data-sq-stagger` to the container — the JS runtime observes it and adds `.sq-stagger` on entry.
@@ -835,8 +868,8 @@ action, so it should still be visible. Query the state with
 
 All *ambient* motion (mount, stagger, shimmer, pulse) is still suppressed when
 `prefers-reduced-motion: reduce` is active (set in `base.css`). Essential loading
-indicators (`.sq-spinner`, `.sq-progress__fill--indeterminate`) stay animated at a
-slower rate so a loading state never looks frozen.
+indicators (`.sq-spinner`, `.sq-progress__fill--indeterminate`, `.sq-topbar__loader`)
+stay animated at a slower rate so a loading state never looks frozen.
 
 ---
 
