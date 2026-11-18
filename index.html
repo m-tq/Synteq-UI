@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Synteq UI — a viewport-locked, zero-dependency dashboard framework for operator interfaces." />
+  <title>Synteq UI — Operator-grade dashboard framework</title>
+  <link rel="stylesheet" href="css/synteq-ui.css" />
+  <style>
+    /* The landing page uses the real Synteq shell. It has no dock, so the shell's
+       bottom row collapses to 0 and the single .sq-section fills the viewport. */
+    .home-app {
+      --sq-nav-current: 0px;
+    }
+
+    .home__content {
+      padding: 0;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .home__section {
+      max-width: none;
+      min-height: calc(100dvh - var(--sq-topbar-h));
+      padding: clamp(20px, 3.5vw, 44px) clamp(20px, 4vw, 48px);
+      border-top: 0;
+      justify-content: flex-start;
+    }
+
+    .home__wrap {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: var(--sq-space-5);
+      width: 100%;
+      max-width: 1200px;
+      min-height: 0;
+      margin: 0 auto;
+    }
+
+    .home__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sq-space-2);
+      color: var(--sq-text-strong);
+      font-size: var(--sq-text-lg);
+      font-weight: var(--sq-fw-semibold);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .home__mark {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border: var(--sq-line-h) solid var(--sq-line-strong);
+      border-radius: var(--sq-radius-control);
+      background: var(--sq-inset);
+      color: var(--sq-brand);
+      flex-shrink: 0;
+    }
+
+    .home__hero {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 880px;
+      min-height: 0;
+      padding-block: var(--sq-space-4);
+    }
+
+    .home__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sq-space-2);
+      margin: 0;
+      color: var(--sq-text-subtle);
+      font-size: var(--sq-text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .home__eyebrow .sq-dot {
+      background: var(--sq-status-running);
+    }
+
+    .home__title {
+      max-width: 15ch;
+      margin: var(--sq-space-3) 0;
+      color: var(--sq-text-strong);
+      font-size: clamp(38px, 6.5vw, 72px);
+      font-weight: var(--sq-fw-semibold);
+      letter-spacing: -0.045em;
+      line-height: 1.02;
+    }
+
+    .home__title em {
+      color: var(--sq-brand);
+      font-style: normal;
+    }
+
+    .home__lead {
+      max-width: 58ch;
+      margin: 0;
+      color: var(--sq-text-subtle);
+      font-size: var(--sq-text-lg);
+      line-height: 1.55;
+    }
+
+    .home__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sq-space-2);
+      margin-top: var(--sq-space-5);
+    }
+
+    .home__actions .sq-btn {
+      height: 40px;
+      padding-inline: var(--sq-space-4);
+      font-size: var(--sq-text-md);
+    }
+
+    .home__features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--sq-space-5);
+      padding-top: var(--sq-space-4);
+      border-top: var(--sq-line-h) solid var(--sq-line);
+    }
+
+    .home__feature {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sq-space-1);
+      min-width: 0;
+    }
+
+    .home__feature strong {
+      color: var(--sq-text);
+      font-size: var(--sq-text-md);
+      font-weight: var(--sq-fw-medium);
+    }
+
+    .home__feature span {
+      color: var(--sq-text-subtle);
+      font-size: var(--sq-text-sm);
+      line-height: 1.5;
+    }
+
+    .home__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sq-space-4);
+      padding-top: var(--sq-space-3);
+      border-top: var(--sq-line-h) solid var(--sq-line);
+      color: var(--sq-text-subtle);
+      font-size: var(--sq-text-xs);
+    }
+
+    .home__footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sq-space-3);
+    }
+
+    .home__footer a {
+      color: var(--sq-text-subtle);
+      text-decoration: none;
+    }
+
+    .home__footer a:hover {
+      color: var(--sq-text-strong);
+    }
+
+    @media (max-width: 720px) {
+      .home__section {
+        padding: var(--sq-space-5) var(--sq-space-4);
+      }
+
+      .home__features {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--sq-space-2);
+      }
+
+      .home__feature {
+        padding-top: var(--sq-space-2);
+        border-top: var(--sq-line-h) solid var(--sq-line);
+      }
+
+      .home__feature:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .home__feature span {
+        display: none;
+      }
+
+      .home__footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--sq-space-2);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .home__feature:nth-child(3) {
+        display: none;
+      }
+
+      .home__actions .sq-btn {
+        width: 100%;
+      }
+    }
+
+    /* Short viewports keep the one-screen promise by dropping the supporting
+       feature copy, not the primary actions. */
+    @media (max-height: 660px) {
+      .home__features {
+        display: none;
+      }
+
+      .home__hero {
+        padding-block: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sq-app home-app">
+    <header class="sq-topbar" role="banner">
+      <div class="sq-topbar__left">
+        <a class="home__brand" href="index.html" aria-label="Synteq UI home">
+          <span class="home__mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M9 3.5C9 2.12 7.66 1 6 1 4.34 1 3 2.12 3 3.5c0 1.18.9 2.17 2.14 2.41L7.5 6.3C8.43 6.57 9 7.3 9 8.2 9 9.32 7.87 10.2 6.5 10.2S4 9.32 4 8.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Synteq UI
+        </a>
+        <span class="sq-badge sq-badge--brand">v2.2.0</span>
+      </div>
+
+      <div class="sq-topbar__right">
+        <button class="sq-iconbtn sq-theme-toggle" data-sq-toggle-theme aria-label="Toggle theme">
+          <svg class="sq-icon sq-icon--16 sq-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sq-icon sq-icon--16 sq-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="sq-main" aria-label="Synteq UI introduction">
+      <div class="sq-content home__content">
+        <section class="sq-section home__section" aria-labelledby="home-title">
+          <div class="home__wrap">
+            <div class="home__hero">
+              <p class="home__eyebrow">
+                <span class="sq-dot sq-live" aria-hidden="true"></span>
+                Stable release · operator-grade UI
+              </p>
+              <h1 class="home__title" id="home-title">
+                Dense dashboards.<br />
+                <em>Zero noise.</em>
+              </h1>
+              <p class="home__lead">
+                A viewport-locked, zero-dependency framework for operator consoles:
+                hairline hierarchy, flat surfaces, inline icons, and motion that knows
+                when to stay still.
+              </p>
+              <div class="home__actions">
+                <a class="sq-btn sq-btn--brand" href="examples/components.html">
+                  Explore components
+                  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a class="sq-btn" href="examples/dashboard.html">
+                  Open live dashboard
+                  <svg class="sq-icon sq-icon--16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <section class="home__features" aria-label="Framework highlights">
+              <div class="home__feature">
+                <strong>Viewport-locked shell</strong>
+                <span>No page scrollbar. Only in-content regions scroll, so navigation never leaves the operator.</span>
+              </div>
+              <div class="home__feature">
+                <strong>Zero dependencies</strong>
+                <span>CSS custom properties and vanilla JS. Lightweight motion, reduced-motion aware by default.</span>
+              </div>
+              <div class="home__feature">
+                <strong>Live component explorer</strong>
+                <span>Every primitive has an interactive preview, including loading, charts, tables, and animated UI.</span>
+              </div>
+            </section>
+
+            <footer class="home__footer">
+              <span>Synteq UI 2.2.0 · Built for operators</span>
+              <nav class="home__footer-links" aria-label="Demo links">
+                <a href="examples/components.html">Components</a>
+                <a href="examples/dashboard.html">Dashboard</a>
+                <a href="README.md">README</a>
+              </nav>
+            </footer>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/synteq-ui.js"></script>
+</body>
+</html>

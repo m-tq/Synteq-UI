@@ -15,6 +15,7 @@ A clean, viewport-locked dashboard framework built on six hard rules:
 
 ```
 synteq-ui/
+├── index.html              — GitHub Pages landing page
 ├── css/
 │   ├── tokens.css            — fluid type scale, 4px spacing, radii, motion, layout shell vars, form tokens
 │   ├── theme-dark.css        — dark palette (default)
@@ -79,6 +80,13 @@ synteq-ui/
 ```
 
 The `sq-app` grid locks to the viewport. `sq-content.sq-scroll` is the only element that produces a scrollbar. Navigation is a sticky bottom dock on desktop and mobile; the topbar toggle hides it without changing document scroll.
+
+### GitHub Pages
+
+`index.html` at the repository root is a ready-to-serve landing page. Push the
+repo, open **Settings → Pages**, choose **Deploy from a branch**, and serve the
+root of your default branch — no build step. Relative links resolve under the
+repository subpath automatically.
 
 ---
 
